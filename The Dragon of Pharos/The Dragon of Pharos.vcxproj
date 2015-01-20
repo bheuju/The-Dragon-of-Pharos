@@ -81,15 +81,20 @@
   <ItemGroup>
     <ClCompile Include="DoP.cpp" />
     <ClCompile Include="Dragon.cpp" />
+    <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Matrix4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DoP.h" />
     <ClInclude Include="Dragon.h" />
+    <ClInclude Include="Graphics.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Vector2D.h" />
     <ClInclude Include="Vector3D.h" />
+    <ClInclude Include="Vector4D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

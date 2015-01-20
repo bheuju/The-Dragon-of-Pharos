@@ -25,12 +25,15 @@ int main(int argc, char** argv)
 	//Initialize
 	DoP::Instance()->init("The Dragon of Pharos", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600);
 
+	/*
 	glClearColor(0, 1, 0, 1);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	myPerspective(45, 600.0/800.0, 1.0, 100.0);
 	glMatrixMode(GL_MODELVIEW);
+	*/
 
+	//myPerspective(45, 600.0/800.0, 1.0, 100.0);
 	while (DoP::Instance()->isRunning())
 	{
 		frameStart = SDL_GetTicks();

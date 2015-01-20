@@ -9,7 +9,9 @@ Singleton class
 #include <SDL.h>
 #include <iostream>
 #include <SDL_opengl.h>
+#include "Vector3D.h"
 #include "InputHandler.h"
+#include "Graphics.h"
 #include "Dragon.h"
 
 class DoP
@@ -36,6 +38,8 @@ public:
 	bool isRunning() {return mRun;}
 	void setRunning(bool run) {mRun = run;}
 
+	SDL_Renderer* getRenderer() {return ren;}
+
 private:
 	DoP();
 	static DoP* pInstance;
@@ -43,4 +47,10 @@ private:
 	bool mRun;
 
 	SDL_Window* win;
+	SDL_Renderer* ren;
+
+	Graphics gph;
+
+	//Objects
+	Dragon* drag;
 };
