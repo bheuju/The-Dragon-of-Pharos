@@ -9,6 +9,8 @@ Dragon Class
 
 #pragma once
 #include "Graphics.h"
+#include "Object.h"
+#include "Matrix4.h"
 
 class Dragon
 {
@@ -16,6 +18,9 @@ public:
 	Dragon();
 	~Dragon() {}
 
+	void init();
+
+	void handleInput();
 	void update();
 	void render();
 private:

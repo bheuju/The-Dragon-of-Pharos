@@ -19,25 +19,25 @@ Matrix4::Matrix4(float matrix[4][4])
 
 Matrix4::Matrix4(Vector4D v0, Vector4D v1, Vector4D v2, Vector4D v3)
 {
-	mat[3][0] = v0.getX();
-	mat[3][1] = v0.getY();
-	mat[3][2] = v0.getZ();
-	mat[3][3] = v0.getW();
+	mat[0][0] = v0.getX();
+	mat[0][1] = v0.getY();
+	mat[0][2] = v0.getZ();
+	mat[0][3] = v0.getW();
 
-	mat[0][0] = v1.getX();
-	mat[0][1] = v1.getY();
-	mat[0][2] = v1.getZ();
-	mat[0][3] = v1.getW();
+	mat[1][0] = v1.getX();
+	mat[1][1] = v1.getY();
+	mat[1][2] = v1.getZ();
+	mat[1][3] = v1.getW();
 
-	mat[1][0] = v2.getX();
-	mat[1][1] = v2.getY();
-	mat[1][2] = v2.getZ();
-	mat[1][3] = v2.getW();
+	mat[2][0] = v2.getX();
+	mat[2][1] = v2.getY();
+	mat[2][2] = v2.getZ();
+	mat[2][3] = v2.getW();
 
-	mat[2][0] = v3.getX();
-	mat[2][1] = v3.getY();
-	mat[2][2] = v3.getZ();
-	mat[2][3] = v3.getW();
+	mat[3][0] = v3.getX();
+	mat[3][1] = v3.getY();
+	mat[3][2] = v3.getZ();
+	mat[3][3] = v3.getW();
 }
 
 void Matrix4::reset()
@@ -60,25 +60,25 @@ void Matrix4::setIdentityMatrix()
 	mat[3][3] = 1;
 }
 
+//Matrix operations
 //matrix * matrix
 Matrix4 Matrix4::operator* (Matrix4& mat1)
 {
-	float x[4][4];
-	float y[4][4];
-	//float z[4][4];
+	Matrix4 m;
 
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
 		{
-			mat[i][j] = 0;
+			m.mat[i][j] = 0;
 			for (int k = 0; k < 4; k++)
 			{
-				mat[i][j] += x[i][k] * y[k][j];
+				m.mat[i][j] += this->mat[i][k] * mat1.mat[k][j];
 			}
 		}
 	}
-	return Matrix4(mat);
+
+	return m;
 }
 
 //matrix * vector

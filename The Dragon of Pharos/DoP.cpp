@@ -26,7 +26,8 @@ void DoP::init(const char* title, int xpos, int ypos, int width, int height, int
 		std::cout<<"!! Initialization failed"<<std::endl;
 	}
 
-	//drag = new Dragon();
+	//initialize the objects to draw dragon
+	drag.init();
 }
 
 void DoP::handleInputs()
@@ -36,6 +37,8 @@ void DoP::handleInputs()
 	{
 		mRun = false;
 	}
+
+	drag.handleInput();
 }
 
 void DoP::update()
@@ -45,10 +48,12 @@ void DoP::update()
 
 void DoP::render()
 {
+	/*
 	//clear window to white
 	//glClearColor(1, 1, 1, 1);
 	//glClear(GL_COLOR_BUFFER_BIT);
-
+	*/
+	
 	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 	SDL_RenderClear(ren);
 
@@ -56,8 +61,10 @@ void DoP::render()
 
 	SDL_RenderPresent(ren);
 
+	/*
 	//display
 	//SDL_GL_SwapWindow(win);
+	*/
 }
 
 void DoP::clean()

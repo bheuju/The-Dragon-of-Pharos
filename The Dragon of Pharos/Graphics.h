@@ -16,6 +16,5 @@ public:
 
 	void drawPixel(float x, float y);
 	void drawLine(int x1, int y1, int x2, int y2);
-
 };
 
