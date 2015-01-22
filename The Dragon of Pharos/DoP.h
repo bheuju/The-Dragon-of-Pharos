@@ -8,10 +8,7 @@ Singleton class
 #pragma once
 #include <SDL.h>
 #include <iostream>
-#include <SDL_opengl.h>
-#include "Vector3D.h"
 #include "InputHandler.h"
-#include "Graphics.h"
 #include "Dragon.h"
 
 class DoP
@@ -49,8 +46,6 @@ private:
 	SDL_Window* win;
 	SDL_Renderer* ren;
 
-	Graphics gph;
-
 	//Objects
-	Dragon* drag;
+	Dragon drag;
 };

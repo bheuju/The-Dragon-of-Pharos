@@ -10,22 +10,23 @@ void DoP::init(const char* title, int xpos, int ypos, int width, int height, int
 {
 
 	//turn on double buffering
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	//SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 	if (win = SDL_CreateWindow(title, xpos, ypos, width, height, flags))
 	{
 		std::cout<<"Window initialized..."<<std::endl;
+		if (ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC))
+		{
+			std::cout<<"Renderer created..."<<std::endl;
+		}
 	}
 	else
 	{
 		std::cout<<"!! Initialization failed"<<std::endl;
 	}
 
-	SDL_GLContext glContext = SDL_GL_CreateContext(win);
-
-
-	drag = new Dragon();
+	//drag = new Dragon();
 }
 
 void DoP::handleInputs()
@@ -39,23 +40,28 @@ void DoP::handleInputs()
 
 void DoP::update()
 {
-	
+	drag.update();
 }
 
 void DoP::render()
 {
 	//clear window to white
-	glClearColor(1, 1, 1, 1);
-	glClear(GL_COLOR_BUFFER_BIT);
+	//glClearColor(1, 1, 1, 1);
+	//glClear(GL_COLOR_BUFFER_BIT);
 
-	drag->render();
+	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+	SDL_RenderClear(ren);
+
+	drag.render();
+
+	SDL_RenderPresent(ren);
 
 	//display
-	SDL_GL_SwapWindow(win);
+	//SDL_GL_SwapWindow(win);
 }
 
 void DoP::clean()
 {
-	delete drag;
+	//delete drag;
 	SDL_Quit();
 }

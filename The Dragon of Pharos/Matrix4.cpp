@@ -60,6 +60,7 @@ void Matrix4::setIdentityMatrix()
 	mat[3][3] = 1;
 }
 
+//matrix * matrix
 Matrix4 Matrix4::operator* (Matrix4& mat1)
 {
 	float x[4][4];
@@ -80,6 +81,23 @@ Matrix4 Matrix4::operator* (Matrix4& mat1)
 	return Matrix4(mat);
 }
 
+//matrix * vector
+Vector4D operator* (Matrix4& m, Vector4D& v)
+{
+	Vector4D vector;
+
+	float x = v.getX() * m.mat[0][0] + v.getY() * m.mat[0][1] + v.getZ() * m.mat[0][2] + v.getW() * m.mat[0][3];
+	float y = v.getX() * m.mat[1][0] + v.getY() * m.mat[1][1] + v.getZ() * m.mat[1][2] + v.getW() * m.mat[1][3];
+	float z = v.getX() * m.mat[2][0] + v.getY() * m.mat[2][1] + v.getZ() * m.mat[2][2] + v.getW() * m.mat[2][3];
+	float w = v.getX() * m.mat[3][0] + v.getY() * m.mat[3][1] + v.getZ() * m.mat[3][2] + v.getW() * m.mat[3][3];
+
+	vector.setX(x);
+	vector.setY(y);
+	vector.setZ(z);
+	vector.setW(w);
+
+	return vector;
+}
 
 //Transformation Matrices
 //Translation
@@ -131,7 +149,8 @@ void Matrix4::setScaleMatrix(float sX, float sY, float sZ)
 //Extra matrices
 Matrix4 Matrix4::setModelMatrix(Matrix4 translation, Matrix4 rotation, Matrix4 scale)
 {
-	return Matrix4();
+	Matrix4 modelMatrix = (translation * (rotation * scale));
+	return modelMatrix;
 }
 
 Matrix4 Matrix4::setViewMatrix(Vector3D cameraPos, Vector3D cameraTarget, Vector3D upVector)
@@ -164,29 +183,35 @@ Matrix4 Matrix4::setViewMatrix(Vector3D cameraPos, Vector3D cameraTarget, Vector
 	//the final view matrix
 	return (orientation * translation);
 
-
-
 	/**
 	Simplified form
 	***************
 	Vector3D zAxis = normalize(cameraPos - cameraTarget);	// The "forward" vector.
 	Vector3D xAxis = normalize(cross(upVector, zAxis));		// The "right" vector.
 	Vector3D yAxis = cross(zAxis, xAxis);					// The "up" vector.
- 
-    //Create a 4x4 view matrix from
+
+	//Create a 4x4 view matrix from
 	//the right, up, forward and eye position vectors
-    Matrix4 viewMatrix (
-        Vector4D(	xAxis.getX(),			xAxis.getY(),			xAxis.getZ(),			0 ),
-		Vector4D(	yAxis.getX(),			yAxis.getY(),			yAxis.getZ(),			0 ),
-		Vector4D(	zAxis.getX(),			zAxis.getY(),			zAxis.getZ(),			0 ),
-		Vector4D(	-dot(xAxis, cameraPos),	-dot(yAxis, cameraPos),	-dot(zAxis, cameraPos),	1 )
-    );
-    return viewMatrix;
+	Matrix4 viewMatrix (
+	Vector4D(	xAxis.getX(),			xAxis.getY(),			xAxis.getZ(),			0 ),
+	Vector4D(	yAxis.getX(),			yAxis.getY(),			yAxis.getZ(),			0 ),
+	Vector4D(	zAxis.getX(),			zAxis.getY(),			zAxis.getZ(),			0 ),
+	Vector4D(	-dot(xAxis, cameraPos),	-dot(yAxis, cameraPos),	-dot(zAxis, cameraPos),	1 )
+	);
+	return viewMatrix;
 	*/
 }
 
-Matrix4 Matrix4::setProjectionMatrix()
+Matrix4 Matrix4::setProjectionMatrix(float fovy, float aspect, float zNear, float zFar)
 {
-	return Matrix4();
+	float angle = (PI / 180) * fovy;
+	reset();
+	mat[0][0] = aspect * (1.0 / (tan(angle * 0.5)));
+	mat[1][1] = 1.0 / (tan(angle * 0.5));
+	mat[2][2] = -((zFar + zNear) / (zFar - zNear));
+	mat[2][3] = -((2 * zFar * zNear) / (zFar - zNear));
+	mat[3][2] = -1;
+
+	return *this;
 }
 

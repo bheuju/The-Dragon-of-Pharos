@@ -31,6 +31,13 @@ public:
 	void setZ(float z) {mZ = z;}
 	void setW(float w) {mW = w;}
 
+	void normalizeW()
+	{
+		mX = mX / mW;
+		mY = mY / mW;
+		mZ = mZ / mW;
+		mW = mW / mW;
+	}
 
 private:
 	float mX;

@@ -1,19 +1,25 @@
 #include "Graphics.h"
+#include <cmath>
+#include "DoP.h"
+#include "Vector3D.h"
 
 Graphics::Graphics()
 {
 
 }
 
-
 void Graphics::drawPixel(float x, float y)
 {
+	/*
 	glColor3f(1, 0, 0);
 	glBegin(GL_POINTS);
 	{
 		glVertex2i(x, y);
 	}
 	glEnd();
+	*/
+	SDL_SetRenderDrawColor(DoP::Instance()->getRenderer(), 255, 0, 0, 255);
+	SDL_RenderDrawPoint(DoP::Instance()->getRenderer(), x, y);
 }
 
 void Graphics::drawLine(int x1, int y1, int x2, int y2)

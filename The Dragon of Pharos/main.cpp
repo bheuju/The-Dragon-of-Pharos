@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 	Uint32 frameStart, frameTime;
 
 	//Initialize
-	DoP::Instance()->init("The Dragon of Pharos", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600);
+	DoP::Instance()->init("The Dragon of Pharos", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
 
 	/*
 	glClearColor(0, 1, 0, 1);

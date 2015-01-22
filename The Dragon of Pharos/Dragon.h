@@ -16,9 +16,11 @@ public:
 	Dragon();
 	~Dragon() {}
 
+	void update();
 	void render();
-
 private:
 	Graphics gph;
+	int x, y;
+	int step;
 };
 

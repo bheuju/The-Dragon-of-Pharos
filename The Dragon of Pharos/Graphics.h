@@ -8,10 +8,6 @@ Singleton class
 **************************************************************/
 
 #pragma once
-#include <SDL_opengl.h>
-#include <cmath>
-#include "Vector3D.h"
-
 class Graphics
 {
 public:
@@ -21,7 +17,5 @@ public:
 	void drawPixel(float x, float y);
 	void drawLine(int x1, int y1, int x2, int y2);
 
-private:
-	
 };
 

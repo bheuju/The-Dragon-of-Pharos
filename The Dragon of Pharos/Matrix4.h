@@ -26,7 +26,9 @@ public:
 	void reset();
 	void setIdentityMatrix();
 
-	Matrix4 operator* (Matrix4& mat1);
+	//Operations
+	Matrix4 operator* (Matrix4& mat1);						//matrix - matrix multiplication
+	friend Vector4D operator* (Matrix4& mat, Vector4D& v);	//matrix - vector multiplication
 
 	//Transformation matrices
 	void setTranslationMatrix(float tX, float tY, float tZ);
@@ -38,7 +40,7 @@ public:
 	//Extra matrices
 	Matrix4 setModelMatrix(Matrix4 translation, Matrix4 rotation, Matrix4 scale);
 	Matrix4 setViewMatrix(Vector3D cameraPos, Vector3D cameraTarget, Vector3D upVector);
-	Matrix4 setProjectionMatrix();
+	Matrix4 setProjectionMatrix(float fovy, float aspect, float zNear, float zFar);
 
 private:
 	float mat[4][4];
