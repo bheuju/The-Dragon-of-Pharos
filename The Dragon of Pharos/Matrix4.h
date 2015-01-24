@@ -14,6 +14,7 @@
 #include <cmath>
 #include "Vector3D.h"
 #include "Vector4D.h"
+#include <string>
 
 #define PI	3.1416
 
@@ -44,10 +45,12 @@ public:
 	Matrix4 setViewMatrix(Vector3D cameraPos, Vector3D cameraTarget, Vector3D upVector);
 	Matrix4 setProjectionMatrix(float fovy, float aspect, float zNear, float zFar);
 
-	friend void displayMatrix(Matrix4 m)
+	friend void displayMatrix(Matrix4 m, std::string name = "")
 	{
 		std::cout.precision(3);
 		std::cout<<"=============================="<<std::endl;
+		std::cout<<"\t"<<name<<std::endl;
+		std::cout<<"------------------------------"<<std::endl;
 		for (int i = 0; i < 4; i++)
 		{
 			for (int j = 0; j < 4; j++)

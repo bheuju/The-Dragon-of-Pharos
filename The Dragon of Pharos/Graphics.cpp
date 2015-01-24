@@ -19,7 +19,9 @@ void Graphics::drawPixel(float x, float y)
 	glEnd();
 	*/
 	SDL_SetRenderDrawColor(DoP::Instance()->getRenderer(), 255, 0, 0, 255);
-	SDL_RenderDrawPoint(DoP::Instance()->getRenderer(), x, y);
+	//SDL_RenderDrawPoint(DoP::Instance()->getRenderer(), x, y);				//origin at top-left-corner
+	//SDL_RenderDrawPoint(DoP::Instance()->getRenderer(), x, 600 - y);			//origin at bottom-left-corner
+	SDL_RenderDrawPoint(DoP::Instance()->getRenderer(), 400 + x, 300 - y);	//origin at center
 }
 
 void Graphics::drawLine(int x1, int y1, int x2, int y2)

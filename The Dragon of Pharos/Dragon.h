@@ -23,9 +23,22 @@ public:
 	void handleInput();
 	void update();
 	void render();
+
 private:
 	Graphics gph;
 	int x, y;
 	int step;
+
+	Object cube;
+	int angle;
+
+	std::vector<Object> objects;
+
+	Matrix4 viewMatrix, projectionMatrix;
+
+	Matrix4 transformMatrix;
+
+	std::vector<Vector4D> points;
+	//std::vector<>
 };
 

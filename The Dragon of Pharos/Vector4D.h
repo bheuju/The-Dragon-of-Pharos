@@ -7,6 +7,7 @@
 
 #pragma once
 #include <iostream>
+#include <string>
 
 class Vector4D
 {
@@ -40,7 +41,7 @@ public:
 		mW = mW / mW;
 	}
 
-	friend void displayVector4D(Vector4D& v, int mode  = 0)
+	friend void displayVector4D(Vector4D& v, std::string name = "", int mode  = 0)
 	{
 		//mode 0 - column major
 		//mode 1 - row major
@@ -48,14 +49,18 @@ public:
 		if (mode == 0)
 		{
 			std::cout<<"===="<<std::endl;
+			std::cout<<name<<std::endl;
+			std::cout<<"----"<<std::endl;
 			std::cout<<v.mX<<"\n"<<v.mY<<"\n"<<v.mZ<<"\n"<<v.mW<<std::endl;
 			std::cout<<"===="<<std::endl;
 		}
 		else
 		{
-			std::cout<<"==========================="<<std::endl;
+			std::cout<<"=============================="<<std::endl;
+			std::cout<<"\t"<<name<<std::endl;
+			std::cout<<"------------------------------"<<std::endl;
 			std::cout<<v.mX<<"\t"<<v.mY<<"\t"<<v.mZ<<"\t"<<v.mW<<std::endl;
-			std::cout<<"==========================="<<std::endl;
+			std::cout<<"=============================="<<std::endl;
 		}
 	}
 

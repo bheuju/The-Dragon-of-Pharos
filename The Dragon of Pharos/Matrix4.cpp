@@ -149,7 +149,7 @@ void Matrix4::setScaleMatrix(float sX, float sY, float sZ)
 //Extra matrices
 Matrix4 Matrix4::setModelMatrix(Matrix4 translation, Matrix4 rotation, Matrix4 scale)
 {
-	Matrix4 modelMatrix = (translation * (rotation * scale));
+	Matrix4 modelMatrix = (translation * rotation * scale);
 	return modelMatrix;
 }
 
@@ -211,7 +211,6 @@ Matrix4 Matrix4::setProjectionMatrix(float fovy, float aspect, float zNear, floa
 	mat[2][2] = -((zFar + zNear) / (zFar - zNear));
 	mat[2][3] = -((2 * zFar * zNear) / (zFar - zNear));
 	mat[3][2] = -1;
-
 	return *this;
 }
 

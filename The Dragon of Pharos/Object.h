@@ -27,6 +27,7 @@ public:
 	std::vector<Face*> face;
 	
 	Matrix4 translation, rotation, scale;
+	Matrix4 modelMatrix;
 };
 
 class Face
