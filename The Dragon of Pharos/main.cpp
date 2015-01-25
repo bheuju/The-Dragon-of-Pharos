@@ -10,6 +10,9 @@ Main Function
 const int FPS = 60;
 const int DELAY_TIME = 1000.0f / FPS;
 
+float frame = 0;
+bool showFPS = false;
+
 void myPerspective(float fovy, float aspect, float zNear, float zFar)
 {
 	float fw, fh;
@@ -46,7 +49,7 @@ int main(int argc, char** argv)
 		DoP::Instance()->update();
 		//TODO: render
 		DoP::Instance()->render();
-		
+
 		/***************************/
 
 		frameTime = SDL_GetTicks() - frameStart;
@@ -54,9 +57,29 @@ int main(int argc, char** argv)
 		{
 			SDL_Delay((int)(DELAY_TIME - frameTime));
 		}
+
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F12))
+		{
+			if (showFPS)
+			{
+				showFPS = false;
+				std::cout<<"FPS disabled"<<std::endl;
+			}
+			else
+			{
+				showFPS = true;
+				std::cout<<"FPS enabled"<<std::endl;
+			}
+		}
+		if (((SDL_GetTicks() % 5000) < 50) && showFPS)
+		{
+			std::cout<<"FPS: "<<frame/5<<std::endl;
+			frame = 0;
+		}
+		//std::cout<<"Ticks: "<<SDL_GetTicks()<<std::endl;
+		frame++;
 	}
-	
-	//Clean
+
 	DoP::Instance()->clean();
 
 	return 0;

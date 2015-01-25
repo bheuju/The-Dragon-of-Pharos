@@ -1,7 +1,7 @@
 #include "InputHandler.h"
 InputHandler* InputHandler::pInstance = 0;
 
-InputHandler::InputHandler() : mousePosition(new Vector2D(0, 0)), keyStates(0)
+InputHandler::InputHandler() : mousePosition(new Vector2D(0, 0)), keyStates(0), scroll(0)
 {
 	//Set mouse button states to false
 	for (int i = 0; i < 3; i++)
@@ -15,7 +15,11 @@ InputHandler::InputHandler() : mousePosition(new Vector2D(0, 0)), keyStates(0)
 void InputHandler::update()
 {
 	if (SDL_WaitEvent(&event))
+	//while(SDL_PollEvent(&event))
 	{
+		//reset mouse states
+		reset();
+
 		switch (event.type)
 		{
 		case SDL_QUIT:
@@ -102,6 +106,7 @@ void InputHandler::reset()
 	mouseButtonStates[LEFT] = false;
 	mouseButtonStates[RIGHT] = false;
 	mouseButtonStates[MIDDLE] = false;
+	scroll = 0;
 }
 
 //keybard functions

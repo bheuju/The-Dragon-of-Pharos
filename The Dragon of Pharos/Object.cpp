@@ -20,12 +20,12 @@ Face::Face() : v0(0), v1(0), v2(0), v3(0)
 
 }
 
-Face::Face(int a, int b, int c, int d)
+Face::Face(int a, int b, int c)
 {
 	v0 = a;
 	v1 = b;
 	v2 = c;
-	v3 = d;
+	//v3 = d;
 }
 
 

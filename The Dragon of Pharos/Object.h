@@ -34,7 +34,7 @@ class Face
 {
 public:
 	Face();
-	Face(int a, int b, int c, int d);
+	Face(int a, int b, int c);
 	~Face() {}
 
 	int v0, v1, v2, v3;

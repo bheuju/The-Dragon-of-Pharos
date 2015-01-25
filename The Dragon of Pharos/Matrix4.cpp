@@ -101,15 +101,17 @@ Vector4D operator* (Matrix4& m, Vector4D& v)
 
 //Transformation Matrices
 //Translation
-void Matrix4::setTranslationMatrix(float tX, float tY, float tZ)
+Matrix4 Matrix4::setTranslationMatrix(float tX, float tY, float tZ)
 {
 	setIdentityMatrix();
 	mat[0][3] = tX;
 	mat[1][3] = tY;
 	mat[2][3] = tZ;
+
+	return *this;
 }
 //Rotations
-void Matrix4::setRotationX(float theta)
+Matrix4 Matrix4::setRotationX(float theta)
 {
 	float angle = (PI / 180) * theta;
 	setIdentityMatrix();
@@ -117,8 +119,9 @@ void Matrix4::setRotationX(float theta)
 	mat[1][2] = -sin(theta);
 	mat[2][1] = sin(theta);
 	mat[2][2] = cos(theta);
+	return *this;
 }
-void Matrix4::setRotationY(float theta)
+Matrix4 Matrix4::setRotationY(float theta)
 {
 	float angle = (PI / 180) * theta;
 	setIdentityMatrix();
@@ -126,8 +129,9 @@ void Matrix4::setRotationY(float theta)
 	mat[2][0] = -sin(theta);
 	mat[0][2] = sin(theta);
 	mat[2][2] = cos(theta);
+	return *this;
 }
-void Matrix4::setRotationZ(float theta)
+Matrix4 Matrix4::setRotationZ(float theta)
 {
 	float angle = (PI / 180) * theta;
 	setIdentityMatrix();
@@ -135,14 +139,28 @@ void Matrix4::setRotationZ(float theta)
 	mat[0][1] = -sin(theta);
 	mat[1][0] = sin(theta);
 	mat[1][1] = cos(theta);
+	return *this;
+}
+Matrix4 Matrix4::setRotation(float thetaX, float thetaY, float thetaZ)
+{
+	//displayMatrix(setRotationX(thetaX), "X");
+	//displayMatrix(setRotationY(thetaY), "Y");
+	//displayMatrix(setRotationZ(thetaZ), "Z");
+
+	Matrix4 rotate = setRotationX(thetaX) * setRotationY(thetaY) * setRotationZ(thetaZ);
+	
+	//displayMatrix(rotate, "All");
+	return (rotate);
 }
 //Scaling
-void Matrix4::setScaleMatrix(float sX, float sY, float sZ)
+Matrix4 Matrix4::setScaleMatrix(float sX, float sY, float sZ)
 {
 	setIdentityMatrix();
 	mat[0][0] = sX;
 	mat[1][1] = sY;
 	mat[2][2] = sZ;
+
+	return *this;
 }
 
 

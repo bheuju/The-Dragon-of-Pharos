@@ -34,11 +34,12 @@ public:
 	friend Vector4D operator* (Matrix4& mat, Vector4D& v);	//matrix - vector multiplication
 
 	//Transformation matrices
-	void setTranslationMatrix(float tX = 0, float tY = 0, float tZ = 0);
-	void setRotationX(float theta = 0);
-	void setRotationY(float theta = 0);
-	void setRotationZ(float theta = 0);
-	void setScaleMatrix(float sX = 1, float sY = 1, float sZ = 1);
+	Matrix4 setTranslationMatrix(float tX = 0, float tY = 0, float tZ = 0);
+	Matrix4 setRotationX(float theta = 0);
+	Matrix4 setRotationY(float theta = 0);
+	Matrix4 setRotationZ(float theta = 0);
+	Matrix4 setRotation(float thetaX = 0, float thetaY = 0, float thetaZ = 0);
+	Matrix4 setScaleMatrix(float sX = 1, float sY = 1, float sZ = 1);
 
 	//Extra matrices
 	Matrix4 setModelMatrix(Matrix4 translation, Matrix4 rotation, Matrix4 scale);

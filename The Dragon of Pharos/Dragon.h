@@ -26,16 +26,19 @@ public:
 
 private:
 	Graphics gph;
+
+	bool wireFrame;
+
 	int x, y;
 	int step;
 
 	Object cube;
-	int angle;
+	float angleX, angleY, angleZ;
+	float sX, sY, sZ;
 
 	std::vector<Object> objects;
 
 	Matrix4 viewMatrix, projectionMatrix;
-
 	Matrix4 transformMatrix;
 
 	std::vector<Vector4D> points;
