@@ -7,9 +7,16 @@ Singleton class
 
 #pragma once
 #include <SDL.h>
+#include <SDL_opengl.h>
 #include <iostream>
 #include "InputHandler.h"
 #include "Dragon.h"
+
+enum
+{
+	OPENGL = 0,
+	SDL = 1
+};
 
 class DoP
 {
@@ -23,6 +30,8 @@ public:
 		return pInstance;
 	}
 	~DoP() {}
+
+	int getMode() {return mode;}
 
 	void init(const char* title, int xpos, int ypos, int width, int height, int flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
@@ -41,6 +50,7 @@ private:
 	DoP();
 	static DoP* pInstance;
 
+	int mode;	//SDL or OPENGL
 	bool mRun;
 
 	SDL_Window* win;

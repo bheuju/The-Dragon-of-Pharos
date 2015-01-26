@@ -4,7 +4,7 @@
 
 Dragon::Dragon()
 {
-	wireFrame = true;
+	wireFrame = false;
 	step = 10;
 	x = y = 10;
 	angleX = angleY = angleZ = 0;
@@ -13,10 +13,12 @@ Dragon::Dragon()
 
 void Dragon::init()
 {
+	//gph.setMode(SDL);
+
 	//Set View Matrix
 	Camera::Instance()->setCameraPos(0, 0, 1);
-	Camera::Instance()->setCameraTarget(1, 1, 1);
-	Camera::Instance()->setUpVector(1, 0, 0);
+	Camera::Instance()->setCameraTarget(0, 0, 0);
+	Camera::Instance()->setUpVector(0, 1, 0);
 	viewMatrix = Camera::Instance()->getViewMatrix();
 
 	//Set Projection Matrix
@@ -50,7 +52,7 @@ void Dragon::init()
 	//Push initialized objects
 	objects.push_back(cube);
 
-	angleX = angleY = angleZ = 45;
+	angleX = angleY = angleZ = 0;
 	sX = sY = sZ = 2;
 
 	/*
@@ -168,14 +170,21 @@ void Dragon::render()
 		//displayMatrix(transformMatrix, "Transform");
 
 		//for each vertex in the object
+		/*
 		for (int j = 0; j < objects[i].vertex.size(); j++)
 		{
-			Vector4D point = transformMatrix * *objects[i].vertex[j];
-			int x0 = point.getX();
-			int y0 = point.getY();
-			//std::cout<<"Point "<<j<<": "<<x0<<" "<<y0<<std::endl;
-			gph.drawPixel(x0, y0);
+		Vector4D point = transformMatrix * *objects[i].vertex[j];
+		//std::cout<<"Before = Point "<<j<<": "<<point.getX()<<" "<<point.getY()<<std::endl;
+
+		displayVector4D(point, "Before", 1);
+		point.normalizeW();
+		displayVector4D(point, "After", 1);
+		int x0 = point.getX();
+		int y0 = point.getY();
+		//std::cout<<"After = Point "<<j<<": "<<x0<<" "<<y0<<std::endl;
+		gph.drawPixel(x0, y0);
 		}
+		*/
 		//for each face of the object
 		for (int k = 0; k < objects[i].face.size(); k++)
 		{
@@ -190,6 +199,20 @@ void Dragon::render()
 			Vector4D point2 = transformMatrix * *objects[i].vertex[v2];
 			//Vector4D point3 = transformMatrix * *objects[i].vertex[v3];
 
+			
+			//normalizing w component
+			/*
+			displayVector4D(point0, "Before point 0", 1);
+			point0.normalizeW();
+			displayVector4D(point0, "After point 0", 1);
+			displayVector4D(point1, "Before point 1", 1);
+			point1.normalizeW();
+			displayVector4D(point1, "After point 1", 1);
+			displayVector4D(point2, "Before point 2", 1);
+			point2.normalizeW();
+			displayVector4D(point2, "After point 2", 1);
+			*/
+
 			//displayVector4D(point0, "Point 0", 1);
 			//displayVector4D(point1, "Point 1", 1);
 			//displayVector4D(point2, "Point 2", 1);
@@ -201,7 +224,48 @@ void Dragon::render()
 
 			if (!wireFrame)
 			{
-				gph.fillTriangle(point0, point1, point2, Vector3D(0, 100, 150));
+				switch (k)
+				{
+				case 0:
+					gph.fillTriangle(point0, point1, point2, Vector3D(0, 25, 25));
+					break;
+				case 1:
+					gph.fillTriangle(point0, point1, point2, Vector3D(25, 100, 25));
+					break;
+				case 2:
+					gph.fillTriangle(point0, point1, point2, Vector3D(100, 100, 150));
+					break;
+				case 3:
+					gph.fillTriangle(point0, point1, point2, Vector3D(150, 25, 150));
+					break;
+				case 4:
+					//gph.fillTriangle(point0, point1, point2, Vector3D(150, 200, 150));
+					break;
+				case 5:
+					//gph.fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));
+					break;
+				case 6:
+					//gph.fillTriangle(point0, point1, point2, Vector3D(230, 90, 45));
+					break;
+				case 7:
+					//gph.fillTriangle(point0, point1, point2, Vector3D(159, 23, 23));
+					break;
+				case 8:
+					//gph.fillTriangle(point0, point1, point2, Vector3D(255, 10, 100));
+					break;
+				case 9:
+					//gph.fillTriangle(point0, point1, point2, Vector3D(24, 28, 87));
+					break;
+				case 10:
+					//gph.fillTriangle(point0, point1, point2, Vector3D(14, 11, 60));
+					break;
+				case 11:
+					//gph.fillTriangle(point0, point1, point2, Vector3D(155, 43, 67));
+					break;
+				default:
+					break;
+				}
+				//gph.fillTriangle(point0, point1, point2, Vector3D(0, 100, 150));
 			}
 		}
 	}

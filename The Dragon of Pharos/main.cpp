@@ -2,6 +2,7 @@
 Main Function
 */
 #include <SDL.h>
+#include <SDL_timer.h>
 #include <SDL_opengl.h>
 #include <iostream>
 #include <cmath>
@@ -9,9 +10,6 @@ Main Function
 
 const int FPS = 60;
 const int DELAY_TIME = 1000.0f / FPS;
-
-float frame = 0;
-bool showFPS = false;
 
 void myPerspective(float fovy, float aspect, float zNear, float zFar)
 {
@@ -24,9 +22,10 @@ void myPerspective(float fovy, float aspect, float zNear, float zFar)
 int main(int argc, char** argv)
 {
 	Uint32 frameStart, frameTime;
+	bool showFPS = false;
 
 	//Initialize
-	DoP::Instance()->init("The Dragon of Pharos", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
+	DoP::Instance()->init("The Dragon of Pharos", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
 	/*
 	glClearColor(0, 1, 0, 1);
@@ -71,13 +70,10 @@ int main(int argc, char** argv)
 				std::cout<<"FPS enabled"<<std::endl;
 			}
 		}
-		if (((SDL_GetTicks() % 5000) < 50) && showFPS)
+		if (showFPS)
 		{
-			std::cout<<"FPS: "<<frame/5<<std::endl;
-			frame = 0;
+			std::cout<<"FPS: "<<1000.0/frameTime<<std::endl;
 		}
-		//std::cout<<"Ticks: "<<SDL_GetTicks()<<std::endl;
-		frame++;
 	}
 
 	DoP::Instance()->clean();

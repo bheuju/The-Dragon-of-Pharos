@@ -3,6 +3,10 @@ Graphics Class
 - handle graphics
 - line drawing
 - pixel plotting
+
+- can switch between OPENGL and SDL rendering 
+		by defining 'mode' in DoP
+		default: OPENGL
 --------------------------------------------------------------
 Singleton class
 **************************************************************/
@@ -22,5 +26,6 @@ public:
 
 	void processScanLine(int y, Vector4D pa, Vector4D pb, Vector4D pc, Vector4D pd, Vector3D color);
 	void fillTriangle(Vector4D p1, Vector4D p2, Vector4D p3, Vector3D color);
+
 };
 

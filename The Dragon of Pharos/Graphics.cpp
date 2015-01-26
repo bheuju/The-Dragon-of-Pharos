@@ -3,6 +3,7 @@
 #include <cmath>
 #include "DoP.h"
 #include "Vector3D.h"
+#include <SDL_opengl.h>
 
 Graphics::Graphics()
 {
@@ -11,22 +12,33 @@ Graphics::Graphics()
 
 void Graphics::drawPixel(float x, float y, Vector3D color)
 {
-	/*
-	glColor3f(1, 0, 0);
-	glBegin(GL_POINTS);
+	if (DoP::Instance()->getMode() == OPENGL)
 	{
-	glVertex2i(x, y);
-	}
-	glEnd();
-	*/
-	uint8_t r = color.getX();
-	uint8_t g = color.getY();
-	uint8_t b = color.getZ();
+		float r = color.getX() / 255.0;
+		float g = color.getY() / 255.0;
+		float b = color.getZ() / 255.0;
 
-	SDL_SetRenderDrawColor(DoP::Instance()->getRenderer(), r, g, b, 255);
-	//SDL_RenderDrawPoint(DoP::Instance()->getRenderer(), x, y);				//origin at top-left-corner
-	//SDL_RenderDrawPoint(DoP::Instance()->getRenderer(), x, 600 - y);			//origin at bottom-left-corner
-	SDL_RenderDrawPoint(DoP::Instance()->getRenderer(), 400 + x, 300 - y);	//origin at center
+		glColor3f(r, g, b);
+
+		glBegin(GL_POINTS);
+		{
+			//glVertex2i(x, y);				//origin at top-left-corner
+			//glVertex2i(x, 600 - y);		//origin at bottom-left-corner
+			glVertex2i(400 + x, 300 - y);	//origin at center
+		}
+		glEnd();
+	}
+	else if (DoP::Instance()->getMode() == SDL)
+	{
+		int r = color.getX();
+		int g = color.getY();
+		int b = color.getZ();
+
+		SDL_SetRenderDrawColor(DoP::Instance()->getRenderer(), r, g, b, 255);
+		//SDL_RenderDrawPoint(DoP::Instance()->getRenderer(), x, y);				//origin at top-left-corner
+		//SDL_RenderDrawPoint(DoP::Instance()->getRenderer(), x, 600 - y);			//origin at bottom-left-corner
+		SDL_RenderDrawPoint(DoP::Instance()->getRenderer(), 400 + x, 300 - y);		//origin at center
+	}
 }
 
 void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color)
@@ -127,7 +139,7 @@ void Graphics::processScanLine(int y, Vector4D pa, Vector4D pb, Vector4D pc, Vec
 	int ex = pc.getX() + gradient2 * (pd.getX() - pc.getX());
 
 	//std::cout<<"sx: "<<sx<<" ex: "<<ex<<std::endl;
-	
+
 	for (int x = sx+1; x < ex; x++)
 	{
 		//std::cout<<"x: "<<x<<" y: "<<y<<std::endl;
