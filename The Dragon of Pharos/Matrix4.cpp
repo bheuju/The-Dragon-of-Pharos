@@ -148,7 +148,7 @@ Matrix4 Matrix4::setRotation(float thetaX, float thetaY, float thetaZ)
 	//displayMatrix(setRotationZ(thetaZ), "Z");
 
 	Matrix4 rotate = setRotationX(thetaX) * setRotationY(thetaY) * setRotationZ(thetaZ);
-	
+
 	//displayMatrix(rotate, "All");
 	return (rotate);
 }
@@ -187,6 +187,8 @@ Matrix4 Matrix4::setViewMatrix(Vector3D cameraPos, Vector3D cameraTarget, Vector
 		Vector4D(	0,				0,				0,				1 )
 		);
 
+	//displayMatrix(orientation);
+
 	//create 4x4 tralslation matrix
 	//cameraPos is negelected which is eqvt
 	//to the inverse of the translation matrix
@@ -200,6 +202,7 @@ Matrix4 Matrix4::setViewMatrix(Vector3D cameraPos, Vector3D cameraTarget, Vector
 	//combine the orientation and translation to compute
 	//the final view matrix
 	return (orientation * translation);
+	//return (translation * orientation );
 
 	/**
 	Simplified form
@@ -224,11 +227,21 @@ Matrix4 Matrix4::setProjectionMatrix(float fovy, float aspect, float zNear, floa
 {
 	float angle = (PI / 180) * fovy;
 	reset();
-	mat[0][0] = aspect * (1.0 / (tan(angle * 0.5)));
-	mat[1][1] = 1.0 / (tan(angle * 0.5));
+
+	//mat[0][0] = aspect * (1.0 / (tan(angle * 0.5)));
+	//mat[1][1] = 1.0 / (tan(angle * 0.5));
+	//mat[2][2] = -((zFar + zNear) / (zFar - zNear));
+	//mat[2][3] = -((2 * zFar * zNear) / (zFar - zNear));
+	//mat[3][2] = -1;
+
+	mat[0][0] = 500;
+	mat[1][1] = 500;
 	mat[2][2] = -((zFar + zNear) / (zFar - zNear));
 	mat[2][3] = -((2 * zFar * zNear) / (zFar - zNear));
 	mat[3][2] = -1;
+
+	//displayMatrix(*this);
+
 	return *this;
 }
 

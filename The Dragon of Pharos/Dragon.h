@@ -41,7 +41,7 @@ private:
 	Matrix4 viewMatrix, projectionMatrix;
 	Matrix4 transformMatrix;
 
-	std::vector<Vector4D> points;
+	//std::vector<float> points;
 	//std::vector<>
 };
 

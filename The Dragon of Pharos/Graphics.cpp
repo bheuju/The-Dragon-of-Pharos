@@ -10,8 +10,14 @@ Graphics::Graphics()
 
 }
 
-void Graphics::drawPixel(float x, float y, Vector3D color)
+void Graphics::drawPixel(float x, float y, float z, Vector3D color)
 {
+	//if (depthBuffer.back() < z)
+	{
+	//	return;
+	}
+	//depthBuffer.push_back(z);
+
 	if (DoP::Instance()->getMode() == OPENGL)
 	{
 		float r = color.getX() / 255.0;
@@ -64,7 +70,7 @@ void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color)
 			y=y2;
 			xe=x1;
 		}
-		drawPixel(x, y, color);
+		drawPixel(x, y, 1000, color);
 		//putpixel(x,y,c);
 		for(i=0;x<xe;i++)
 		{
@@ -85,7 +91,7 @@ void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color)
 				}
 				px=px+2*(dy1-dx1);
 			}
-			drawPixel(x, y, color);
+			drawPixel(x, y, 1000, color);
 			//putpixel(x,y,c);
 		}
 	}
@@ -103,7 +109,7 @@ void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color)
 			y=y2;
 			ye=y1;
 		}
-		drawPixel(x, y, color);
+		drawPixel(x, y, 1000, color);
 		//putpixel(x,y,c);
 		for(i=0;y<ye;i++)
 		{
@@ -124,7 +130,7 @@ void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color)
 				}
 				py=py+2*(dx1-dy1);
 			}
-			drawPixel(x, y, color);
+			drawPixel(x, y, 1000, color);
 			//putpixel(x,y,c);
 		}
 	}
@@ -138,12 +144,17 @@ void Graphics::processScanLine(int y, Vector4D pa, Vector4D pb, Vector4D pc, Vec
 	int sx = pa.getX() + gradient1 * (pb.getX() - pa.getX());
 	int ex = pc.getX() + gradient2 * (pd.getX() - pc.getX());
 
+	float z1 = pa.getZ() + gradient1 * (pb.getZ() - pa.getZ());
+	float z2 = pc.getZ() + gradient2 * (pd.getZ() - pc.getZ());
+
 	//std::cout<<"sx: "<<sx<<" ex: "<<ex<<std::endl;
 
 	for (int x = sx+1; x < ex; x++)
 	{
 		//std::cout<<"x: "<<x<<" y: "<<y<<std::endl;
-		drawPixel(x, y, color);
+		float gradient = (x - sx) / (float)(ex - sx);
+		int z = z1 + gradient * (z2 - z1);
+		drawPixel(x, y, z, color);
 	}
 }
 
