@@ -25,7 +25,8 @@ int main(int argc, char** argv)
 	bool showFPS = false;
 
 	//Initialize
-	DoP::Instance()->init("The Dragon of Pharos", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+	//DoP::Instance()->init("The Dragon of Pharos", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+	DoP::Instance()->init("The Dragon of Pharos", 550, 100, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
 	/*
 	glClearColor(0, 1, 0, 1);

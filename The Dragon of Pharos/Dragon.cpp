@@ -4,19 +4,20 @@
 
 Dragon::Dragon()
 {
+	selected = 0;
 	wireFrame = true;
-	step = 10;
-	x = y = 10;
-	angleX = angleY = angleZ = 0;
-	sX = sY = sZ = 1;
+
+	released = true;
+
+	translateStep = 1;
+	rotateStep = 0.1;
+	scaleStep = 0.1;
 }
 
 void Dragon::init()
 {
-	//gph.setMode(SDL);
-
 	//Set View Matrix
-	Camera::Instance()->setCameraPos(0, 0, -200);
+	Camera::Instance()->setCameraPos(0, 0, 200);
 	Camera::Instance()->setCameraTarget(0, 0, 0);
 	Camera::Instance()->setUpVector(0, 1, 0);
 	viewMatrix = Camera::Instance()->getViewMatrix();
@@ -26,7 +27,7 @@ void Dragon::init()
 
 	/** Initialize object: cube */
 	//===========================/
-	cube = Object("cube", 8, 12);
+	cube = Object("cube");
 	cube.vertex.push_back(new Vector4D(-10, 10, 10));
 	cube.vertex.push_back(new Vector4D(-10, -10, 10));
 	cube.vertex.push_back(new Vector4D(10, -10, 10));
@@ -35,7 +36,6 @@ void Dragon::init()
 	cube.vertex.push_back(new Vector4D(-10, -10, -10));
 	cube.vertex.push_back(new Vector4D(10, -10, -10));
 	cube.vertex.push_back(new Vector4D(10, 10, -10));
-
 	cube.face.push_back(new Face(0, 1, 2));
 	cube.face.push_back(new Face(2, 3, 0));
 	cube.face.push_back(new Face(4, 7, 6));
@@ -50,10 +50,10 @@ void Dragon::init()
 	cube.face.push_back(new Face(6, 2, 1));
 
 	//Push initialized objects
+	cube.setTranslation(100, 0, 0);
 	objects.push_back(cube);
-
-	angleX = angleY = angleZ = 0;
-	sX = sY = sZ = 2;
+	cube.setTranslation(-100, 20, -10);
+	objects.push_back(cube);
 
 	/*
 	displayMatrix(cube.modelMatrix, "Model Matrix");
@@ -64,25 +64,22 @@ void Dragon::init()
 
 void Dragon::handleInput()
 {
-	/*
-	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_LEFT))
-	{
-	x -= step;
-	}
-	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_RIGHT))
-	{
-	x += step;
-	}
-	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_UP))
-	{
-	y -= step;
-	}
-	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_DOWN))
-	{
-	y += step;
-	}
-	*/
+	/**********************************************************
+	Input Keys Description:
+	F11					-	toggle wireframe / rasterized
+	F12					-	display FPS
+	TAB and BACKSPACE	-	select objects
+	H					-	hide objects
+	LEFT(-), RIGHT(+)	-	translate X
+	UP(+), DOWN(-)		-	translate Y
+	LCTRL(+), RCTRL(-)	-	translate Z
+	W,A,S,D,Q,E			-	rotate X, Y, Z
+	Scroll and Z,X		-	scale
+	LSHIFT + (R, S, T)	-	reset rotate, scale, translate
+	SPACE				-	show info of slected object
+	**********************************************************/
 
+	//toggle between wireframe and rasterized model
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F11))
 	{
 		if (wireFrame)
@@ -96,60 +93,182 @@ void Dragon::handleInput()
 			wireFrame = true;
 		}
 	}
-
+	//Selecting objects
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_TAB))
+	{
+		selected++;
+		if (selected >= objects.size())
+		{
+			selected = 0;
+		}
+		std::cout<<"Selected - "<<selected<<"\t -- "<<objects[selected].name<<" Status: "<<objects[selected].shown<<std::endl;
+	}
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_BACKSPACE))
+	{
+		selected--;
+		if (selected < 0)
+		{
+			selected = objects.size() - 1;
+		}
+		std::cout<<"Selected - "<<selected<<"\t -- "<<objects[selected].name<<" Status: "<<objects[selected].shown<<std::endl;
+	}
+	//toggling hiding objects
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_H) && released)
+	{
+		if (objects[selected].shown)
+		{
+			objects[selected].shown = false;
+		}
+		else
+		{
+			objects[selected].shown = true;
+		}
+		released = false;
+	}
+	else
+	{
+		released = true;
+	}
+	//translation
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_LEFT))
+	{
+		objects[selected].tX -= translateStep;
+	}
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_RIGHT))
+	{
+		objects[selected].tX += translateStep;
+	}
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_DOWN))
+	{
+		objects[selected].tY -= translateStep;
+	}
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_UP))
+	{
+		objects[selected].tY += translateStep;
+	}
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_LCTRL))
+	{
+		objects[selected].tZ += translateStep;
+	}
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_RCTRL))
+	{
+		objects[selected].tZ -= translateStep;
+	}
+	//rotation
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_W))
 	{
-		angleX += 0.1;
+		objects[selected].angleX -= rotateStep;
 	}
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_S))
 	{
-		angleX -= 0.1;
+		objects[selected].angleX += rotateStep;
 	}
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_A))
 	{
-		angleY -= 0.1;
+		objects[selected].angleY -= rotateStep;
 	}
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_D))
 	{
-		angleY += 0.1;
+		objects[selected].angleY += rotateStep;
 	}
-
-	//std::cout<<InputHandler::Instance()->getWheelPosition()<<std::endl;
-	//zoom function (scaling)
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_Q))
+	{
+		objects[selected].angleZ -= rotateStep;
+	}
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_E))
+	{
+		objects[selected].angleZ += rotateStep;
+	}
+	//scaling
 	if (InputHandler::Instance()->getWheelPosition() == -1)
 	{
-		sX -= 0.1;
-		sY -= 0.1;
-		sZ -= 0.1;
+		objects[selected].sX -= scaleStep;
+		objects[selected].sY -= scaleStep;
+		objects[selected].sZ -= scaleStep;
+		if (objects[selected].sX < 0.1)
+		{
+			objects[selected].sX = objects[selected].sY = objects[selected].sZ = 0.1;
+		}
 	}
 	else if (InputHandler::Instance()->getWheelPosition() == 1)
 	{
-		if (sX > 0.1)
+		if (objects[selected].sX >= 0.1)
 		{
-			sX += 0.1;
-			sY += 0.1;
-			sZ += 0.1;
+			objects[selected].sX += scaleStep;
+			objects[selected].sY += scaleStep;
+			objects[selected].sZ += scaleStep;
 		}
 	}
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_Z))
 	{
-		sX = sY = sZ += 1;
+		if (objects[selected].sX > 0.1)
+		{
+			objects[selected].sX = objects[selected].sY = objects[selected].sZ += 1;
+		}
 	}
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_X))
 	{
-		sX = sY = sZ -= 1;
+		objects[selected].sX = objects[selected].sY = objects[selected].sZ -= 1;
+		if (objects[selected].sX < 0.1)
+		{
+			objects[selected].sX = objects[selected].sY = objects[selected].sZ = 0.1;
+		}
 	}
-	/* Follow mouse
-	x = InputHandler::Instance()->getMousePosition()->getX();
-	y = InputHandler::Instance()->getMousePosition()->getY();
-	*/
+	//reset model
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_LSHIFT))
+	{
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_T))
+		{
+			std::cout<<"Reset Translation\n";
+			objects[selected].tX = objects[selected].tY = objects[selected].tZ = 0;
+		}
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_R))
+		{
+			std::cout<<"Reset Rotation\n";
+			objects[selected].angleX = objects[selected].angleY = objects[selected].angleZ = 0;
+		}
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_S))
+		{
+			std::cout<<"Reset Scaling\n";
+			objects[selected].sX = objects[selected].sY = objects[selected].sZ = 1;
+		}
+	}
+	//show info
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_SPACE))
+	{
+		std::cout<<"======================================="<<std::endl;
+		std::cout<<"SN: "<<selected<<std::endl;
+		std::cout<<"Object: "<<objects[selected].name<<std::endl;
+		std::cout<<"Status: "<<(objects[selected].shown ? "shown": "hidden")<<std::endl;
+		std::cout<<"World coordinates: "<<objects[selected].tX<<", "<<objects[selected].tY<<", "<<objects[selected].tZ<<std::endl;
+		std::cout<<"Rotation: "<<objects[selected].angleX<<", "<<objects[selected].angleY<<", "<<objects[selected].angleZ<<std::endl;
+		std::cout<<"Scale: "<<objects[selected].sX<<", "<<objects[selected].sY<<", "<<objects[selected].sZ<<std::endl;
+		std::cout<<"======================================="<<std::endl;
+	}
 }
 
 void Dragon::update()
 {
-	objects[0].translation = Matrix4().setTranslationMatrix(0, 0, 0);
-	objects[0].rotation = Matrix4().setRotation(angleX, angleY, angleZ);
-	objects[0].scale = Matrix4().setScaleMatrix(sX, sY, sZ);
+	for (int i = 0; i < objects.size(); i++)
+	{
+
+		//std::cout<<"angle x"<<objects[i].tX<<std::endl;
+		//std::cout<<"angle y"<<objects[i].tY<<std::endl;
+		objects[i].translation = Matrix4().setTranslationMatrix(objects[i].tX, objects[i].tY, objects[i].tZ);
+		objects[i].rotation = Matrix4().setRotation(objects[i].angleX, objects[i].angleY, objects[i].angleZ);
+		objects[i].scale = Matrix4().setScaleMatrix(objects[i].sX, objects[i].sY, objects[i].sZ);
+		//displayMatrix(objects[i].translation, "Translate");
+		//displayMatrix(objects[i].rotation, "Rotate");
+		//displayMatrix(objects[i].scale, "Scale");
+	}
+
+	//objects[0].translation = Matrix4().setTranslationMatrix(0, 0, 0);
+	//objects[0].rotation = Matrix4().setRotation(angleX, angleY, angleZ);
+	//objects[0].scale = Matrix4().setScaleMatrix(sX, sY, sZ);
+
+	//objects[1].translation = Matrix4().setTranslationMatrix(50, 0, 0);
+	//objects[1].rotation = Matrix4().setRotation(angleX, angleY, angleZ);
+	//objects[1].scale = Matrix4().setScaleMatrix(sX, sY, sZ);
 }
 
 void Dragon::render()
@@ -159,12 +278,16 @@ void Dragon::render()
 	//gph.depthBuffer.push_back(1000);
 
 	//draw axis lines
-	gph.drawLine(0, 300, 0, -300, Vector3D(0, 255, 0));
-	gph.drawLine(400, 0, -400, 0, Vector3D(0, 255, 0));
+	gph.drawLine(0, 300, 0, -300, Vector3D(0, 255, 255));
+	gph.drawLine(400, 0, -400, 0, Vector3D(0, 255, 255));
 
 	//for each object
 	for (int i = 0; i < objects.size(); i++)
 	{
+		if (!objects[i].shown)
+		{
+			continue;
+		}
 		objects[i].modelMatrix = Matrix4().setModelMatrix(objects[i].translation, objects[i].rotation, objects[i].scale);
 		//objects[i].modelMatrix = Matrix4().setModelMatrix(objects[i].translation, rotation, objects[i].scale);
 		transformMatrix = projectionMatrix * viewMatrix * objects[i].modelMatrix;
@@ -205,17 +328,6 @@ void Dragon::render()
 
 
 			//normalizing w component
-			
-			//displayVector4D(point0, "Before point 0", 1);
-			//point0.normalizeW();
-			//displayVector4D(point0, "After point 0", 1);
-			//displayVector4D(point1, "Before point 1", 1);
-			//point1.normalizeW();
-			//displayVector4D(point1, "After point 1", 1);
-			//displayVector4D(point2, "Before point 2", 1);
-			//point2.normalizeW();
-			//displayVector4D(point2, "After point 2", 1);
-			
 			point0.normalizeW();
 			point1.normalizeW();
 			point2.normalizeW();
@@ -224,10 +336,21 @@ void Dragon::render()
 			//displayVector4D(point1, "Point 1", 1);
 			//displayVector4D(point2, "Point 2", 1);
 
-			//draw 4 lines of the quad
-			gph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY());
-			gph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY());
-			gph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY());
+			//draw 3 lines of the triangle
+			if (i == selected)
+			{
+				//highlight selected object by drawng green color line	
+				gph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY(), Vector3D(0, 255, 0));
+				gph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY(), Vector3D(0, 255, 0));
+				gph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY(), Vector3D(0, 255, 0));
+			}
+			else
+			{
+				//use default color red for unselected
+				gph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY());
+				gph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY());
+				gph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY());
+			}
 
 			if (!wireFrame)
 			{

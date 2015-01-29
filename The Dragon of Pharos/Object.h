@@ -18,16 +18,25 @@ class Object
 {
 public:
 	Object();
-	Object(std::string objectName, int verticesCount, int faceCount);
+	Object(std::string objectName);
 	~Object() {}
 
 	std::string name;
-	int vertexCount, facesCount;
 	std::vector<Vector4D*> vertex;
 	std::vector<Face*> face;
 	
+	void setTranslation(float x, float y, float z);
+	void setRotation(float x, float y, float z);
+	void setScale(float x, float y, float z);
+
 	Matrix4 translation, rotation, scale;
 	Matrix4 modelMatrix;
+
+	float tX, tY, tZ;
+	float sX, sY, sZ;
+	float angleX, angleY, angleZ;
+
+	bool shown;
 };
 
 class Face

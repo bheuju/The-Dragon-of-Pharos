@@ -29,9 +29,6 @@ private:
 
 	bool wireFrame;
 
-	int x, y;
-	int step;
-
 	Object cube;
 	float angleX, angleY, angleZ;
 	float sX, sY, sZ;
@@ -40,6 +37,15 @@ private:
 
 	Matrix4 viewMatrix, projectionMatrix;
 	Matrix4 transformMatrix;
+
+
+	//to know which object to move (selects from vector objects)
+	int selected;
+
+	bool released;
+
+	//step size for transformations
+	float translateStep, rotateStep, scaleStep;
 
 	//std::vector<float> points;
 	//std::vector<>

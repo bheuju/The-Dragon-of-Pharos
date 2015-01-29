@@ -3,14 +3,41 @@
 /* Objects */
 Object::Object()
 {
+	tX = tY = tZ = 0;
+	angleX = angleY = angleZ = 0;
+	sX = sY = sZ = 1;
 
+	shown  = true;
 }
 
-Object::Object(std::string objectName, int verticesCount, int faceCount)
+Object::Object(std::string objectName)
 {
 	name = objectName;
-	vertexCount = verticesCount;
-	facesCount = faceCount;
+
+	tX = tY = tZ = 0;
+	angleX = angleY = angleZ = 0;
+	sX = sY = sZ = 1;
+
+	shown  = true;
+}
+
+void Object::setTranslation(float x, float y, float z)
+{
+	tX = x;
+	tY = y;
+	tZ = z;
+}
+void Object::setRotation(float x, float y, float z)
+{
+	angleX = x;
+	angleY = y;
+	angleZ = z;
+}
+void Object::setScale(float x, float y, float z)
+{
+	sX = x;
+	sY = y;
+	sZ = z;
 }
 
 
