@@ -5,6 +5,7 @@
 Dragon::Dragon()
 {
 	selected = 0;
+	//wireFrame = true;
 	wireFrame = true;
 
 	released = true;
@@ -49,12 +50,32 @@ void Dragon::init()
 	cube.face.push_back(new Face(1, 5, 6));
 	cube.face.push_back(new Face(6, 2, 1));
 
-	//Push initialized objects
-	cube.setTranslation(100, 0, 0);
-	objects.push_back(cube);
-	cube.setTranslation(-100, 20, -10);
-	objects.push_back(cube);
+	Object octahedron("Octahedron");
+	octahedron.vertex.push_back(new Vector4D(10, 0, 0));
+	octahedron.vertex.push_back(new Vector4D(0, -10, 0));
+	octahedron.vertex.push_back(new Vector4D(-10, 0, 0));
+	octahedron.vertex.push_back(new Vector4D(0, 10, 0));
+	octahedron.vertex.push_back(new Vector4D(0, 0, 10));
+	octahedron.vertex.push_back(new Vector4D(0, 0, -10));
+	octahedron.face.push_back(new Face(1, 0, 4));
+	octahedron.face.push_back(new Face(2, 1, 4));
+	octahedron.face.push_back(new Face(3, 2, 4));
+	octahedron.face.push_back(new Face(0, 3, 4));
+	octahedron.face.push_back(new Face(0, 1, 5));
+	octahedron.face.push_back(new Face(1, 2, 5));
+	octahedron.face.push_back(new Face(2, 3, 5));
+	octahedron.face.push_back(new Face(3, 0, 5));
+	octahedron.setTranslation(-20, -15, 0);
+	octahedron.setScale(2, 2, 2);
 
+	//Push initialized objects
+	cube.setTranslation(50, 0, 0);
+	cube.setScale(2, 2, 2);
+	objects.push_back(cube);
+	cube.setTranslation(-15, 20, -10);
+	cube.setScale(1, 1, 1);
+	objects.push_back(cube);
+	objects.push_back(octahedron);
 	/*
 	displayMatrix(cube.modelMatrix, "Model Matrix");
 	displayMatrix(viewMatrix, "View Matrix");
@@ -236,6 +257,7 @@ void Dragon::handleInput()
 	//show info
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_SPACE))
 	{
+		std::cout.precision(2);
 		std::cout<<"======================================="<<std::endl;
 		std::cout<<"SN: "<<selected<<std::endl;
 		std::cout<<"Object: "<<objects[selected].name<<std::endl;
@@ -243,6 +265,18 @@ void Dragon::handleInput()
 		std::cout<<"World coordinates: "<<objects[selected].tX<<", "<<objects[selected].tY<<", "<<objects[selected].tZ<<std::endl;
 		std::cout<<"Rotation: "<<objects[selected].angleX<<", "<<objects[selected].angleY<<", "<<objects[selected].angleZ<<std::endl;
 		std::cout<<"Scale: "<<objects[selected].sX<<", "<<objects[selected].sY<<", "<<objects[selected].sZ<<std::endl;
+		std::cout<<"---------------------------------------"<<std::endl;
+		for (int i = 0; i < objects[selected].vertex.size(); i++)
+		{
+			Vector4D p = *objects[selected].vertex[i];
+			//std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
+			objects[selected].modelMatrix = Matrix4().setModelMatrix(objects[selected].translation, objects[selected].rotation, objects[selected].scale);
+			transformMatrix = projectionMatrix * viewMatrix * objects[selected].modelMatrix;
+			p = transformMatrix * *objects[selected].vertex[i];
+			//std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
+			p.normalizeW();
+			//std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
+		}
 		std::cout<<"======================================="<<std::endl;
 	}
 }
@@ -269,17 +303,29 @@ void Dragon::update()
 	//objects[1].translation = Matrix4().setTranslationMatrix(50, 0, 0);
 	//objects[1].rotation = Matrix4().setRotation(angleX, angleY, angleZ);
 	//objects[1].scale = Matrix4().setScaleMatrix(sX, sY, sZ);
-}
 
-void Dragon::render()
-{
+
 	//clearing
 	//gph.depthBuffer.clear();
 	//gph.depthBuffer.push_back(1000);
 
+	//clear frameBuffer
+	gph.frameBuffer.clear();
+	//cleat colorBuffer
+	gph.colorBuffer.clear();
+	//reset zBuffer
+	for (int i = 0; i < 800; i++)
+	{
+		for (int j = 0; j < 600; j++)
+		{
+			gph.zBuffer[i][j] = 500;
+		}
+	}
+
 	//draw axis lines
 	gph.drawLine(0, 300, 0, -300, Vector3D(0, 255, 255));
 	gph.drawLine(400, 0, -400, 0, Vector3D(0, 255, 255));
+	//std::cout<<"Real: "<<gph.frameBuffer.size()<<std::endl;
 
 	//for each object
 	for (int i = 0; i < objects.size(); i++)
@@ -297,21 +343,21 @@ void Dragon::render()
 		//displayMatrix(transformMatrix, "Transform");
 
 		//for each vertex in the object
-		/*
-		for (int j = 0; j < objects[i].vertex.size(); j++)
-		{
-		Vector4D point = transformMatrix * *objects[i].vertex[j];
-		//std::cout<<"Before = Point "<<j<<": "<<point.getX()<<" "<<point.getY()<<std::endl;
 
-		displayVector4D(point, "Before", 1);
-		point.normalizeW();
-		displayVector4D(point, "After", 1);
-		int x0 = point.getX();
-		int y0 = point.getY();
-		//std::cout<<"After = Point "<<j<<": "<<x0<<" "<<y0<<std::endl;
-		gph.drawPixel(x0, y0);
-		}
-		*/
+		//for (int j = 0; j < objects[i].vertex.size(); j++)
+		//{
+		//	Vector4D point = transformMatrix * *objects[i].vertex[j];
+		//	//std::cout<<"Before = Point "<<j<<": "<<point.getX()<<" "<<point.getY()<<std::endl;
+
+		//	displayVector4D(point, "Before", 1);
+		//	point.normalizeW();
+		//	displayVector4D(point, "After", 1);
+		//	int x0 = point.getX();
+		//	int y0 = point.getY();
+		//	//std::cout<<"After = Point "<<j<<": "<<x0<<" "<<y0<<std::endl;
+		//	gph.drawPixel(x0, y0);
+		//}
+
 		//for each face of the object
 		for (int k = 0; k < objects[i].face.size(); k++)
 		{
@@ -357,40 +403,28 @@ void Dragon::render()
 				switch (k)
 				{
 				case 0:
+				case 1:
 					gph.fillTriangle(point0, point1, point2, Vector3D(0, 25, 25));
 					break;
-				case 1:
+				case 2:
+				case 3:
 					gph.fillTriangle(point0, point1, point2, Vector3D(25, 100, 25));
 					break;
-				case 2:
+				case 4:
+				case 5:
 					gph.fillTriangle(point0, point1, point2, Vector3D(100, 100, 150));
 					break;
-				case 3:
+				case 6:
+				case 7:
 					gph.fillTriangle(point0, point1, point2, Vector3D(150, 25, 150));
 					break;
-				case 4:
+				case 8:
+				case 9:
 					gph.fillTriangle(point0, point1, point2, Vector3D(150, 200, 150));
 					break;
-				case 5:
-					gph.fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));
-					break;
-				case 6:
-					gph.fillTriangle(point0, point1, point2, Vector3D(230, 90, 45));
-					break;
-				case 7:
-					gph.fillTriangle(point0, point1, point2, Vector3D(159, 23, 23));
-					break;
-				case 8:
-					gph.fillTriangle(point0, point1, point2, Vector3D(255, 10, 100));
-					break;
-				case 9:
-					gph.fillTriangle(point0, point1, point2, Vector3D(24, 28, 87));
-					break;
 				case 10:
-					gph.fillTriangle(point0, point1, point2, Vector3D(14, 11, 60));
-					break;
 				case 11:
-					gph.fillTriangle(point0, point1, point2, Vector3D(155, 43, 67));
+					gph.fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));
 					break;
 				default:
 					break;
@@ -398,5 +432,24 @@ void Dragon::render()
 				//gph.fillTriangle(point0, point1, point2, Vector3D(0, 100, 150));
 			}
 		}
+	}
+}
+
+void Dragon::render()
+{
+	//std::cout<<gph.frameBuffer.size()<<std::endl;
+	for (int i = 0; i < gph.frameBuffer.size(); i++)
+	{
+		int x = gph.frameBuffer[i].getX();
+		int y = gph.frameBuffer[i].getY();
+		int z = gph.frameBuffer[i].getZ();
+
+		//std::cout<<i;
+		//displayVector4D(gph.frameBuffer[i], "", 1);
+
+		Vector3D color = gph.colorBuffer[i];
+
+		gph.drawPixel(x, y, z, color);
+
 	}
 }

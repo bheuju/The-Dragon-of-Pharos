@@ -113,7 +113,7 @@ Matrix4 Matrix4::setTranslationMatrix(float tX, float tY, float tZ)
 //Rotations
 Matrix4 Matrix4::setRotationX(float theta)
 {
-	float angle = (PI / 180) * theta;
+	float angle = (float)(PI / 180) * theta;
 	setIdentityMatrix();
 	mat[1][1] = cos(theta);
 	mat[1][2] = -sin(theta);
@@ -123,7 +123,7 @@ Matrix4 Matrix4::setRotationX(float theta)
 }
 Matrix4 Matrix4::setRotationY(float theta)
 {
-	float angle = (PI / 180) * theta;
+	float angle = (float)(PI / 180) * theta;
 	setIdentityMatrix();
 	mat[0][0] = cos(theta);
 	mat[2][0] = -sin(theta);
@@ -133,7 +133,7 @@ Matrix4 Matrix4::setRotationY(float theta)
 }
 Matrix4 Matrix4::setRotationZ(float theta)
 {
-	float angle = (PI / 180) * theta;
+	float angle = (float)(PI / 180) * theta;
 	setIdentityMatrix();
 	mat[0][0] = cos(theta);
 	mat[0][1] = -sin(theta);
@@ -225,11 +225,11 @@ Matrix4 Matrix4::setViewMatrix(Vector3D cameraPos, Vector3D cameraTarget, Vector
 
 Matrix4 Matrix4::setProjectionMatrix(float fovy, float aspect, float zNear, float zFar)
 {
-	float angle = (PI / 180) * fovy;
+	float angle = (float)(PI / 180) * fovy;
 	reset();
 
-	//mat[0][0] = aspect * (1.0 / (tan(angle * 0.5)));
-	//mat[1][1] = 1.0 / (tan(angle * 0.5));
+	//mat[0][0] = 600*aspect * (1.0 / (tan(angle * 0.5)));
+	//mat[1][1] = 800*1.0 / (tan(angle * 0.5));
 	//mat[2][2] = -((zFar + zNear) / (zFar - zNear));
 	//mat[2][3] = -((2 * zFar * zNear) / (zFar - zNear));
 	//mat[3][2] = -1;

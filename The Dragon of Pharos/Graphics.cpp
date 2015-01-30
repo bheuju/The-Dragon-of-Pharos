@@ -5,19 +5,44 @@
 #include "Vector3D.h"
 #include <SDL_opengl.h>
 
+//std::vector<Vector4D> temp;
+
+//std::vector<Vector4D> Graphics::frameBuffer = temp;
+
 Graphics::Graphics()
 {
 
 }
 
+void Graphics::putPixel(float x, float y, float z, Vector3D color)
+{
+	//for (each pixel (x, y))
+	//{
+	//	z-depth at (x,y) = z;
+	//	if (z-depth < zBuffer(x, y))
+	//	{
+	//		write point to frameBuffer; i.e vector4d(x, y, z);
+	//		zBuffer(x, y) = z-depth;
+	//	}
+	//}
+
+	int zDepth = z;
+	int xp = (int) (x + 400 );
+	int yp = (int) (300 - y);
+
+	//std::cout<<"x: "<<xp<<" y: "<<yp<<std::endl;
+
+	if (zDepth < zBuffer[xp][yp])
+	{
+		frameBuffer.push_back(Vector4D(x, y, z));
+		colorBuffer.push_back(color);
+		zBuffer[xp][yp] = zDepth;
+	}
+	//std::cout<<"Real: "<<frameBuffer.size()<<std::endl;
+}
+
 void Graphics::drawPixel(float x, float y, float z, Vector3D color)
 {
-	//if (depthBuffer.back() < z)
-	{
-	//	return;
-	}
-	//depthBuffer.push_back(z);
-
 	if (DoP::Instance()->getMode() == OPENGL)
 	{
 		float r = color.getX() / 255.0;
@@ -70,8 +95,8 @@ void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color)
 			y=y2;
 			xe=x1;
 		}
-		drawPixel(x, y, 1000, color);
-		//putpixel(x,y,c);
+		//drawPixel(x, y, 1000, color);
+		putPixel(x, y, 100, color);
 		for(i=0;x<xe;i++)
 		{
 			x=x+1;
@@ -91,8 +116,8 @@ void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color)
 				}
 				px=px+2*(dy1-dx1);
 			}
-			drawPixel(x, y, 1000, color);
-			//putpixel(x,y,c);
+			//drawPixel(x, y, 1000, color);
+			putPixel(x, y, 100, color);
 		}
 	}
 	else
@@ -109,8 +134,8 @@ void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color)
 			y=y2;
 			ye=y1;
 		}
-		drawPixel(x, y, 1000, color);
-		//putpixel(x,y,c);
+		//drawPixel(x, y, 1000, color);
+		putPixel(x, y, 100, color);
 		for(i=0;y<ye;i++)
 		{
 			y=y+1;
@@ -130,8 +155,8 @@ void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color)
 				}
 				py=py+2*(dx1-dy1);
 			}
-			drawPixel(x, y, 1000, color);
-			//putpixel(x,y,c);
+			//drawPixel(x, y, 1000, color);
+			putPixel(x, y, 100, color);
 		}
 	}
 }
@@ -154,7 +179,8 @@ void Graphics::processScanLine(int y, Vector4D pa, Vector4D pb, Vector4D pc, Vec
 		//std::cout<<"x: "<<x<<" y: "<<y<<std::endl;
 		float gradient = (x - sx) / (float)(ex - sx);
 		int z = z1 + gradient * (z2 - z1);
-		drawPixel(x, y, z, color);
+		//drawPixel(x, y, z, color);
+		putPixel(x, y, z, color);
 	}
 }
 

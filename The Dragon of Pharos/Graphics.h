@@ -31,7 +31,10 @@ public:
 	void processScanLine(int y, Vector4D pa, Vector4D pb, Vector4D pc, Vector4D pd, Vector3D color);
 	void fillTriangle(Vector4D p1, Vector4D p2, Vector4D p3, Vector3D color);
 
-	std::vector<float> depthBuffer;
+	float zBuffer[801][601];
+
+	std::vector<Vector4D> frameBuffer;
+	std::vector<Vector3D> colorBuffer;
 
 };
 
