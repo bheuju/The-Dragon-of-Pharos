@@ -28,17 +28,23 @@ public:
 	float getZ() {return mZ;}
 	float getW() {return mW;}
 
+	float getDZ() {return dz;}
+
 	void setX(float x) {mX = x;}
 	void setY(float y) {mY = y;}
 	void setZ(float z) {mZ = z;}
 	void setW(float w) {mW = w;}
 
-	void normalizeW()
+	Vector4D getNormalizedW()
 	{
-		mX = mX / mW;
-		mY = mY / mW;
-		mZ = mZ / mW;
-		mW = mW / mW;
+		float dz = mZ;
+
+		float x = mX / mW;
+		float y = mY / mW;
+		float z = mZ / mW;
+		float w = mW / mW;
+		
+		return Vector4D(x, y, z, w);
 	}
 
 	friend void displayVector4D(Vector4D& v, std::string name = "", int mode  = 0)
@@ -69,4 +75,6 @@ private:
 	float mY;
 	float mZ;
 	float mW;
+
+	float dz;	//stores denormalized z
 };

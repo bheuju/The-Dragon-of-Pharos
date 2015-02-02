@@ -180,12 +180,19 @@ Matrix4 Matrix4::setViewMatrix(Vector3D cameraPos, Vector3D cameraTarget, Vector
 	//create a 4x4 orientation matrix
 	//this is transposed which is eqvt. to performing an inverse
 	//if the matrix is orthonormalized (in this case, it is)
+	//Matrix4 orientation (
+	//	Vector4D(	xAxis.getX(),	xAxis.getY(),	xAxis.getZ(),	0 ),
+	//	Vector4D(	yAxis.getX(),	yAxis.getY(),	yAxis.getZ(),	0 ),
+	//	Vector4D(	zAxis.getX(),	zAxis.getY(),	zAxis.getZ(),	0 ),
+	//	Vector4D(	0,				0,				0,				1 )
+	//	);
 	Matrix4 orientation (
-		Vector4D(	xAxis.getX(),	xAxis.getY(),	xAxis.getZ(),	0 ),
-		Vector4D(	yAxis.getX(),	yAxis.getY(),	yAxis.getZ(),	0 ),
-		Vector4D(	zAxis.getX(),	zAxis.getY(),	zAxis.getZ(),	0 ),
+		Vector4D(	xAxis.getX(),	yAxis.getX(),	zAxis.getX(),	0 ),
+		Vector4D(	xAxis.getY(),	yAxis.getY(),	zAxis.getY(),	0 ),
+		Vector4D(	xAxis.getZ(),	yAxis.getZ(),	zAxis.getZ(),	0 ),
 		Vector4D(	0,				0,				0,				1 )
 		);
+
 
 	//displayMatrix(orientation);
 
@@ -226,7 +233,9 @@ Matrix4 Matrix4::setViewMatrix(Vector3D cameraPos, Vector3D cameraTarget, Vector
 Matrix4 Matrix4::setProjectionMatrix(float fovy, float aspect, float zNear, float zFar)
 {
 	float angle = (float)(PI / 180) * fovy;
+	
 	reset();
+	//setIdentityMatrix();
 
 	//mat[0][0] = 600*aspect * (1.0 / (tan(angle * 0.5)));
 	//mat[1][1] = 800*1.0 / (tan(angle * 0.5));

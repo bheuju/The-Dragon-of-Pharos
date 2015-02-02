@@ -11,6 +11,7 @@ Dragon Class
 #include "Graphics.h"
 #include "Object.h"
 #include "Matrix4.h"
+#include "Vector2D.h"
 
 class Dragon
 {
@@ -49,5 +50,11 @@ private:
 
 	//std::vector<float> points;
 	//std::vector<>
+	Vector4D p0, p1, p2;
+
+	Vector2D startPos;
+	Vector2D endPos;
+
+	std::vector<Vector2D> lines;
 };
 

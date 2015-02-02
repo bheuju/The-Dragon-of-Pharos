@@ -5,14 +5,19 @@
 Dragon::Dragon()
 {
 	selected = 0;
-	//wireFrame = true;
 	wireFrame = true;
+	//wireFrame = false;
 
 	released = true;
 
 	translateStep = 1;
 	rotateStep = 0.1;
 	scaleStep = 0.1;
+
+	endPos = Vector2D(0, 0);
+	startPos = Vector2D(0, 0);
+
+	//lines.push_back(Vector2D(0, 0));
 }
 
 void Dragon::init()
@@ -24,58 +29,99 @@ void Dragon::init()
 	viewMatrix = Camera::Instance()->getViewMatrix();
 
 	//Set Projection Matrix
-	projectionMatrix = Matrix4().setProjectionMatrix(45, 4.0/3.0, 0, 100);
+	projectionMatrix = Matrix4().setProjectionMatrix(45, 4.0/3.0, 1, 1000);
 
 	/** Initialize object: cube */
 	//===========================/
 	cube = Object("cube");
-	cube.vertex.push_back(new Vector4D(-10, 10, 10));
-	cube.vertex.push_back(new Vector4D(-10, -10, 10));
-	cube.vertex.push_back(new Vector4D(10, -10, 10));
-	cube.vertex.push_back(new Vector4D(10, 10, 10));
-	cube.vertex.push_back(new Vector4D(-10, 10, -10));
-	cube.vertex.push_back(new Vector4D(-10, -10, -10));
-	cube.vertex.push_back(new Vector4D(10, -10, -10));
-	cube.vertex.push_back(new Vector4D(10, 10, -10));
-	cube.face.push_back(new Face(0, 1, 2));
-	cube.face.push_back(new Face(2, 3, 0));
-	cube.face.push_back(new Face(4, 7, 6));
-	cube.face.push_back(new Face(6 ,5, 4));
-	cube.face.push_back(new Face(0, 4, 5));
-	cube.face.push_back(new Face(5, 1, 0));
-	cube.face.push_back(new Face(7, 3, 2));
-	cube.face.push_back(new Face(2, 6, 7));
-	cube.face.push_back(new Face(0, 3, 7));
-	cube.face.push_back(new Face(7, 4, 0));
-	cube.face.push_back(new Face(1, 5, 6));
-	cube.face.push_back(new Face(6, 2, 1));
-
+	{
+		cube.vertex.push_back(new Vector4D(-10, 10, 10));
+		cube.vertex.push_back(new Vector4D(-10, -10, 10));
+		cube.vertex.push_back(new Vector4D(10, -10, 10));
+		cube.vertex.push_back(new Vector4D(10, 10, 10));
+		cube.vertex.push_back(new Vector4D(-10, 10, -10));
+		cube.vertex.push_back(new Vector4D(-10, -10, -10));
+		cube.vertex.push_back(new Vector4D(10, -10, -10));
+		cube.vertex.push_back(new Vector4D(10, 10, -10));
+		cube.face.push_back(new Face(0, 1, 2));
+		cube.face.push_back(new Face(2, 3, 0));
+		cube.face.push_back(new Face(4, 7, 6));
+		cube.face.push_back(new Face(6 ,5, 4));
+		cube.face.push_back(new Face(0, 4, 5));
+		cube.face.push_back(new Face(5, 1, 0));
+		cube.face.push_back(new Face(7, 3, 2));
+		cube.face.push_back(new Face(2, 6, 7));
+		cube.face.push_back(new Face(0, 3, 7));
+		cube.face.push_back(new Face(7, 4, 0));
+		cube.face.push_back(new Face(1, 5, 6));
+		cube.face.push_back(new Face(6, 2, 1));
+	}
 	Object octahedron("Octahedron");
-	octahedron.vertex.push_back(new Vector4D(10, 0, 0));
-	octahedron.vertex.push_back(new Vector4D(0, -10, 0));
-	octahedron.vertex.push_back(new Vector4D(-10, 0, 0));
-	octahedron.vertex.push_back(new Vector4D(0, 10, 0));
-	octahedron.vertex.push_back(new Vector4D(0, 0, 10));
-	octahedron.vertex.push_back(new Vector4D(0, 0, -10));
-	octahedron.face.push_back(new Face(1, 0, 4));
-	octahedron.face.push_back(new Face(2, 1, 4));
-	octahedron.face.push_back(new Face(3, 2, 4));
-	octahedron.face.push_back(new Face(0, 3, 4));
-	octahedron.face.push_back(new Face(0, 1, 5));
-	octahedron.face.push_back(new Face(1, 2, 5));
-	octahedron.face.push_back(new Face(2, 3, 5));
-	octahedron.face.push_back(new Face(3, 0, 5));
-	octahedron.setTranslation(-20, -15, 0);
-	octahedron.setScale(2, 2, 2);
-
+	{
+		octahedron.vertex.push_back(new Vector4D(10, 0, 0));
+		octahedron.vertex.push_back(new Vector4D(0, -10, 0));
+		octahedron.vertex.push_back(new Vector4D(-10, 0, 0));
+		octahedron.vertex.push_back(new Vector4D(0, 10, 0));
+		octahedron.vertex.push_back(new Vector4D(0, 0, 10));
+		octahedron.vertex.push_back(new Vector4D(0, 0, -10));
+		octahedron.face.push_back(new Face(1, 0, 4));
+		octahedron.face.push_back(new Face(2, 1, 4));
+		octahedron.face.push_back(new Face(3, 2, 4));
+		octahedron.face.push_back(new Face(0, 3, 4));
+		octahedron.face.push_back(new Face(0, 1, 5));
+		octahedron.face.push_back(new Face(1, 2, 5));
+		octahedron.face.push_back(new Face(2, 3, 5));
+		octahedron.face.push_back(new Face(3, 0, 5));
+		octahedron.setTranslation(-20, -50, 0);
+		octahedron.setScale(2, 2, 2);
+		//octahedron.shown = false;
+	}
 	//Push initialized objects
-	cube.setTranslation(50, 0, 0);
+	//cube.setTranslation(-100, 50, 0);
 	cube.setScale(2, 2, 2);
+	//cube.shown = false;
+	cube.setRotation(0, 0, 0);
 	objects.push_back(cube);
-	cube.setTranslation(-15, 20, -10);
+	cube.setTranslation(-15, 50, -10);
 	cube.setScale(1, 1, 1);
+	//cube.shown = false;
 	objects.push_back(cube);
 	objects.push_back(octahedron);
+
+	//Object tailFin("Tail Fin");
+	//tailFin.vertex.push_back(new Vector4D(-200, 0, 0));	//0
+	//tailFin.vertex.push_back(new Vector4D(-160, 15, 0));	//1
+	//tailFin.vertex.push_back(new Vector4D(-120, 64, 0));	//2
+	//tailFin.vertex.push_back(new Vector4D(-80, 64, 0));	//3
+	//tailFin.vertex.push_back(new Vector4D(-55, 71, 0));	//4
+	//tailFin.vertex.push_back(new Vector4D(-40, 82, 0));	//5
+	//tailFin.vertex.push_back(new Vector4D(-5, 70, 0));	//6
+	//tailFin.vertex.push_back(new Vector4D(30, 65, 0));	//7
+	//tailFin.vertex.push_back(new Vector4D(60, 69, 0));	//8
+	//tailFin.vertex.push_back(new Vector4D(45, 41, 0));	//9
+	//tailFin.vertex.push_back(new Vector4D(43, 29, 0));	//10
+	//tailFin.vertex.push_back(new Vector4D(45, 17, 0));	//11
+	//tailFin.vertex.push_back(new Vector4D(-18, 0, 0));	//12
+	//tailFin.face.push_back(new Face(0, 1, 2));
+	//tailFin.face.push_back(new Face(0, 2, 3));
+	//tailFin.face.push_back(new Face(0, 3, 4));
+	//tailFin.face.push_back(new Face(0, 4, 5));
+	//tailFin.face.push_back(new Face(0, 5, 6));
+	//tailFin.face.push_back(new Face(0, 6, 7));
+	//tailFin.face.push_back(new Face(0, 7, 8));
+	//tailFin.face.push_back(new Face(0, 8, 9));
+	//tailFin.face.push_back(new Face(0, 9, 10));
+	//tailFin.face.push_back(new Face(0, 10, 11));
+	//tailFin.face.push_back(new Face(0, 11, 12));
+	//
+	//tailFin.setScale(0.5, 0.5, 0.5);
+	//tailFin.setTranslation(50, 0, 0);
+	//
+	//objects.push_back(tailFin);
+
+	Object dragon("Dragon");
+
+
 	/*
 	displayMatrix(cube.modelMatrix, "Model Matrix");
 	displayMatrix(viewMatrix, "View Matrix");
@@ -85,6 +131,30 @@ void Dragon::init()
 
 void Dragon::handleInput()
 {
+	////for self drawing lines
+	//if (InputHandler::Instance()->getMouseButtonState(LEFT))
+	//{
+	//	startPos = endPos;
+
+	//	endPos = *InputHandler::Instance()->getMousePosition();
+
+	//	endPos.setX(endPos.getX() - 400);
+	//	endPos.setY(300 - endPos.getY());
+
+	//	lines.push_back(endPos);
+
+	//	displayVector2D(startPos, "Start Position");
+	//	displayVector2D(endPos, "End Position");
+	//}
+	//if (InputHandler::Instance()->getMouseButtonState(RIGHT))
+	//{
+	//	if (lines.size() > 0)
+	//	{
+	//		lines.pop_back();
+	//	}
+	//}
+
+
 	/**********************************************************
 	Input Keys Description:
 	F11					-	toggle wireframe / rasterized
@@ -266,16 +336,17 @@ void Dragon::handleInput()
 		std::cout<<"Rotation: "<<objects[selected].angleX<<", "<<objects[selected].angleY<<", "<<objects[selected].angleZ<<std::endl;
 		std::cout<<"Scale: "<<objects[selected].sX<<", "<<objects[selected].sY<<", "<<objects[selected].sZ<<std::endl;
 		std::cout<<"---------------------------------------"<<std::endl;
+
 		for (int i = 0; i < objects[selected].vertex.size(); i++)
 		{
 			Vector4D p = *objects[selected].vertex[i];
-			//std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
+			std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
 			objects[selected].modelMatrix = Matrix4().setModelMatrix(objects[selected].translation, objects[selected].rotation, objects[selected].scale);
 			transformMatrix = projectionMatrix * viewMatrix * objects[selected].modelMatrix;
 			p = transformMatrix * *objects[selected].vertex[i];
-			//std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
-			p.normalizeW();
-			//std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
+			std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
+			p = p.getNormalizedW();
+			std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
 		}
 		std::cout<<"======================================="<<std::endl;
 	}
@@ -318,13 +389,27 @@ void Dragon::update()
 	{
 		for (int j = 0; j < 600; j++)
 		{
-			gph.zBuffer[i][j] = 500;
+			gph.zBuffer[i][j] = -500;
 		}
 	}
 
 	//draw axis lines
 	gph.drawLine(0, 300, 0, -300, Vector3D(0, 255, 255));
 	gph.drawLine(400, 0, -400, 0, Vector3D(0, 255, 255));
+
+	//std::cout<<lines.size()<<std::endl;
+
+
+	//display self made line
+	for (int i = 1; i < lines.size(); i++)
+	{
+		int x1, y1, x2, y2;
+		x1 = lines[i-1].getX();
+		y1 = lines[i-1].getY();
+		x2 = lines[i].getX();
+		y2 = lines[i].getY();
+		gph.drawLine(x1, y1, x2, y2, Vector3D(0, 10, 10));
+	}
 	//std::cout<<"Real: "<<gph.frameBuffer.size()<<std::endl;
 
 	//for each object
@@ -335,7 +420,6 @@ void Dragon::update()
 			continue;
 		}
 		objects[i].modelMatrix = Matrix4().setModelMatrix(objects[i].translation, objects[i].rotation, objects[i].scale);
-		//objects[i].modelMatrix = Matrix4().setModelMatrix(objects[i].translation, rotation, objects[i].scale);
 		transformMatrix = projectionMatrix * viewMatrix * objects[i].modelMatrix;
 		//transformMatrix = viewMatrix * objects[i].modelMatrix;
 
@@ -367,16 +451,35 @@ void Dragon::update()
 			int v2 = objects[i].face[k]->v2;
 			//int v3 = objects[i].face[k]->v3;
 
+			//displayVector4D(*objects[i].vertex[v0], "Before", 1);
+
+			//displayMatrix(projectionMatrix, "Projection");
+			//displayMatrix(viewMatrix, "View");
+			//displayMatrix(objects[i].modelMatrix, "Model");
+			//displayMatrix(transformMatrix, "Transform");
+
 			Vector4D point0 = transformMatrix * *objects[i].vertex[v0];
 			Vector4D point1 = transformMatrix * *objects[i].vertex[v1];
 			Vector4D point2 = transformMatrix * *objects[i].vertex[v2];
 			//Vector4D point3 = transformMatrix * *objects[i].vertex[v3];
 
+			//displayVector4D(point0);
+
+			//values before normalizing
+			p0 = point0;
+			p1 = point1;
+			p2 = point2;
+
+			//displayVector4D(p0, "After", 1);
 
 			//normalizing w component
-			point0.normalizeW();
-			point1.normalizeW();
-			point2.normalizeW();
+			point0 = point0.getNormalizedW();
+			point1 = point1.getNormalizedW();
+			point2 = point2.getNormalizedW();
+
+			//displayVector4D(point0, "After normalized", 1);
+
+			//std::cout<<"Face: "<<k<<std::endl;
 
 			//displayVector4D(point0, "Point 0", 1);
 			//displayVector4D(point1, "Point 1", 1);
@@ -404,27 +507,28 @@ void Dragon::update()
 				{
 				case 0:
 				case 1:
-					gph.fillTriangle(point0, point1, point2, Vector3D(0, 25, 25));
+					//std::cout<<"Face "<<k<<std::endl;
+					gph.fillTriangle(point0, point1, point2, Vector3D(0, 100, 100));	//front
 					break;
 				case 2:
 				case 3:
-					gph.fillTriangle(point0, point1, point2, Vector3D(25, 100, 25));
+					gph.fillTriangle(point0, point1, point2, Vector3D(25, 100, 25));	//back
 					break;
 				case 4:
 				case 5:
-					gph.fillTriangle(point0, point1, point2, Vector3D(100, 100, 150));
+					//gph.fillTriangle(point0, point1, point2, Vector3D(100, 100, 150));	//left
 					break;
 				case 6:
 				case 7:
-					gph.fillTriangle(point0, point1, point2, Vector3D(150, 25, 150));
+					//gph.fillTriangle(point0, point1, point2, Vector3D(150, 25, 150));	//right
 					break;
 				case 8:
 				case 9:
-					gph.fillTriangle(point0, point1, point2, Vector3D(150, 200, 150));
+					gph.fillTriangle(point0, point1, point2, Vector3D(50, 20, 80));	//top
 					break;
 				case 10:
 				case 11:
-					gph.fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));
+					//gph.fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));		//bottom
 					break;
 				default:
 					break;
@@ -439,6 +543,7 @@ void Dragon::render()
 {
 	//std::cout<<gph.frameBuffer.size()<<std::endl;
 	for (int i = 0; i < gph.frameBuffer.size(); i++)
+		//for (int i = gph.frameBuffer.size()-1; i >= 0; i--)
 	{
 		int x = gph.frameBuffer[i].getX();
 		int y = gph.frameBuffer[i].getY();

@@ -26,18 +26,28 @@ void Graphics::putPixel(float x, float y, float z, Vector3D color)
 	//	}
 	//}
 
+	if (x < -400 || y < -300 || x >= 400 || y >= 300)
+	{
+		return;
+	}
+
 	int zDepth = z;
 	int xp = (int) (x + 400 );
 	int yp = (int) (300 - y);
 
 	//std::cout<<"x: "<<xp<<" y: "<<yp<<std::endl;
+	//std::cout<<"z: "<<zDepth<<std::endl;
 
 	if (zDepth < zBuffer[xp][yp])
 	{
-		frameBuffer.push_back(Vector4D(x, y, z));
-		colorBuffer.push_back(color);
-		zBuffer[xp][yp] = zDepth;
+		return;
 	}
+
+	frameBuffer.push_back(Vector4D(x, y, z));
+	//displayVector4D(frameBuffer.back());
+	colorBuffer.push_back(color);
+	zBuffer[xp][yp] = zDepth;
+
 	//std::cout<<"Real: "<<frameBuffer.size()<<std::endl;
 }
 
@@ -166,19 +176,36 @@ void Graphics::processScanLine(int y, Vector4D pa, Vector4D pb, Vector4D pc, Vec
 	float gradient1 = pa.getY() != pb.getY() ? (y - pa.getY()) / (pb.getY() - pa.getY()) : 1;
 	float gradient2 = pc.getY() != pd.getY() ? (y - pc.getY()) / (pd.getY() - pc.getY()) : 1;
 
+	//displayVector4D(pa, "pa", 1);
+	//displayVector4D(pb, "pb", 1);
+	//displayVector4D(pc, "pc", 1);
+	//displayVector4D(pd, "pd", 1);
+
+	//gradient1 = gradient1 < 0 ? 0 : (gradient1 > 1 ? 1 : gradient1) ;
+	//gradient1 = gradient2 < 0 ? 0 : (gradient2 > 1 ? 1 : gradient2) ;
+
 	int sx = pa.getX() + gradient1 * (pb.getX() - pa.getX());
 	int ex = pc.getX() + gradient2 * (pd.getX() - pc.getX());
 
-	float z1 = pa.getZ() + gradient1 * (pb.getZ() - pa.getZ());
-	float z2 = pc.getZ() + gradient2 * (pd.getZ() - pc.getZ());
+	//if (sx > ex)
+	//{
+	//	int temp = sx;
+	//	sx = ex;
+	//	ex = temp;
+	//}
 
-	//std::cout<<"sx: "<<sx<<" ex: "<<ex<<std::endl;
+	float z1 = pa.getW() + gradient1 * (pb.getZ() - pa.getZ());
+	float z2 = pc.getW() + gradient2 * (pd.getZ() - pc.getZ());
+	//std::cout<<"At y: "<<y<<" sx: "<<(sx)<<" ex: "<<(ex)<<std::endl;
 
-	for (int x = sx+1; x < ex; x++)
+	//std::cout<<"DZ: "<<pb.getDZ()<<std::endl;
+
+	for (int x = sx; x < ex; x++)
 	{
 		//std::cout<<"x: "<<x<<" y: "<<y<<std::endl;
 		float gradient = (x - sx) / (float)(ex - sx);
-		int z = z1 + gradient * (z2 - z1);
+		float z = z1 + gradient * (z2 - z1);
+		//std::cout<<"DZ: "<<z<<std::endl;
 		//drawPixel(x, y, z, color);
 		putPixel(x, y, z, color);
 	}
@@ -207,6 +234,7 @@ void Graphics::fillTriangle(Vector4D p1, Vector4D p2, Vector4D p3, Vector3D colo
 		p1 = temp;
 	}
 
+	//std::cout<<p2.getY()<<" "<<p1.getY()<<std::endl;
 	if ((p2.getY() - p1.getY()) > 0)
 	{
 		dp1p2 = (p2.getX()- p1.getX()) / (p2.getY() - p1.getY());
@@ -215,6 +243,7 @@ void Graphics::fillTriangle(Vector4D p1, Vector4D p2, Vector4D p3, Vector3D colo
 	{
 		dp1p2 = 0;
 	}
+	//std::cout<<p3.getY()<<" "<<p1.getY()<<std::endl;
 	if ((p3.getY() - p1.getY()) > 0)
 	{
 		dp1p3 = (p3.getX() - p1.getX()) / (p3.getY() - p1.getY());
@@ -226,28 +255,34 @@ void Graphics::fillTriangle(Vector4D p1, Vector4D p2, Vector4D p3, Vector3D colo
 
 	if (dp1p2 > dp1p3)
 	{
-		for (int y = p1.getY(); y <= (p3.getY()); y++)
+		for (int y = (int)p1.getY(); y <= (int)(p3.getY()); y++)
 		{
+			//std::cout<<y<<" "<<p2.getY()<<std::endl;
 			if (y < p2.getY())
 			{
+				//upper triangle
 				processScanLine(y, p1, p3, p1, p2, color);
 			}
 			else
 			{
+				//lower triangle
 				processScanLine(y, p1, p3, p2, p3, color);
 			}
 		}
 	}
 	else
 	{
-		for (int y = p1.getY(); y <= p3.getY(); y++)
+		for (int y = (int)p1.getY(); y <= (int)p3.getY(); y++)
 		{
+			//std::cout<<y<<" "<<p2.getY()<<std::endl;
 			if (y < p2.getY())
 			{
+				//upper triangle
 				processScanLine(y, p1, p2, p1, p3, color);
 			}
 			else
 			{
+				//lower triangle
 				processScanLine(y, p2, p3, p1, p3, color);
 			}
 		}
