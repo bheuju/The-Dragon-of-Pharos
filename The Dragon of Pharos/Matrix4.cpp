@@ -237,8 +237,8 @@ Matrix4 Matrix4::setProjectionMatrix(float fovy, float aspect, float zNear, floa
 	reset();
 	//setIdentityMatrix();
 
-	//mat[0][0] = 600*aspect * (1.0 / (tan(angle * 0.5)));
-	//mat[1][1] = 800*1.0 / (tan(angle * 0.5));
+	//mat[0][0] = aspect * (1.0 / (tan(angle * 0.5)));
+	//mat[1][1] = 1.0 / (tan(angle * 0.5));
 	//mat[2][2] = -((zFar + zNear) / (zFar - zNear));
 	//mat[2][3] = -((2 * zFar * zNear) / (zFar - zNear));
 	//mat[3][2] = -1;
@@ -249,7 +249,7 @@ Matrix4 Matrix4::setProjectionMatrix(float fovy, float aspect, float zNear, floa
 	mat[2][3] = -((2 * zFar * zNear) / (zFar - zNear));
 	mat[3][2] = -1;
 
-	//displayMatrix(*this);
+	displayMatrix(*this);
 
 	return *this;
 }

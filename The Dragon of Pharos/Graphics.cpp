@@ -26,19 +26,21 @@ void Graphics::putPixel(float x, float y, float z, Vector3D color)
 	//	}
 	//}
 
+	//clipping before writing to frameBuffer
 	if (x < -400 || y < -300 || x >= 400 || y >= 300)
 	{
 		return;
 	}
 
-	int zDepth = z;
+	float zDepth = z;
 	int xp = (int) (x + 400 );
 	int yp = (int) (300 - y);
 
 	//std::cout<<"x: "<<xp<<" y: "<<yp<<std::endl;
-	//std::cout<<"z: "<<zDepth<<std::endl;
-
-	if (zDepth < zBuffer[xp][yp])
+	
+	//std::cout<<"zDepth: "<<zDepth<<"\tzBuffer: "<<zBuffer[xp][yp]<<std::endl;
+	//if the point is further from previous one, do nothing (return)
+	if (zDepth > zBuffer[xp][yp])
 	{
 		return;
 	}
@@ -194,11 +196,11 @@ void Graphics::processScanLine(int y, Vector4D pa, Vector4D pb, Vector4D pc, Vec
 	//	ex = temp;
 	//}
 
-	float z1 = pa.getW() + gradient1 * (pb.getZ() - pa.getZ());
-	float z2 = pc.getW() + gradient2 * (pd.getZ() - pc.getZ());
+	float z1 = pa.getZ() + gradient1 * (pb.getZ() - pa.getZ());
+	float z2 = pc.getZ() + gradient2 * (pd.getZ() - pc.getZ());
 	//std::cout<<"At y: "<<y<<" sx: "<<(sx)<<" ex: "<<(ex)<<std::endl;
 
-	//std::cout<<"DZ: "<<pb.getDZ()<<std::endl;
+	//std::cout<<"z1: "<<z1<<"\tz2: "<<z2<<std::endl;
 
 	for (int x = sx; x < ex; x++)
 	{

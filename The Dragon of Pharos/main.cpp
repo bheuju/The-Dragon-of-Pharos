@@ -37,6 +37,7 @@ int main(int argc, char** argv)
 	*/
 
 	//myPerspective(45, 600.0/800.0, 1.0, 100.0);
+
 	while (DoP::Instance()->isRunning())
 	{
 		frameStart = SDL_GetTicks();

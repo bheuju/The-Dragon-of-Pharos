@@ -29,6 +29,7 @@ private:
 	Graphics gph;
 
 	bool wireFrame;
+	bool showWire;
 
 	Object cube;
 	float angleX, angleY, angleZ;

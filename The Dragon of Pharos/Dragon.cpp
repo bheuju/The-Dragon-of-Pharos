@@ -2,11 +2,14 @@
 #include "InputHandler.h"
 #include "Camera.h"
 
+#include <fstream>
+
 Dragon::Dragon()
 {
 	selected = 0;
 	wireFrame = true;
 	//wireFrame = false;
+	showWire = true;
 
 	released = true;
 
@@ -29,7 +32,7 @@ void Dragon::init()
 	viewMatrix = Camera::Instance()->getViewMatrix();
 
 	//Set Projection Matrix
-	projectionMatrix = Matrix4().setProjectionMatrix(45, 4.0/3.0, 1, 1000);
+	projectionMatrix = Matrix4().setProjectionMatrix(45, 3.0/4.0, 1, 500);
 
 	/** Initialize object: cube */
 	//===========================/
@@ -88,36 +91,36 @@ void Dragon::init()
 	objects.push_back(cube);
 	objects.push_back(octahedron);
 
-	//Object tailFin("Tail Fin");
-	//tailFin.vertex.push_back(new Vector4D(-200, 0, 0));	//0
-	//tailFin.vertex.push_back(new Vector4D(-160, 15, 0));	//1
-	//tailFin.vertex.push_back(new Vector4D(-120, 64, 0));	//2
-	//tailFin.vertex.push_back(new Vector4D(-80, 64, 0));	//3
-	//tailFin.vertex.push_back(new Vector4D(-55, 71, 0));	//4
-	//tailFin.vertex.push_back(new Vector4D(-40, 82, 0));	//5
-	//tailFin.vertex.push_back(new Vector4D(-5, 70, 0));	//6
-	//tailFin.vertex.push_back(new Vector4D(30, 65, 0));	//7
-	//tailFin.vertex.push_back(new Vector4D(60, 69, 0));	//8
-	//tailFin.vertex.push_back(new Vector4D(45, 41, 0));	//9
-	//tailFin.vertex.push_back(new Vector4D(43, 29, 0));	//10
-	//tailFin.vertex.push_back(new Vector4D(45, 17, 0));	//11
-	//tailFin.vertex.push_back(new Vector4D(-18, 0, 0));	//12
-	//tailFin.face.push_back(new Face(0, 1, 2));
-	//tailFin.face.push_back(new Face(0, 2, 3));
-	//tailFin.face.push_back(new Face(0, 3, 4));
-	//tailFin.face.push_back(new Face(0, 4, 5));
-	//tailFin.face.push_back(new Face(0, 5, 6));
-	//tailFin.face.push_back(new Face(0, 6, 7));
-	//tailFin.face.push_back(new Face(0, 7, 8));
-	//tailFin.face.push_back(new Face(0, 8, 9));
-	//tailFin.face.push_back(new Face(0, 9, 10));
-	//tailFin.face.push_back(new Face(0, 10, 11));
-	//tailFin.face.push_back(new Face(0, 11, 12));
-	//
-	//tailFin.setScale(0.5, 0.5, 0.5);
-	//tailFin.setTranslation(50, 0, 0);
-	//
-	//objects.push_back(tailFin);
+	Object tailFin("Tail Fin");
+	tailFin.vertex.push_back(new Vector4D(-200, 0, 0));	//0
+	tailFin.vertex.push_back(new Vector4D(-160, 15, 0));	//1
+	tailFin.vertex.push_back(new Vector4D(-120, 64, 0));	//2
+	tailFin.vertex.push_back(new Vector4D(-80, 64, 0));	//3
+	tailFin.vertex.push_back(new Vector4D(-55, 71, 0));	//4
+	tailFin.vertex.push_back(new Vector4D(-40, 82, 0));	//5
+	tailFin.vertex.push_back(new Vector4D(-5, 70, 0));	//6
+	tailFin.vertex.push_back(new Vector4D(30, 65, 0));	//7
+	tailFin.vertex.push_back(new Vector4D(60, 69, 0));	//8
+	tailFin.vertex.push_back(new Vector4D(45, 41, 0));	//9
+	tailFin.vertex.push_back(new Vector4D(43, 29, 0));	//10
+	tailFin.vertex.push_back(new Vector4D(45, 17, 0));	//11
+	tailFin.vertex.push_back(new Vector4D(-18, 0, 0));	//12
+	tailFin.face.push_back(new Face(0, 1, 2));
+	tailFin.face.push_back(new Face(0, 2, 3));
+	tailFin.face.push_back(new Face(0, 3, 4));
+	tailFin.face.push_back(new Face(0, 4, 5));
+	tailFin.face.push_back(new Face(0, 5, 6));
+	tailFin.face.push_back(new Face(0, 6, 7));
+	tailFin.face.push_back(new Face(0, 7, 8));
+	tailFin.face.push_back(new Face(0, 8, 9));
+	tailFin.face.push_back(new Face(0, 9, 10));
+	tailFin.face.push_back(new Face(0, 10, 11));
+	tailFin.face.push_back(new Face(0, 11, 12));
+
+	tailFin.setScale(0.5, 0.5, 0.5);
+	tailFin.setTranslation(50, 0, 0);
+
+	objects.push_back(tailFin);
 
 	Object dragon("Dragon");
 
@@ -157,6 +160,7 @@ void Dragon::handleInput()
 
 	/**********************************************************
 	Input Keys Description:
+	F10					-	toggle wire
 	F11					-	toggle wireframe / rasterized
 	F12					-	display FPS
 	TAB and BACKSPACE	-	select objects
@@ -170,6 +174,20 @@ void Dragon::handleInput()
 	SPACE				-	show info of slected object
 	**********************************************************/
 
+	//toggle showing of wire in both wireframe and rasterized model
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F10))
+	{
+		if (showWire)
+		{
+			std::cout<<"Disabled wire"<<std::endl;
+			showWire = false;
+		}
+		else
+		{
+			std::cout<<"Enabled wire"<<std::endl;
+			showWire = true;
+		}
+	}
 	//toggle between wireframe and rasterized model
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F11))
 	{
@@ -327,7 +345,7 @@ void Dragon::handleInput()
 	//show info
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_SPACE))
 	{
-		std::cout.precision(2);
+		std::cout.precision(5);
 		std::cout<<"======================================="<<std::endl;
 		std::cout<<"SN: "<<selected<<std::endl;
 		std::cout<<"Object: "<<objects[selected].name<<std::endl;
@@ -385,11 +403,11 @@ void Dragon::update()
 	//cleat colorBuffer
 	gph.colorBuffer.clear();
 	//reset zBuffer
-	for (int i = 0; i < 800; i++)
+	for (int i = 0; i < 801; i++)
 	{
-		for (int j = 0; j < 600; j++)
+		for (int j = 0; j < 601; j++)
 		{
-			gph.zBuffer[i][j] = -500;
+			gph.zBuffer[i][j] = 500;
 		}
 	}
 
@@ -486,19 +504,22 @@ void Dragon::update()
 			//displayVector4D(point2, "Point 2", 1);
 
 			//draw 3 lines of the triangle
-			if (i == selected)
+			if (showWire)
 			{
-				//highlight selected object by drawng green color line	
-				gph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY(), Vector3D(0, 255, 0));
-				gph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY(), Vector3D(0, 255, 0));
-				gph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY(), Vector3D(0, 255, 0));
-			}
-			else
-			{
-				//use default color red for unselected
-				gph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY());
-				gph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY());
-				gph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY());
+				if (i == selected)
+				{
+					//highlight selected object by drawng green color line	
+					gph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY(), Vector3D(0, 255, 0));
+					gph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY(), Vector3D(0, 255, 0));
+					gph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY(), Vector3D(0, 255, 0));
+				}
+				else
+				{
+					//use default color red for unselected
+					gph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY());
+					gph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY());
+					gph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY());
+				}
 			}
 
 			if (!wireFrame)
@@ -516,11 +537,11 @@ void Dragon::update()
 					break;
 				case 4:
 				case 5:
-					//gph.fillTriangle(point0, point1, point2, Vector3D(100, 100, 150));	//left
+					gph.fillTriangle(point0, point1, point2, Vector3D(100, 100, 150));	//left
 					break;
 				case 6:
 				case 7:
-					//gph.fillTriangle(point0, point1, point2, Vector3D(150, 25, 150));	//right
+					gph.fillTriangle(point0, point1, point2, Vector3D(150, 25, 150));	//right
 					break;
 				case 8:
 				case 9:
@@ -528,12 +549,13 @@ void Dragon::update()
 					break;
 				case 10:
 				case 11:
-					//gph.fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));		//bottom
+					gph.fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));		//bottom
 					break;
 				default:
+					gph.fillTriangle(point0, point1, point2, Vector3D(0, 10, 150));
 					break;
 				}
-				//gph.fillTriangle(point0, point1, point2, Vector3D(0, 100, 150));
+				
 			}
 		}
 	}
@@ -542,19 +564,17 @@ void Dragon::update()
 void Dragon::render()
 {
 	//std::cout<<gph.frameBuffer.size()<<std::endl;
-	for (int i = 0; i < gph.frameBuffer.size(); i++)
-		//for (int i = gph.frameBuffer.size()-1; i >= 0; i--)
-	{
-		int x = gph.frameBuffer[i].getX();
-		int y = gph.frameBuffer[i].getY();
-		int z = gph.frameBuffer[i].getZ();
 
-		//std::cout<<i;
-		//displayVector4D(gph.frameBuffer[i], "", 1);
+	for (int i = 0; i < gph.frameBuffer.size(); i++)
+	//for (int i = gph.frameBuffer.size()-1; i >= 0; i--)
+	{
+		float x = gph.frameBuffer[i].getX();
+		float y = gph.frameBuffer[i].getY();
+		float z = gph.frameBuffer[i].getZ();
 
 		Vector3D color = gph.colorBuffer[i];
 
 		gph.drawPixel(x, y, z, color);
-
 	}
+
 }
