@@ -249,7 +249,7 @@ Matrix4 Matrix4::setProjectionMatrix(float fovy, float aspect, float zNear, floa
 	mat[2][3] = -((2 * zFar * zNear) / (zFar - zNear));
 	mat[3][2] = -1;
 
-	displayMatrix(*this);
+	//displayMatrix(*this);
 
 	return *this;
 }

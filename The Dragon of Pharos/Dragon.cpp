@@ -31,6 +31,8 @@ void Dragon::init()
 	Camera::Instance()->setUpVector(0, 1, 0);
 	viewMatrix = Camera::Instance()->getViewMatrix();
 
+	//displayMatrix(viewMatrix);
+
 	//Set Projection Matrix
 	projectionMatrix = Matrix4().setProjectionMatrix(45, 3.0/4.0, 1, 500);
 
@@ -75,6 +77,7 @@ void Dragon::init()
 		octahedron.face.push_back(new Face(1, 2, 5));
 		octahedron.face.push_back(new Face(2, 3, 5));
 		octahedron.face.push_back(new Face(3, 0, 5));
+
 		octahedron.setTranslation(-20, -50, 0);
 		octahedron.setScale(2, 2, 2);
 		//octahedron.shown = false;
@@ -84,42 +87,47 @@ void Dragon::init()
 	cube.setScale(2, 2, 2);
 	//cube.shown = false;
 	cube.setRotation(0, 0, 0);
+
 	objects.push_back(cube);
+
 	cube.setTranslation(-15, 50, -10);
 	cube.setScale(1, 1, 1);
 	//cube.shown = false;
+
 	objects.push_back(cube);
+
 	objects.push_back(octahedron);
 
 	Object tailFin("Tail Fin");
-	tailFin.vertex.push_back(new Vector4D(-200, 0, 0));	//0
-	tailFin.vertex.push_back(new Vector4D(-160, 15, 0));	//1
-	tailFin.vertex.push_back(new Vector4D(-120, 64, 0));	//2
-	tailFin.vertex.push_back(new Vector4D(-80, 64, 0));	//3
-	tailFin.vertex.push_back(new Vector4D(-55, 71, 0));	//4
-	tailFin.vertex.push_back(new Vector4D(-40, 82, 0));	//5
-	tailFin.vertex.push_back(new Vector4D(-5, 70, 0));	//6
-	tailFin.vertex.push_back(new Vector4D(30, 65, 0));	//7
-	tailFin.vertex.push_back(new Vector4D(60, 69, 0));	//8
-	tailFin.vertex.push_back(new Vector4D(45, 41, 0));	//9
-	tailFin.vertex.push_back(new Vector4D(43, 29, 0));	//10
-	tailFin.vertex.push_back(new Vector4D(45, 17, 0));	//11
-	tailFin.vertex.push_back(new Vector4D(-18, 0, 0));	//12
-	tailFin.face.push_back(new Face(0, 1, 2));
-	tailFin.face.push_back(new Face(0, 2, 3));
-	tailFin.face.push_back(new Face(0, 3, 4));
-	tailFin.face.push_back(new Face(0, 4, 5));
-	tailFin.face.push_back(new Face(0, 5, 6));
-	tailFin.face.push_back(new Face(0, 6, 7));
-	tailFin.face.push_back(new Face(0, 7, 8));
-	tailFin.face.push_back(new Face(0, 8, 9));
-	tailFin.face.push_back(new Face(0, 9, 10));
-	tailFin.face.push_back(new Face(0, 10, 11));
-	tailFin.face.push_back(new Face(0, 11, 12));
+	{
+		tailFin.vertex.push_back(new Vector4D(-200, 0, 0));	//0
+		tailFin.vertex.push_back(new Vector4D(-160, 15, 0));	//1
+		tailFin.vertex.push_back(new Vector4D(-120, 64, 0));	//2
+		tailFin.vertex.push_back(new Vector4D(-80, 64, 0));	//3
+		tailFin.vertex.push_back(new Vector4D(-55, 71, 0));	//4
+		tailFin.vertex.push_back(new Vector4D(-40, 82, 0));	//5
+		tailFin.vertex.push_back(new Vector4D(-5, 70, 0));	//6
+		tailFin.vertex.push_back(new Vector4D(30, 65, 0));	//7
+		tailFin.vertex.push_back(new Vector4D(60, 69, 0));	//8
+		tailFin.vertex.push_back(new Vector4D(45, 41, 0));	//9
+		tailFin.vertex.push_back(new Vector4D(43, 29, 0));	//10
+		tailFin.vertex.push_back(new Vector4D(45, 17, 0));	//11
+		tailFin.vertex.push_back(new Vector4D(-18, 0, 0));	//12
+		tailFin.face.push_back(new Face(0, 1, 2));
+		tailFin.face.push_back(new Face(0, 2, 3));
+		tailFin.face.push_back(new Face(0, 3, 4));
+		tailFin.face.push_back(new Face(0, 4, 5));
+		tailFin.face.push_back(new Face(0, 5, 6));
+		tailFin.face.push_back(new Face(0, 6, 7));
+		tailFin.face.push_back(new Face(0, 7, 8));
+		tailFin.face.push_back(new Face(0, 8, 9));
+		tailFin.face.push_back(new Face(0, 9, 10));
+		tailFin.face.push_back(new Face(0, 10, 11));
+		tailFin.face.push_back(new Face(0, 11, 12));
 
-	tailFin.setScale(0.5, 0.5, 0.5);
-	tailFin.setTranslation(50, 0, 0);
-
+		tailFin.setScale(0.5, 0.5, 0.5);
+		tailFin.setTranslation(100, 50, 0);
+	}
 	objects.push_back(tailFin);
 
 	Object dragon("Dragon");
@@ -210,7 +218,7 @@ void Dragon::handleInput()
 		{
 			selected = 0;
 		}
-		std::cout<<"Selected - "<<selected<<"\t -- "<<objects[selected].name<<" Status: "<<objects[selected].shown<<std::endl;
+		std::cout<<"\nSelected - "<<selected<<"\t"<<objects[selected].name<<"\n\t\tStatus: "<<(objects[selected].shown ? "shown": "hidden")<<std::endl;
 	}
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_BACKSPACE))
 	{
@@ -219,7 +227,7 @@ void Dragon::handleInput()
 		{
 			selected = objects.size() - 1;
 		}
-		std::cout<<"Selected - "<<selected<<"\t -- "<<objects[selected].name<<" Status: "<<objects[selected].shown<<std::endl;
+		std::cout<<"\nSelected - "<<selected<<"\t"<<objects[selected].name<<"\n\t\tStatus: "<<(objects[selected].shown ? "shown": "hidden")<<std::endl;
 	}
 	//toggling hiding objects
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_H) && released)
@@ -324,7 +332,7 @@ void Dragon::handleInput()
 		}
 	}
 	//reset model
-	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_LSHIFT))
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_LSHIFT) || InputHandler::Instance()->isKeyDown(SDL_SCANCODE_RSHIFT))
 	{
 		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_T))
 		{
@@ -355,6 +363,7 @@ void Dragon::handleInput()
 		std::cout<<"Scale: "<<objects[selected].sX<<", "<<objects[selected].sY<<", "<<objects[selected].sZ<<std::endl;
 		std::cout<<"---------------------------------------"<<std::endl;
 
+		/*
 		for (int i = 0; i < objects[selected].vertex.size(); i++)
 		{
 			Vector4D p = *objects[selected].vertex[i];
@@ -362,10 +371,11 @@ void Dragon::handleInput()
 			objects[selected].modelMatrix = Matrix4().setModelMatrix(objects[selected].translation, objects[selected].rotation, objects[selected].scale);
 			transformMatrix = projectionMatrix * viewMatrix * objects[selected].modelMatrix;
 			p = transformMatrix * *objects[selected].vertex[i];
-			std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
+			//std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
 			p = p.getNormalizedW();
 			std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
 		}
+		*/
 		std::cout<<"======================================="<<std::endl;
 	}
 }
@@ -555,7 +565,7 @@ void Dragon::update()
 					gph.fillTriangle(point0, point1, point2, Vector3D(0, 10, 150));
 					break;
 				}
-				
+
 			}
 		}
 	}
@@ -566,7 +576,7 @@ void Dragon::render()
 	//std::cout<<gph.frameBuffer.size()<<std::endl;
 
 	for (int i = 0; i < gph.frameBuffer.size(); i++)
-	//for (int i = gph.frameBuffer.size()-1; i >= 0; i--)
+		//for (int i = gph.frameBuffer.size()-1; i >= 0; i--)
 	{
 		float x = gph.frameBuffer[i].getX();
 		float y = gph.frameBuffer[i].getY();

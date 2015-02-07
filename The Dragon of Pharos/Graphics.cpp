@@ -27,7 +27,8 @@ void Graphics::putPixel(float x, float y, float z, Vector3D color)
 	//}
 
 	//clipping before writing to frameBuffer
-	if (x < -400 || y < -300 || x >= 400 || y >= 300)
+	if (x < -400 || y < -300 || x > 400 || y > 300)
+	//if (x < -200 || y < -100 || x > 200 || y > 100)
 	{
 		return;
 	}
@@ -84,7 +85,7 @@ void Graphics::drawPixel(float x, float y, float z, Vector3D color)
 	}
 }
 
-void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color)
+void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color, float lineZ)
 {
 	int x,y,dx,dy,dx1,dy1,px,py,xe,ye,i;
 	dx=x2-x1;
@@ -108,7 +109,7 @@ void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color)
 			xe=x1;
 		}
 		//drawPixel(x, y, 1000, color);
-		putPixel(x, y, 100, color);
+		putPixel(x, y, lineZ, color);
 		for(i=0;x<xe;i++)
 		{
 			x=x+1;
@@ -129,7 +130,7 @@ void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color)
 				px=px+2*(dy1-dx1);
 			}
 			//drawPixel(x, y, 1000, color);
-			putPixel(x, y, 100, color);
+			putPixel(x, y, lineZ, color);
 		}
 	}
 	else
@@ -147,7 +148,7 @@ void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color)
 			ye=y1;
 		}
 		//drawPixel(x, y, 1000, color);
-		putPixel(x, y, 100, color);
+		putPixel(x, y, lineZ, color);
 		for(i=0;y<ye;i++)
 		{
 			y=y+1;
@@ -168,7 +169,7 @@ void Graphics::drawLine(int x1, int y1, int x2, int y2, Vector3D color)
 				py=py+2*(dx1-dy1);
 			}
 			//drawPixel(x, y, 1000, color);
-			putPixel(x, y, 100, color);
+			putPixel(x, y, lineZ, color);
 		}
 	}
 }
@@ -178,26 +179,30 @@ void Graphics::processScanLine(int y, Vector4D pa, Vector4D pb, Vector4D pc, Vec
 	float gradient1 = pa.getY() != pb.getY() ? (y - pa.getY()) / (pb.getY() - pa.getY()) : 1;
 	float gradient2 = pc.getY() != pd.getY() ? (y - pc.getY()) / (pd.getY() - pc.getY()) : 1;
 
+	//clamping between 0-1
+	gradient1 = gradient1 < 0 ? 0 : (gradient1 > 1 ? 1 : gradient1);
+	gradient2 = gradient2 < 0 ? 0 : (gradient2 > 1 ? 1 : gradient2);
+
 	//displayVector4D(pa, "pa", 1);
 	//displayVector4D(pb, "pb", 1);
 	//displayVector4D(pc, "pc", 1);
 	//displayVector4D(pd, "pd", 1);
 
-	//gradient1 = gradient1 < 0 ? 0 : (gradient1 > 1 ? 1 : gradient1) ;
-	//gradient1 = gradient2 < 0 ? 0 : (gradient2 > 1 ? 1 : gradient2) ;
-
+	//interpolating start and end points
 	int sx = pa.getX() + gradient1 * (pb.getX() - pa.getX());
 	int ex = pc.getX() + gradient2 * (pd.getX() - pc.getX());
 
-	//if (sx > ex)
-	//{
-	//	int temp = sx;
-	//	sx = ex;
-	//	ex = temp;
-	//}
+	//change start and end point
+	if (sx > ex)
+	{
+		int temp = sx;
+		sx = ex;
+		ex = temp;
+	}
 
 	float z1 = pa.getZ() + gradient1 * (pb.getZ() - pa.getZ());
 	float z2 = pc.getZ() + gradient2 * (pd.getZ() - pc.getZ());
+	
 	//std::cout<<"At y: "<<y<<" sx: "<<(sx)<<" ex: "<<(ex)<<std::endl;
 
 	//std::cout<<"z1: "<<z1<<"\tz2: "<<z2<<std::endl;
@@ -206,9 +211,12 @@ void Graphics::processScanLine(int y, Vector4D pa, Vector4D pb, Vector4D pc, Vec
 	{
 		//std::cout<<"x: "<<x<<" y: "<<y<<std::endl;
 		float gradient = (x - sx) / (float)(ex - sx);
+
+		//interpolating value of z - for zBuffer test
 		float z = z1 + gradient * (z2 - z1);
 		//std::cout<<"DZ: "<<z<<std::endl;
 		//drawPixel(x, y, z, color);
+		//write to frameBuffer
 		putPixel(x, y, z, color);
 	}
 }
