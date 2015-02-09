@@ -3,6 +3,7 @@
 #include "Camera.h"
 
 #include <fstream>
+#include <sstream>
 
 Dragon::Dragon()
 {
@@ -60,6 +61,10 @@ void Dragon::init()
 		cube.face.push_back(new Face(7, 4, 0));
 		cube.face.push_back(new Face(1, 5, 6));
 		cube.face.push_back(new Face(6, 2, 1));
+
+		cube.setTranslation(0, 0, 0);
+		cube.setScale(2, 2, 2);
+		cube.shown = true;
 	}
 	Object octahedron("Octahedron");
 	{
@@ -82,22 +87,6 @@ void Dragon::init()
 		octahedron.setScale(2, 2, 2);
 		//octahedron.shown = false;
 	}
-	//Push initialized objects
-	//cube.setTranslation(-100, 50, 0);
-	cube.setScale(2, 2, 2);
-	//cube.shown = false;
-	cube.setRotation(0, 0, 0);
-
-	objects.push_back(cube);
-
-	cube.setTranslation(-15, 50, -10);
-	cube.setScale(1, 1, 1);
-	//cube.shown = false;
-
-	objects.push_back(cube);
-
-	objects.push_back(octahedron);
-
 	Object tailFin("Tail Fin");
 	{
 		tailFin.vertex.push_back(new Vector4D(-200, 0, 0));	//0
@@ -113,6 +102,8 @@ void Dragon::init()
 		tailFin.vertex.push_back(new Vector4D(43, 29, 0));	//10
 		tailFin.vertex.push_back(new Vector4D(45, 17, 0));	//11
 		tailFin.vertex.push_back(new Vector4D(-18, 0, 0));	//12
+		tailFin.vertex.push_back(new Vector4D(-200, 0, -10));	//13
+		tailFin.vertex.push_back(new Vector4D(-18, 0, -10));	//14
 		tailFin.face.push_back(new Face(0, 1, 2));
 		tailFin.face.push_back(new Face(0, 2, 3));
 		tailFin.face.push_back(new Face(0, 3, 4));
@@ -124,14 +115,62 @@ void Dragon::init()
 		tailFin.face.push_back(new Face(0, 9, 10));
 		tailFin.face.push_back(new Face(0, 10, 11));
 		tailFin.face.push_back(new Face(0, 11, 12));
-
+		tailFin.face.push_back(new Face(0, 12, 13));
+		tailFin.face.push_back(new Face(12, 13, 14));
 		tailFin.setScale(0.5, 0.5, 0.5);
 		tailFin.setTranslation(100, 50, 0);
 	}
-	objects.push_back(tailFin);
-
 	Object dragon("Dragon");
+	{
+		std::ifstream in("Night Fury Dragon.obj", std::ios::in);
+		if (!in)
+		{
+			std::cout<<"Cannot open file"<<std::endl;
+			exit(1);
+		}
+		std::string line;
+		while(std::getline(in, line))
+		{
+			if (line.substr(0, 2) == "v ")
+			{
+				std::istringstream v(line.substr(2));
+				float x, y, z;
+				v>>x;
+				v>>y;
+				v>>z;
+				dragon.vertex.push_back(new Vector4D(x, y, z));
+				//std::cout<<"Received:"<<std::endl;
+				//displayVector4D(*dragon.vertex.back());
+			}
+			else if (line.substr(0, 2) == "f ")
+			{
+				int a, b, c;
 
+				//const char* chh=line.c_str();
+				//sscanf (chh, "f %i/%i %i/%i %i/%i",&a,&A,&b,&B,&c,&C); //here it read the line start with f and store the corresponding values in the variables
+				//a--;b--;c--;
+				//A--;B--;C--;
+
+				std::istringstream f(line.substr(2));
+				f>>a;
+				f>>b;
+				f>>c;
+				a--;
+				b--;
+				c--;
+				dragon.face.push_back(new Face(a, b, c));
+				//std::cout<<"Received: "<<a<<", "<<b<<", "<<c<<std::endl;
+			}
+		}
+		dragon.setRotation(90, 0, 0);
+	}
+
+	//Push initialized objects
+
+	//objects.push_back(cube);
+	//objects.push_back(octahedron);
+	//objects.push_back(tailFin);
+	objects.push_back(dragon);
 
 	/*
 	displayMatrix(cube.modelMatrix, "Model Matrix");
@@ -177,8 +216,8 @@ void Dragon::handleInput()
 	UP(+), DOWN(-)		-	translate Y
 	LCTRL(+), RCTRL(-)	-	translate Z
 	W,A,S,D,Q,E			-	rotate X, Y, Z
-	Scroll and Z,X		-	scale
-	LSHIFT + (R, S, T)	-	reset rotate, scale, translate
+	mouseScroll and Z,X	-	scale
+	SHIFT + (R, S, T)	-	reset rotate, scale, translate
 	SPACE				-	show info of slected object
 	**********************************************************/
 
@@ -234,10 +273,12 @@ void Dragon::handleInput()
 	{
 		if (objects[selected].shown)
 		{
+			std::cout<<objects[selected].name<<": "<<"hidden"<<std::endl;
 			objects[selected].shown = false;
 		}
 		else
 		{
+			std::cout<<objects[selected].name<<": "<<"shown"<<std::endl;
 			objects[selected].shown = true;
 		}
 		released = false;
@@ -366,14 +407,14 @@ void Dragon::handleInput()
 		/*
 		for (int i = 0; i < objects[selected].vertex.size(); i++)
 		{
-			Vector4D p = *objects[selected].vertex[i];
-			std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
-			objects[selected].modelMatrix = Matrix4().setModelMatrix(objects[selected].translation, objects[selected].rotation, objects[selected].scale);
-			transformMatrix = projectionMatrix * viewMatrix * objects[selected].modelMatrix;
-			p = transformMatrix * *objects[selected].vertex[i];
-			//std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
-			p = p.getNormalizedW();
-			std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
+		Vector4D p = *objects[selected].vertex[i];
+		std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
+		objects[selected].modelMatrix = Matrix4().setModelMatrix(objects[selected].translation, objects[selected].rotation, objects[selected].scale);
+		transformMatrix = projectionMatrix * viewMatrix * objects[selected].modelMatrix;
+		p = transformMatrix * *objects[selected].vertex[i];
+		//std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
+		p = p.getNormalizedW();
+		std::cout<<"Vertex "<<i<<": "<<p.getX()<<", "<<p.getY()<<", "<<p.getZ()<<", "<<p.getW()<<std::endl;
 		}
 		*/
 		std::cout<<"======================================="<<std::endl;
