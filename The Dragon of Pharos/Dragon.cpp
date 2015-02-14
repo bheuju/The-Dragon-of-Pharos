@@ -22,17 +22,19 @@ Dragon::Dragon()
 	startPos = Vector2D(0, 0);
 
 	cameraRot = Vector3D(0, 0, 0);
-	cameraStepX = 1;
-	cameraStepY = 1;
-	cameraStepZ = 1;
+	cameraStepX = 0.1;
+	cameraStepY = 0.1;
+	cameraStepZ = 5;
 	//lines.push_back(Vector2D(0, 0));
 }
 
 void Dragon::init()
 {
 	//Set View Matrix
+	Camera::Instance()->setOrgCameraPos(0, 0, 200);
 	Camera::Instance()->setCameraPos(0, 0, 200);
 	Camera::Instance()->setCameraTarget(0, 0, 0);
+	Camera::Instance()->setOrgUpVector(0, 1, 0);
 	Camera::Instance()->setUpVector(0, 1, 0);
 	viewMatrix = Camera::Instance()->getViewMatrix();
 
@@ -391,28 +393,49 @@ void Dragon::handleInput()
 		{
 			//near - move camera near
 			//cameraPos.setZ(cameraPos.getZ() - cameraStepZ);
-			cameraRot.setX(cameraRot.getX() - cameraStepX);
+			//cameraRot.setX(cameraRot.getX() - cameraStepX);
+			Camera::Instance()->setOrgCameraPos(0, 0, Camera::Instance()->getOrgCameraPos().getZ() - cameraStepZ);
 		}
 		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_O))
 		{
 			//far - move camera far
 			//cameraPos.setZ(cameraPos.getZ() + cameraStepZ);
-			cameraRot.setX(cameraRot.getX() + cameraStepX);
+			//cameraRot.setX(cameraRot.getX() + cameraStepX);
+			Camera::Instance()->setOrgCameraPos(0, 0, Camera::Instance()->getOrgCameraPos().getZ() + cameraStepZ);
 		}
-		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_R))
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_C))
 		{
-			if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_C))
+			//reset camera
+			if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_R))
 			{
+				std::cout<<"Reset camera configs"<<std::endl;
+				Camera::Instance()->setOrgCameraPos(0, 0, 100);
 				Camera::Instance()->setCameraPos(0, 0, 200);
 				Camera::Instance()->setUpVector(0, 1, 0);
+				cameraRot = Vector3D(0, 0, 0);
+			}
+			//display info of camera
+			if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_SPACE))
+			{
+				std::cout.precision(5);
+				float x = Camera::Instance()->getCameraPos().getX();
+				float y = Camera::Instance()->getCameraPos().getY();
+				float z = Camera::Instance()->getCameraPos().getZ();
+				float radius = sqrt(x * x + y * y + z * z);
+				std::cout<<"=============== Camera ================"<<std::endl;
+				std::cout<<"Camera"<<std::endl;
+				std::cout<<"World coordinates: "<<x<<", "<<y<<", "<<z<<std::endl;
+				std::cout<<"Radius: "<<radius<<std::endl;
+				std::cout<<"Rotation: "<<cameraRot.getX()<<", "<<cameraRot.getY()<<", "<<cameraRot.getZ()<<std::endl;
+				std::cout<<"======================================="<<std::endl;
 			}
 		}
-		//Camera::Instance()->setCameraPos(cameraPos.getX(), cameraPos.getY(), cameraPos.getZ());
 	}
 }
 
 void Dragon::update()
 {
+	//displayVector3D(cameraRot, "Rotation Camera", 1);
 	Camera::Instance()->rotate(cameraRot);
 	viewMatrix = Camera::Instance()->getViewMatrix();
 

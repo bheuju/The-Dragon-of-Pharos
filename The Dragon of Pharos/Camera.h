@@ -4,7 +4,9 @@
 - can return viewMatrix
 - initialize cameraPos, cameraTarget, upVector
 --------------------------------------------------------------
-
+- added orgCameraPos, orgUpVector to try and standardize
+  implementations other functions
+- orgCameraPos used in rotate()
 **************************************************************/
 
 #pragma once
@@ -33,6 +35,12 @@ public:
 	Vector3D getCameraTarget() {return cameraTarget;}
 	Vector3D getUpVector() {return upVector;}
 
+	//Original camera configs
+	void setOrgCameraPos(float x, float y, float z);
+	void setOrgUpVector(float x, float y, float z);
+
+	Vector3D getOrgCameraPos() {return orgCameraPos;}
+
 	Matrix4 getViewMatrix();
 	void rotate(Vector3D angle);
 
@@ -43,6 +51,9 @@ private:
 	Vector3D cameraPos;
 	Vector3D cameraTarget;
 	Vector3D upVector;
+
+	Vector3D orgCameraPos;
+	Vector3D orgUpVector;
 
 	Matrix4 viewMatrix;
 };
