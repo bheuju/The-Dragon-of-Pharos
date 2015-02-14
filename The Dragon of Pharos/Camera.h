@@ -25,15 +25,16 @@ public:
 
 	~Camera() {}
 
-	void setCameraPos(int x, int y, int z);
-	void setCameraTarget(int x, int y, int z);
-	void setUpVector(int x, int y, int z);
+	void setCameraPos(float x, float y, float z);
+	void setCameraTarget(float x, float y, float z);
+	void setUpVector(float x, float y, float z);
 
 	Vector3D getCameraPos() {return cameraPos;}
 	Vector3D getCameraTarget() {return cameraTarget;}
 	Vector3D getUpVector() {return upVector;}
 
 	Matrix4 getViewMatrix();
+	void rotate(Vector3D angle);
 
 private:
 	Camera();

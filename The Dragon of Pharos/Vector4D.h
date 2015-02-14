@@ -8,12 +8,21 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include "Vector3D.h"
 
 class Vector4D
 {
 public:
 	Vector4D() : mX(0.0), mY(0.0), mZ(0.0), mW(1.0)
 	{}
+
+	Vector4D(Vector3D v)
+	{
+		mX = v.getX();
+		mY = v.getY();
+		mZ = v.getZ();
+		mW = 1.0;
+	}
 
 	Vector4D(float x, float y, float z, float w = 1.0)
 	{

@@ -12,6 +12,7 @@ Dragon Class
 #include "Object.h"
 #include "Matrix4.h"
 #include "Vector2D.h"
+#include "BasicShape.h"
 
 class Dragon
 {
@@ -31,7 +32,6 @@ private:
 	bool wireFrame;
 	bool showWire;
 
-	Object cube;
 	float angleX, angleY, angleZ;
 	float sX, sY, sZ;
 
@@ -40,6 +40,10 @@ private:
 	Matrix4 viewMatrix, projectionMatrix;
 	Matrix4 transformMatrix;
 
+	Vector3D cameraRot;
+	float cameraStepX, cameraStepY, cameraStepZ;
+
+	BasicShape shape;
 
 	//to know which object to move (selects from vector objects)
 	int selected;

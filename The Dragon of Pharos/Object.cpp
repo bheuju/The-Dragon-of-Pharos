@@ -21,23 +21,26 @@ Object::Object(std::string objectName)
 	shown  = true;
 }
 
-void Object::setTranslation(float x, float y, float z)
+Object Object::setTranslation(float x, float y, float z)
 {
 	tX = x;
 	tY = y;
 	tZ = z;
+	return *this;
 }
-void Object::setRotation(float x, float y, float z)
+Object Object::setRotation(float x, float y, float z)
 {
 	angleX = x;
 	angleY = y;
 	angleZ = z;
+	return *this;
 }
-void Object::setScale(float x, float y, float z)
+Object Object::setScale(float x, float y, float z)
 {
 	sX = x;
 	sY = y;
 	sZ = z;
+	return *this;
 }
 
 

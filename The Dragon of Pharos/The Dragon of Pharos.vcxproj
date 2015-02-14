@@ -79,6 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BasicShape.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DoP.cpp" />
     <ClCompile Include="Dragon.cpp" />
@@ -89,6 +90,7 @@
     <ClCompile Include="Object.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BasicShape.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DoP.h" />
     <ClInclude Include="Dragon.h" />

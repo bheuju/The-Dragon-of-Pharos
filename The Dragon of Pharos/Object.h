@@ -25,9 +25,9 @@ public:
 	std::vector<Vector4D*> vertex;
 	std::vector<Face*> face;
 	
-	void setTranslation(float x, float y, float z);
-	void setRotation(float x, float y, float z);
-	void setScale(float x, float y, float z);
+	Object setTranslation(float x, float y, float z);
+	Object setRotation(float x, float y, float z);
+	Object setScale(float x, float y, float z);
 
 	Matrix4 translation, rotation, scale;
 	Matrix4 modelMatrix;

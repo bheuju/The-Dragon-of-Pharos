@@ -1,5 +1,5 @@
 #include "Matrix4.h"
-
+#include "Camera.h"
 
 Matrix4::Matrix4()
 {
@@ -174,24 +174,30 @@ Matrix4 Matrix4::setModelMatrix(Matrix4 translation, Matrix4 rotation, Matrix4 s
 Matrix4 Matrix4::setViewMatrix(Vector3D cameraPos, Vector3D cameraTarget, Vector3D upVector)
 {
 	Vector3D zAxis = normalize(cameraPos - cameraTarget);
-	Vector3D xAxis = normalize(cross(upVector, zAxis));
+	Vector3D xAxis = normalize(cross(normalize(upVector), zAxis));
 	Vector3D yAxis = cross(zAxis, xAxis);
+
+	//Camera::Instance()->setUpVector(yAxis.getX(), yAxis.getY(), yAxis.getZ());
+
+	//displayVector3D(xAxis, "X - Axis", 1);
+	//displayVector3D(yAxis, "Y - Axis", 1);
+	//displayVector3D(zAxis, "Z - Axis", 1);
 
 	//create a 4x4 orientation matrix
 	//this is transposed which is eqvt. to performing an inverse
 	//if the matrix is orthonormalized (in this case, it is)
-	//Matrix4 orientation (
-	//	Vector4D(	xAxis.getX(),	xAxis.getY(),	xAxis.getZ(),	0 ),
-	//	Vector4D(	yAxis.getX(),	yAxis.getY(),	yAxis.getZ(),	0 ),
-	//	Vector4D(	zAxis.getX(),	zAxis.getY(),	zAxis.getZ(),	0 ),
-	//	Vector4D(	0,				0,				0,				1 )
-	//	);
 	Matrix4 orientation (
-		Vector4D(	xAxis.getX(),	yAxis.getX(),	zAxis.getX(),	0 ),
-		Vector4D(	xAxis.getY(),	yAxis.getY(),	zAxis.getY(),	0 ),
-		Vector4D(	xAxis.getZ(),	yAxis.getZ(),	zAxis.getZ(),	0 ),
+		Vector4D(	xAxis.getX(),	xAxis.getY(),	xAxis.getZ(),	0 ),
+		Vector4D(	yAxis.getX(),	yAxis.getY(),	yAxis.getZ(),	0 ),
+		Vector4D(	zAxis.getX(),	zAxis.getY(),	zAxis.getZ(),	0 ),
 		Vector4D(	0,				0,				0,				1 )
 		);
+	//Matrix4 orientation (
+	//	Vector4D(	xAxis.getX(),	yAxis.getX(),	zAxis.getX(),	0 ),
+	//	Vector4D(	xAxis.getY(),	yAxis.getY(),	zAxis.getY(),	0 ),
+	//	Vector4D(	xAxis.getZ(),	yAxis.getZ(),	zAxis.getZ(),	0 ),
+	//	Vector4D(	0,				0,				0,				1 )
+	//	);
 
 
 	//displayMatrix(orientation);
@@ -208,26 +214,26 @@ Matrix4 Matrix4::setViewMatrix(Vector3D cameraPos, Vector3D cameraTarget, Vector
 
 	//combine the orientation and translation to compute
 	//the final view matrix
+	
 	return (orientation * translation);
-	//return (translation * orientation );
 
-	/**
-	Simplified form
-	***************
-	Vector3D zAxis = normalize(cameraPos - cameraTarget);	// The "forward" vector.
-	Vector3D xAxis = normalize(cross(upVector, zAxis));		// The "right" vector.
-	Vector3D yAxis = cross(zAxis, xAxis);					// The "up" vector.
+
+	//Simplified form
+	//***************
+	//Vector3D zAxis = normalize(cameraPos - cameraTarget);	// The "forward" vector.
+	//Vector3D xAxis = normalize(cross(upVector, zAxis));		// The "right" vector.
+	//Vector3D yAxis = cross(zAxis, xAxis);					// The "up" vector.
 
 	//Create a 4x4 view matrix from
 	//the right, up, forward and eye position vectors
-	Matrix4 viewMatrix (
-	Vector4D(	xAxis.getX(),			xAxis.getY(),			xAxis.getZ(),			0 ),
-	Vector4D(	yAxis.getX(),			yAxis.getY(),			yAxis.getZ(),			0 ),
-	Vector4D(	zAxis.getX(),			zAxis.getY(),			zAxis.getZ(),			0 ),
-	Vector4D(	-dot(xAxis, cameraPos),	-dot(yAxis, cameraPos),	-dot(zAxis, cameraPos),	1 )
-	);
-	return viewMatrix;
-	*/
+	//Matrix4 viewMatrix (
+	//Vector4D(	xAxis.getX(),			xAxis.getY(),			xAxis.getZ(),			0 ),
+	//Vector4D(	yAxis.getX(),			yAxis.getY(),			yAxis.getZ(),			0 ),
+	//Vector4D(	zAxis.getX(),			zAxis.getY(),			zAxis.getZ(),			0 ),
+	//Vector4D(	-dot(xAxis, cameraPos),	-dot(yAxis, cameraPos),	-dot(zAxis, cameraPos),	1 )
+	//);
+	//return viewMatrix;
+
 }
 
 Matrix4 Matrix4::setProjectionMatrix(float fovy, float aspect, float zNear, float zFar)

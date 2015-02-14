@@ -5,6 +5,8 @@
 **************************************************************/
 
 #pragma once
+#include <iostream>
+#include <string>
 #include <cmath>
 
 class Vector3D
@@ -12,6 +14,13 @@ class Vector3D
 public:
 	Vector3D() : mX(0.0), mY(0.0), mZ(0.0)
 	{}
+
+	//Vector3D(Vector4D v)
+	//{
+	//	mX = v.getX();
+	//	mY = v.getY();
+	//	mZ = v.getZ();
+	//}
 
 	Vector3D(float x, float y, float z)
 	{
@@ -57,6 +66,29 @@ public:
 		v.mY = -(v1.mX * v2.mZ) + (v2.mX * v1.mZ);
 		v.mZ = (v1.mX * v2.mY) - (v2.mX * v1.mY);
 		return v;
+	}
+
+	friend void displayVector3D(Vector3D& v, std::string name = "", int mode  = 0)
+	{
+		//mode 0 - column major
+		//mode 1 - row major
+		std::cout.precision(5);
+		if (mode == 0)
+		{
+			std::cout<<"===="<<std::endl;
+			std::cout<<name<<std::endl;
+			std::cout<<"----"<<std::endl;
+			std::cout<<v.mX<<"\n"<<v.mY<<"\n"<<v.mZ<<std::endl;
+			std::cout<<"===="<<std::endl;
+		}
+		else
+		{
+			std::cout<<"=============================="<<std::endl;
+			std::cout<<"\t"<<name<<std::endl;
+			std::cout<<"------------------------------"<<std::endl;
+			std::cout<<v.mX<<"\t"<<v.mY<<"\t"<<v.mZ<<std::endl;
+			std::cout<<"=============================="<<std::endl;
+		}
 	}
 
 private:

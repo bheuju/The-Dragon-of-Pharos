@@ -21,6 +21,10 @@ Dragon::Dragon()
 	endPos = Vector2D(0, 0);
 	startPos = Vector2D(0, 0);
 
+	cameraRot = Vector3D(0, 0, 0);
+	cameraStepX = 1;
+	cameraStepY = 1;
+	cameraStepZ = 1;
 	//lines.push_back(Vector2D(0, 0));
 }
 
@@ -39,138 +43,73 @@ void Dragon::init()
 
 	/** Initialize object: cube */
 	//===========================/
-	cube = Object("cube");
-	{
-		cube.vertex.push_back(new Vector4D(-10, 10, 10));
-		cube.vertex.push_back(new Vector4D(-10, -10, 10));
-		cube.vertex.push_back(new Vector4D(10, -10, 10));
-		cube.vertex.push_back(new Vector4D(10, 10, 10));
-		cube.vertex.push_back(new Vector4D(-10, 10, -10));
-		cube.vertex.push_back(new Vector4D(-10, -10, -10));
-		cube.vertex.push_back(new Vector4D(10, -10, -10));
-		cube.vertex.push_back(new Vector4D(10, 10, -10));
-		cube.face.push_back(new Face(0, 1, 2));
-		cube.face.push_back(new Face(2, 3, 0));
-		cube.face.push_back(new Face(4, 7, 6));
-		cube.face.push_back(new Face(6 ,5, 4));
-		cube.face.push_back(new Face(0, 4, 5));
-		cube.face.push_back(new Face(5, 1, 0));
-		cube.face.push_back(new Face(7, 3, 2));
-		cube.face.push_back(new Face(2, 6, 7));
-		cube.face.push_back(new Face(0, 3, 7));
-		cube.face.push_back(new Face(7, 4, 0));
-		cube.face.push_back(new Face(1, 5, 6));
-		cube.face.push_back(new Face(6, 2, 1));
+	Object cube = shape.createCube();
+	cube.setTranslation(0, 0, 0);
+	cube.setScale(20, 20, 20);
+	cube.shown = true;
 
-		cube.setTranslation(0, 0, 0);
-		cube.setScale(2, 2, 2);
-		cube.shown = true;
-	}
-	Object octahedron("Octahedron");
-	{
-		octahedron.vertex.push_back(new Vector4D(10, 0, 0));
-		octahedron.vertex.push_back(new Vector4D(0, -10, 0));
-		octahedron.vertex.push_back(new Vector4D(-10, 0, 0));
-		octahedron.vertex.push_back(new Vector4D(0, 10, 0));
-		octahedron.vertex.push_back(new Vector4D(0, 0, 10));
-		octahedron.vertex.push_back(new Vector4D(0, 0, -10));
-		octahedron.face.push_back(new Face(1, 0, 4));
-		octahedron.face.push_back(new Face(2, 1, 4));
-		octahedron.face.push_back(new Face(3, 2, 4));
-		octahedron.face.push_back(new Face(0, 3, 4));
-		octahedron.face.push_back(new Face(0, 1, 5));
-		octahedron.face.push_back(new Face(1, 2, 5));
-		octahedron.face.push_back(new Face(2, 3, 5));
-		octahedron.face.push_back(new Face(3, 0, 5));
+	Object octahedron = shape.createOctahedron();
+	octahedron.setTranslation(-20, -50, 0);
+	octahedron.setScale(20, 20, 20);
+	octahedron.shown = true;
 
-		octahedron.setTranslation(-20, -50, 0);
-		octahedron.setScale(2, 2, 2);
-		//octahedron.shown = false;
-	}
-	Object tailFin("Tail Fin");
-	{
-		tailFin.vertex.push_back(new Vector4D(-200, 0, 0));	//0
-		tailFin.vertex.push_back(new Vector4D(-160, 15, 0));	//1
-		tailFin.vertex.push_back(new Vector4D(-120, 64, 0));	//2
-		tailFin.vertex.push_back(new Vector4D(-80, 64, 0));	//3
-		tailFin.vertex.push_back(new Vector4D(-55, 71, 0));	//4
-		tailFin.vertex.push_back(new Vector4D(-40, 82, 0));	//5
-		tailFin.vertex.push_back(new Vector4D(-5, 70, 0));	//6
-		tailFin.vertex.push_back(new Vector4D(30, 65, 0));	//7
-		tailFin.vertex.push_back(new Vector4D(60, 69, 0));	//8
-		tailFin.vertex.push_back(new Vector4D(45, 41, 0));	//9
-		tailFin.vertex.push_back(new Vector4D(43, 29, 0));	//10
-		tailFin.vertex.push_back(new Vector4D(45, 17, 0));	//11
-		tailFin.vertex.push_back(new Vector4D(-18, 0, 0));	//12
-		tailFin.vertex.push_back(new Vector4D(-200, 0, -10));	//13
-		tailFin.vertex.push_back(new Vector4D(-18, 0, -10));	//14
-		tailFin.face.push_back(new Face(0, 1, 2));
-		tailFin.face.push_back(new Face(0, 2, 3));
-		tailFin.face.push_back(new Face(0, 3, 4));
-		tailFin.face.push_back(new Face(0, 4, 5));
-		tailFin.face.push_back(new Face(0, 5, 6));
-		tailFin.face.push_back(new Face(0, 6, 7));
-		tailFin.face.push_back(new Face(0, 7, 8));
-		tailFin.face.push_back(new Face(0, 8, 9));
-		tailFin.face.push_back(new Face(0, 9, 10));
-		tailFin.face.push_back(new Face(0, 10, 11));
-		tailFin.face.push_back(new Face(0, 11, 12));
-		tailFin.face.push_back(new Face(0, 12, 13));
-		tailFin.face.push_back(new Face(12, 13, 14));
-		tailFin.setScale(0.5, 0.5, 0.5);
-		tailFin.setTranslation(100, 50, 0);
-	}
-	Object dragon("Dragon");
-	{
-		std::ifstream in("Night Fury Dragon.obj", std::ios::in);
-		if (!in)
-		{
-			std::cout<<"Cannot open file"<<std::endl;
-			exit(1);
-		}
-		std::string line;
-		while(std::getline(in, line))
-		{
-			if (line.substr(0, 2) == "v ")
-			{
-				std::istringstream v(line.substr(2));
-				float x, y, z;
-				v>>x;
-				v>>y;
-				v>>z;
-				dragon.vertex.push_back(new Vector4D(x, y, z));
-				//std::cout<<"Received:"<<std::endl;
-				//displayVector4D(*dragon.vertex.back());
-			}
-			else if (line.substr(0, 2) == "f ")
-			{
-				int a, b, c;
+	Object tailFin = shape.createTailFin();
+	tailFin.setScale(0.5, 0.5, 0.5);
+	tailFin.setTranslation(100, 50, 0);
 
-				//const char* chh=line.c_str();
-				//sscanf (chh, "f %i/%i %i/%i %i/%i",&a,&A,&b,&B,&c,&C); //here it read the line start with f and store the corresponding values in the variables
-				//a--;b--;c--;
-				//A--;B--;C--;
+	//Object dragon("Dragon");
+	//{
+	//	std::ifstream in("dragon.obj", std::ios::in);
+	//	if (!in)
+	//	{
+	//		std::cout<<"Cannot open file"<<std::endl;
+	//		exit(1);
+	//	}
+	//	std::string line;
+	//	while(std::getline(in, line))
+	//	{
+	//		if (line.substr(0, 2) == "v ")
+	//		{
+	//			std::istringstream v(line.substr(2));
+	//			float x, y, z;
+	//			v>>x;
+	//			v>>y;
+	//			v>>z;
+	//			dragon.vertex.push_back(new Vector4D(x, y, z));
+	//			//std::cout<<"Received:"<<std::endl;
+	//			//displayVector4D(*dragon.vertex.back());
+	//		}
+	//		else if (line.substr(0, 2) == "f ")
+	//		{
+	//			int a, b, c;
 
-				std::istringstream f(line.substr(2));
-				f>>a;
-				f>>b;
-				f>>c;
-				a--;
-				b--;
-				c--;
-				dragon.face.push_back(new Face(a, b, c));
-				//std::cout<<"Received: "<<a<<", "<<b<<", "<<c<<std::endl;
-			}
-		}
-		dragon.setRotation(90, 0, 0);
-	}
+	//			//const char* chh=line.c_str();
+	//			//sscanf (chh, "f %i/%i %i/%i %i/%i",&a,&A,&b,&B,&c,&C); //here it read the line start with f and store the corresponding values in the variables
+	//			//a--;b--;c--;
+	//			//A--;B--;C--;
+	//			std::istringstream f(line.substr(2));
+	//			f>>a;
+	//			f>>b;
+	//			f>>c;
+	//			a--;
+	//			b--;
+	//			c--;
+	//			//a = a-8;
+	//			//b = b-8;
+	//			//c = c-8;
+	//			dragon.face.push_back(new Face(a, b, c));
+	//			//std::cout<<"Received: "<<a<<", "<<b<<", "<<c<<std::endl;
+	//		}
+	//	}
+	//	dragon.setRotation(90, 0, 0);
+	//	dragon.setScale(5, 5, 5);
+	//}
 
 	//Push initialized objects
-
-	//objects.push_back(cube);
-	//objects.push_back(octahedron);
+	objects.push_back(cube);
+	objects.push_back(octahedron);
 	//objects.push_back(tailFin);
-	objects.push_back(dragon);
+	//objects.push_back(dragon);
 
 	/*
 	displayMatrix(cube.modelMatrix, "Model Matrix");
@@ -219,6 +158,8 @@ void Dragon::handleInput()
 	mouseScroll and Z,X	-	scale
 	SHIFT + (R, S, T)	-	reset rotate, scale, translate
 	SPACE				-	show info of slected object
+	I, K, J, L, U, O	-	move camera up, down, left, right
+	R + C				-	reset camera
 	**********************************************************/
 
 	//toggle showing of wire in both wireframe and rasterized model
@@ -419,10 +360,64 @@ void Dragon::handleInput()
 		*/
 		std::cout<<"======================================="<<std::endl;
 	}
+
+	//camera manipulators
+	{
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_I))
+		{
+			//up - move camera down
+			//cameraPos.setY(cameraPos.getY() - cameraStepY);
+			cameraRot.setX(cameraRot.getX() - cameraStepX);
+		}
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_K))
+		{
+			//down - move camera up
+			//cameraPos.setY(cameraPos.getY() + cameraStepY);
+			cameraRot.setX(cameraRot.getX() + cameraStepX);
+		}
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_J))
+		{
+			//left - move camera right
+			//cameraPos.setX(cameraPos.getX() + cameraStepX);
+			cameraRot.setY(cameraRot.getY() + cameraStepY);
+		}
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_L))
+		{
+			//right - move camera left
+			//cameraPos.setX(cameraPos.getX() - cameraStepX);
+			cameraRot.setY(cameraRot.getY() - cameraStepY);
+		}
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_U))
+		{
+			//near - move camera near
+			//cameraPos.setZ(cameraPos.getZ() - cameraStepZ);
+			cameraRot.setX(cameraRot.getX() - cameraStepX);
+		}
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_O))
+		{
+			//far - move camera far
+			//cameraPos.setZ(cameraPos.getZ() + cameraStepZ);
+			cameraRot.setX(cameraRot.getX() + cameraStepX);
+		}
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_R))
+		{
+			if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_C))
+			{
+				Camera::Instance()->setCameraPos(0, 0, 200);
+				Camera::Instance()->setUpVector(0, 1, 0);
+			}
+		}
+		//Camera::Instance()->setCameraPos(cameraPos.getX(), cameraPos.getY(), cameraPos.getZ());
+	}
 }
 
 void Dragon::update()
 {
+	Camera::Instance()->rotate(cameraRot);
+	viewMatrix = Camera::Instance()->getViewMatrix();
+
+	//displayMatrix(viewMatrix);
+
 	for (int i = 0; i < objects.size(); i++)
 	{
 
