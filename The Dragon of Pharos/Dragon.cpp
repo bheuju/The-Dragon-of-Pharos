@@ -11,6 +11,7 @@ Dragon::Dragon()
 	wireFrame = true;
 	//wireFrame = false;
 	showWire = true;
+	highLight = true;
 
 	released = true;
 
@@ -150,6 +151,9 @@ void Dragon::handleInput()
 	Input Keys Description:
 	F1, F2				-	work with DRAGON / PHAROS
 	F4					-	display all (no manipulation inputs)
+		1				-	DRAGON input handling
+		2				-	PHAROS input handling
+	F9					-	toggle objct highlight on select
 	F10					-	toggle wire
 	F11					-	toggle wireframe / rasterized
 	F12					-	display FPS
@@ -165,7 +169,21 @@ void Dragon::handleInput()
 	I, K, J, L, U, O	-	move camera up, down, left, right
 	R + C				-	reset camera
 	*************************************************************/
-
+	
+	//toggle highlight on select
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F9))
+	{
+		if (highLight)
+		{
+			std::cout<<"Highlight disabled"<<std::endl;
+			highLight = false;
+		}
+		else
+		{
+			std::cout<<"Highlight enable"<<std::endl;
+			highLight = true;
+		}
+	}
 	//toggle showing of wire in both wireframe and rasterized model
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F10))
 	{
@@ -438,6 +456,9 @@ void Dragon::handleInput()
 void Dragon::update()
 {
 	//displayVector3D(cameraRot, "Rotation Camera", 1);
+
+	//TODO:	Try to move cameraRot variable to camera class to generalize camera
+	//		rotation also in BOTH mode of F4
 	Camera::Instance()->rotate(cameraRot);
 	viewMatrix = Camera::Instance()->getViewMatrix();
 
@@ -466,25 +487,26 @@ void Dragon::update()
 
 
 	//clearing
-	//gph.depthBuffer.clear();
-	//gph.depthBuffer.push_back(1000);
+	//Graphics::Instance()->depthBuffer.clear();
+	//Graphics::Instance()->depthBuffer.push_back(1000);
 
-	//clear frameBuffer
-	gph.frameBuffer.clear();
-	//cleat colorBuffer
-	gph.colorBuffer.clear();
-	//reset zBuffer
-	for (int i = 0; i < 801; i++)
-	{
-		for (int j = 0; j < 601; j++)
-		{
-			gph.zBuffer[i][j] = 500;
-		}
-	}
+	/** This has been moved to Graphics - clearBuffer() **/
+	////clear frameBuffer
+	//Graphics::Instance()->frameBuffer.clear();
+	////cleat colorBuffer
+	//Graphics::Instance()->colorBuffer.clear();
+	////reset zBuffer
+	//for (int i = 0; i < 801; i++)
+	//{
+	//	for (int j = 0; j < 601; j++)
+	//	{
+	//		Graphics::Instance()->zBuffer[i][j] = 500;
+	//	}
+	//}
 
 	//draw axis lines
-	gph.drawLine(0, 300, 0, -300, Vector3D(0, 255, 255));
-	gph.drawLine(400, 0, -400, 0, Vector3D(0, 255, 255));
+	Graphics::Instance()->drawLine(0, 300, 0, -300, Vector3D(0, 255, 255));
+	Graphics::Instance()->drawLine(400, 0, -400, 0, Vector3D(0, 255, 255));
 
 	//std::cout<<lines.size()<<std::endl;
 
@@ -497,9 +519,9 @@ void Dragon::update()
 		y1 = lines[i-1].getY();
 		x2 = lines[i].getX();
 		y2 = lines[i].getY();
-		gph.drawLine(x1, y1, x2, y2, Vector3D(0, 10, 10));
+		Graphics::Instance()->drawLine(x1, y1, x2, y2, Vector3D(0, 10, 10));
 	}
-	//std::cout<<"Real: "<<gph.frameBuffer.size()<<std::endl;
+	//std::cout<<"Real: "<<Graphics::Instance()->frameBuffer.size()<<std::endl;
 
 	//for each object
 	for (int i = 0; i < objects.size(); i++)
@@ -528,7 +550,7 @@ void Dragon::update()
 		//	int x0 = point.getX();
 		//	int y0 = point.getY();
 		//	//std::cout<<"After = Point "<<j<<": "<<x0<<" "<<y0<<std::endl;
-		//	gph.drawPixel(x0, y0);
+		//	Graphics::Instance()->drawPixel(x0, y0);
 		//}
 
 		//for each face of the object
@@ -577,19 +599,19 @@ void Dragon::update()
 			//draw 3 lines of the triangle
 			if (showWire)
 			{
-				if (i == selected)
+				if (i == selected && highLight)
 				{
 					//highlight selected object by drawng green color line	
-					gph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY(), Vector3D(0, 255, 0));
-					gph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY(), Vector3D(0, 255, 0));
-					gph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY(), Vector3D(0, 255, 0));
+					Graphics::Instance()->drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY(), Vector3D(0, 255, 0));
+					Graphics::Instance()->drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY(), Vector3D(0, 255, 0));
+					Graphics::Instance()->drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY(), Vector3D(0, 255, 0));
 				}
 				else
 				{
 					//use default color red for unselected
-					gph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY());
-					gph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY());
-					gph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY());
+					Graphics::Instance()->drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY());
+					Graphics::Instance()->drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY());
+					Graphics::Instance()->drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY());
 				}
 			}
 
@@ -600,30 +622,30 @@ void Dragon::update()
 				case 0:
 				case 1:
 					//std::cout<<"Face "<<k<<std::endl;
-					gph.fillTriangle(point0, point1, point2, Vector3D(0, 100, 100));	//front
+					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(0, 100, 100));	//front
 					break;
 				case 2:
 				case 3:
-					gph.fillTriangle(point0, point1, point2, Vector3D(25, 100, 25));	//back
+					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(25, 100, 25));	//back
 					break;
 				case 4:
 				case 5:
-					gph.fillTriangle(point0, point1, point2, Vector3D(100, 100, 150));	//left
+					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(100, 100, 150));	//left
 					break;
 				case 6:
 				case 7:
-					gph.fillTriangle(point0, point1, point2, Vector3D(150, 25, 150));	//right
+					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(150, 25, 150));	//right
 					break;
 				case 8:
 				case 9:
-					gph.fillTriangle(point0, point1, point2, Vector3D(50, 20, 80));	//top
+					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(50, 20, 80));	//top
 					break;
 				case 10:
 				case 11:
-					gph.fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));		//bottom
+					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));		//bottom
 					break;
 				default:
-					gph.fillTriangle(point0, point1, point2, Vector3D(0, 10, 150));
+					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(0, 10, 150));
 					break;
 				}
 			}
@@ -633,18 +655,18 @@ void Dragon::update()
 
 void Dragon::render()
 {
-	//std::cout<<gph.frameBuffer.size()<<std::endl;
+	//std::cout<<Graphics::Instance()->frameBuffer.size()<<std::endl;
 
-	for (int i = 0; i < gph.frameBuffer.size(); i++)
-		//for (int i = gph.frameBuffer.size()-1; i >= 0; i--)
+	for (int i = 0; i < Graphics::Instance()->frameBuffer.size(); i++)
+		//for (int i = Graphics::Instance()->frameBuffer.size()-1; i >= 0; i--)
 	{
-		float x = gph.frameBuffer[i].getX();
-		float y = gph.frameBuffer[i].getY();
-		float z = gph.frameBuffer[i].getZ();
+		float x = Graphics::Instance()->frameBuffer[i].getX();
+		float y = Graphics::Instance()->frameBuffer[i].getY();
+		float z = Graphics::Instance()->frameBuffer[i].getZ();
 
-		Vector3D color = gph.colorBuffer[i];
+		Vector3D color = Graphics::Instance()->colorBuffer[i];
 
-		gph.drawPixel(x, y, z, color);
+		Graphics::Instance()->drawPixel(x, y, z, color);
 	}
 
 }

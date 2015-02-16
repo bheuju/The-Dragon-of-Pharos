@@ -27,10 +27,9 @@ public:
 	void render();
 
 private:
-	Graphics gph;
-
 	bool wireFrame;
 	bool showWire;
+	bool highLight;
 
 	float angleX, angleY, angleZ;
 	float sX, sY, sZ;

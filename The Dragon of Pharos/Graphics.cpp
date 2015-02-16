@@ -5,9 +5,7 @@
 #include "Vector3D.h"
 #include <SDL_opengl.h>
 
-//std::vector<Vector4D> temp;
-
-//std::vector<Vector4D> Graphics::frameBuffer = temp;
+Graphics* Graphics::pInstance = 0; 
 
 Graphics::Graphics()
 {
@@ -28,7 +26,7 @@ void Graphics::putPixel(float x, float y, float z, Vector3D color)
 
 	//clipping before writing to frameBuffer
 	if (x < -400 || y < -300 || x > 400 || y > 300)
-	//if (x < -200 || y < -100 || x > 200 || y > 100)
+		//if (x < -200 || y < -100 || x > 200 || y > 100)
 	{
 		return;
 	}
@@ -38,7 +36,7 @@ void Graphics::putPixel(float x, float y, float z, Vector3D color)
 	int yp = (int) (300 - y);
 
 	//std::cout<<"x: "<<xp<<" y: "<<yp<<std::endl;
-	
+
 	//std::cout<<"zDepth: "<<zDepth<<"\tzBuffer: "<<zBuffer[xp][yp]<<std::endl;
 	//if the point is further from previous one, do nothing (return)
 	if (zDepth > zBuffer[xp][yp])
@@ -202,7 +200,7 @@ void Graphics::processScanLine(int y, Vector4D pa, Vector4D pb, Vector4D pc, Vec
 
 	float z1 = pa.getZ() + gradient1 * (pb.getZ() - pa.getZ());
 	float z2 = pc.getZ() + gradient2 * (pd.getZ() - pc.getZ());
-	
+
 	//std::cout<<"At y: "<<y<<" sx: "<<(sx)<<" ex: "<<(ex)<<std::endl;
 
 	//std::cout<<"z1: "<<z1<<"\tz2: "<<z2<<std::endl;
@@ -296,5 +294,36 @@ void Graphics::fillTriangle(Vector4D p1, Vector4D p2, Vector4D p3, Vector3D colo
 				processScanLine(y, p2, p3, p1, p3, color);
 			}
 		}
+	}
+}
+
+void Graphics::clearBuffer()
+{
+	//clear frameBuffer
+	frameBuffer.clear();
+	//cleat colorBuffer
+	colorBuffer.clear();
+	//reset zBuffer
+	for (int i = 0; i < 801; i++)
+	{
+		for (int j = 0; j < 601; j++)
+		{
+			zBuffer[i][j] = 500;
+		}
+	}
+}
+
+void Graphics::render()
+{
+	for (int i = 0; i < frameBuffer.size(); i++)
+		//for (int i = Graphics::Instance()->frameBuffer.size()-1; i >= 0; i--)
+	{
+		float x = frameBuffer[i].getX();
+		float y = frameBuffer[i].getY();
+		float z = frameBuffer[i].getZ();
+
+		Vector3D color = colorBuffer[i];
+
+		drawPixel(x, y, z, color);
 	}
 }

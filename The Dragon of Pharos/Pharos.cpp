@@ -8,6 +8,7 @@ Pharos::Pharos()
 	wireFrame = true;
 	//wireFrame = false;
 	showWire = true;
+	highLight = true;
 
 	released = true;
 
@@ -46,12 +47,12 @@ void Pharos::init()
 	tower.shown = true;
 
 	Object hemisphere = shape.createHemiSphere();
-	hemisphere.setTranslation(0, 0, 0);
+	hemisphere.setTranslation(0, 5, 0);
 	hemisphere.setScale(1, 1, 1);
 	hemisphere.shown = true;
 
 	Object torus = shape.createTorus();
-	torus.setTranslation(0, 0, 0);
+	torus.setTranslation(0, 25, 0);
 	torus.setScale(1, 1, 1);
 	torus.shown = true;
 
@@ -96,6 +97,9 @@ void Pharos::handleInput()
 	Input Keys Description:
 	F1, F2				-	work with DRAGON / PHAROS
 	F4					-	display all (no manipulation inputs)
+		1				-	DRAGON input handling
+		2				-	PHAROS input handling
+	F9					-	toggle objct highlight on select
 	F10					-	toggle wire
 	F11					-	toggle wireframe / rasterized
 	F12					-	display FPS
@@ -111,7 +115,20 @@ void Pharos::handleInput()
 	I, K, J, L, U, O	-	move camera up, down, left, right
 	R + C				-	reset camera
 	*************************************************************/
-
+	//toggle highlight on select
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F9))
+	{
+		if (highLight)
+		{
+			std::cout<<"Highlight disabled"<<std::endl;
+			highLight = false;
+		}
+		else
+		{
+			std::cout<<"Highlight enable"<<std::endl;
+			highLight = true;
+		}
+	}
 	//toggle showing of wire in both wireframe and rasterized model
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F10))
 	{
@@ -384,6 +401,9 @@ void Pharos::handleInput()
 void Pharos::update()
 {
 	//displayVector3D(cameraRot, "Rotation Camera", 1);
+
+	//TODO:	Try to move cameraRot variable to camera class to generalize camera
+	//		rotation also in BOTH mode of F4
 	Camera::Instance()->rotate(cameraRot);
 	viewMatrix = Camera::Instance()->getViewMatrix();
 
@@ -410,25 +430,26 @@ void Pharos::update()
 
 
 	//clearing
-	//Pgph.depthBuffer.clear();
-	//Pgph.depthBuffer.push_back(1000);
+	//Graphics::Instance()->depthBuffer.clear();
+	//Graphics::Instance()->depthBuffer.push_back(1000);
 
-	//clear frameBuffer
-	Pgph.frameBuffer.clear();
-	//cleat colorBuffer
-	Pgph.colorBuffer.clear();
-	//reset zBuffer
-	for (int i = 0; i < 800; i++)
-	{
-		for (int j = 0; j < 600; j++)
-		{
-			Pgph.zBuffer[i][j] = 500;
-		}
-	}
+	/** This has been moved to Graphics - clearBuffer() **/
+	////clear frameBuffer
+	//Graphics::Instance()->frameBuffer.clear();
+	////cleat colorBuffer
+	//Graphics::Instance()->colorBuffer.clear();
+	////reset zBuffer
+	//for (int i = 0; i < 800; i++)
+	//{
+	//	for (int j = 0; j < 600; j++)
+	//	{
+	//		Graphics::Instance()->zBuffer[i][j] = 500;
+	//	}
+	//}
 
 	//draw axis lines
-	Pgph.drawLine(0, 300, 0, -300, Vector3D(0, 255, 255));
-	Pgph.drawLine(400, 0, -400, 0, Vector3D(0, 255, 255));
+	Graphics::Instance()->drawLine(0, 300, 0, -300, Vector3D(0, 255, 255));
+	Graphics::Instance()->drawLine(400, 0, -400, 0, Vector3D(0, 255, 255));
 
 	//std::cout<<lines.size()<<std::endl;
 
@@ -441,9 +462,9 @@ void Pharos::update()
 		y1 = lines[i-1].getY();
 		x2 = lines[i].getX();
 		y2 = lines[i].getY();
-		Pgph.drawLine(x1, y1, x2, y2, Vector3D(0, 10, 10));
+		Graphics::Instance()->drawLine(x1, y1, x2, y2, Vector3D(0, 10, 10));
 	}
-	//std::cout<<"Real: "<<Pgph.frameBuffer.size()<<std::endl;
+	//std::cout<<"Real: "<<Graphics::Instance()->frameBuffer.size()<<std::endl;
 
 	//for each object
 	for (int i = 0; i < objects.size(); i++)
@@ -472,7 +493,7 @@ void Pharos::update()
 		//	int x0 = point.getX();
 		//	int y0 = point.getY();
 		//	//std::cout<<"After = Point "<<j<<": "<<x0<<" "<<y0<<std::endl;
-		//	Pgph.drawPixel(x0, y0);
+		//	Graphics::Instance()->drawPixel(x0, y0);
 		//}
 
 		//for each face of the object
@@ -522,19 +543,19 @@ void Pharos::update()
 			//draw 3 lines of the triangle
 			if (showWire)
 			{
-				if (i == selected)
+				if (i == selected && highLight)
 				{
 					//highlight selected object by drawng green color line	
-					Pgph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY(), Vector3D(0, 255, 0));
-					Pgph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY(), Vector3D(0, 255, 0));
-					Pgph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY(), Vector3D(0, 255, 0));
+					Graphics::Instance()->drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY(), Vector3D(0, 255, 0));
+					Graphics::Instance()->drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY(), Vector3D(0, 255, 0));
+					Graphics::Instance()->drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY(), Vector3D(0, 255, 0));
 				}
 				else
 				{
 					//use default color red for unselected
-					Pgph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY());
-					Pgph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY());
-					Pgph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY());
+					Graphics::Instance()->drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY());
+					Graphics::Instance()->drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY());
+					Graphics::Instance()->drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY());
 				}
 			}
 
@@ -545,30 +566,30 @@ void Pharos::update()
 				case 0:
 				case 1:
 					//std::cout<<"Face "<<k<<std::endl;
-					Pgph.fillTriangle(point0, point1, point2, Vector3D(0, 100, 100));	//front
+					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(0, 100, 100));	//front
 					break;
 				case 2:
 				case 3:
-					Pgph.fillTriangle(point0, point1, point2, Vector3D(25, 100, 25));	//back
+					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(25, 100, 25));	//back
 					break;
 				case 4:
 				case 5:
-					Pgph.fillTriangle(point0, point1, point2, Vector3D(100, 100, 150));	//left
+					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(100, 100, 150));	//left
 					break;
 				case 6:
 				case 7:
-					Pgph.fillTriangle(point0, point1, point2, Vector3D(150, 25, 150));	//right
+					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(150, 25, 150));	//right
 					break;
 				case 8:
 				case 9:
-					Pgph.fillTriangle(point0, point1, point2, Vector3D(50, 20, 80));	//top
+					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(50, 20, 80));	//top
 					break;
 				case 10:
 				case 11:
-					Pgph.fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));		//bottom
+					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));		//bottom
 					break;
 				default:
-					Pgph.fillTriangle(point0, point1, point2, Vector3D(0, 10, 150));
+					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(0, 10, 150));
 					break;
 				}
 			}
@@ -578,18 +599,18 @@ void Pharos::update()
 
 void Pharos::render()
 {
-	//std::cout<<gph.frameBuffer.size()<<std::endl;
+	//std::cout<<Graphics::Instance()->frameBuffer.size()<<std::endl;
 
-	for (int i = 0; i < Pgph.frameBuffer.size(); i++)
-		//for (int i = gph.frameBuffer.size()-1; i >= 0; i--)
+	for (int i = 0; i < Graphics::Instance()->frameBuffer.size(); i++)
+		//for (int i = Graphics::Instance()->frameBuffer.size()-1; i >= 0; i--)
 	{
-		float x = Pgph.frameBuffer[i].getX();
-		float y = Pgph.frameBuffer[i].getY();
-		float z = Pgph.frameBuffer[i].getZ();
+		float x = Graphics::Instance()->frameBuffer[i].getX();
+		float y = Graphics::Instance()->frameBuffer[i].getY();
+		float z = Graphics::Instance()->frameBuffer[i].getZ();
 
-		Vector3D color = Pgph.colorBuffer[i];
+		Vector3D color = Graphics::Instance()->colorBuffer[i];
 
-		Pgph.drawPixel(x, y, z, color);
+		Graphics::Instance()->drawPixel(x, y, z, color);
 	}
 
 }

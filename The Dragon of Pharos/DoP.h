@@ -59,6 +59,7 @@ private:
 	bool mRun;
 
 	int choice;
+	int inputChoice;
 
 	SDL_Window* win;
 	SDL_Renderer* ren;

@@ -7,7 +7,7 @@ DoP::DoP()
 	mRun = true;
 	mode = OPENGL;
 
-	choice = PHAROS;
+	inputChoice = choice = DRAGON;
 }
 
 void DoP::init(const char* title, int xpos, int ypos, int width, int height, int flags)
@@ -54,19 +54,38 @@ void DoP::handleInputs()
 		mRun = false;
 	}
 
+
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F1))
 	{
+		std::cout<<"Working with Dragon only"<<std::endl;
 		choice = DRAGON;
 	}
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F2))
 	{
+		std::cout<<"Working with Pharos only"<<std::endl;
 		choice = PHAROS;
 	}
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F4))
 	{
+		std::cout<<"Working with ALL"<<std::endl;
 		choice = ALL;
 	}
 
+	if (choice == ALL)
+	{
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_1))
+		{
+			std::cout<<"Dragon - Input Enabled."<<std::endl;
+			inputChoice = DRAGON;
+		}
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_2))
+		{
+			std::cout<<"Pharos - Input Enabled."<<std::endl;
+			inputChoice = PHAROS;
+		}
+	}
+
+	//Camera are coupled
 	switch(choice)
 	{
 	case DRAGON:
@@ -76,14 +95,23 @@ void DoP::handleInputs()
 		pharos.handleInput();
 		break;
 	case ALL:
-		//drag.handleInput();
-		//pharos.handleInput();
+		switch(inputChoice)
+		{
+		case DRAGON:
+			drag.handleInput();
+			break;
+		case PHAROS:
+			pharos.handleInput();
+			break;
+		}
 		break;
 	}
 }
 
 void DoP::update()
 {
+	Graphics::Instance()->clearBuffer();
+
 	switch(choice)
 	{
 	case DRAGON:
@@ -106,19 +134,21 @@ void DoP::render()
 		SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 		SDL_RenderClear(ren);
 
-		switch(choice)
-		{
-		case DRAGON:
-			drag.render();
-			break;
-		case PHAROS:
-			pharos.render();
-			break;
-		case ALL:
-			drag.render();
-			pharos.render();
-			break;
-		}
+		Graphics::Instance()->render();
+
+		//switch(choice)
+		//{
+		//case DRAGON:
+		//	drag.render();
+		//	break;
+		//case PHAROS:
+		//	pharos.render();
+		//	break;
+		//case ALL:
+		//	drag.render();
+		//	pharos.render();
+		//	break;
+		//}
 
 		SDL_RenderPresent(ren);
 	}
@@ -128,19 +158,21 @@ void DoP::render()
 		glClearColor(1, 1, 1, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		switch(choice)
-		{
-		case DRAGON:
-			drag.render();
-			break;
-		case PHAROS:
-			pharos.render();
-			break;
-		case ALL:
-			drag.render();
-			pharos.render();
-			break;
-		}
+		Graphics::Instance()->render();
+
+		//switch(choice)
+		//{
+		//case DRAGON:
+		//	drag.render();
+		//	break;
+		//case PHAROS:
+		//	pharos.render();
+		//	break;
+		//case ALL:
+		//	drag.render();
+		//	pharos.render();
+		//	break;
+		//}
 
 		SDL_GL_SwapWindow(win);
 	}

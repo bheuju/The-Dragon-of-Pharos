@@ -177,7 +177,7 @@ Matrix4 Matrix4::setViewMatrix(Vector3D cameraPos, Vector3D cameraTarget, Vector
 	Vector3D xAxis = normalize(cross(normalize(upVector), zAxis));
 	Vector3D yAxis = cross(zAxis, xAxis);
 
-	//need to update upvector of camera
+	//need to update upvector of camera to prevent flipping at 180*
 	Camera::Instance()->setUpVector(yAxis.getX(), yAxis.getY(), yAxis.getZ());
 
 	//displayVector3D(xAxis, "X - Axis", 1);
