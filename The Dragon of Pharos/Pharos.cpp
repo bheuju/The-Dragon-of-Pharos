@@ -1,11 +1,8 @@
-#include "Dragon.h"
+#include "Pharos.h"
 #include "InputHandler.h"
 #include "Camera.h"
 
-#include <fstream>
-#include <sstream>
-
-Dragon::Dragon()
+Pharos::Pharos()
 {
 	selected = 0;
 	wireFrame = true;
@@ -28,7 +25,7 @@ Dragon::Dragon()
 	//lines.push_back(Vector2D(0, 0));
 }
 
-void Dragon::init()
+void Pharos::init()
 {
 	//Set View Matrix
 	Camera::Instance()->setOrgCameraPos(0, 0, 200);
@@ -38,80 +35,29 @@ void Dragon::init()
 	Camera::Instance()->setUpVector(0, 1, 0);
 	viewMatrix = Camera::Instance()->getViewMatrix();
 
-	//displayMatrix(viewMatrix);
-
 	//Set Projection Matrix
 	projectionMatrix = Matrix4().setProjectionMatrix(45, 3.0/4.0, 1, 500);
 
 	/** Initialize object: cube */
 	//===========================/
-	Object cube = shape.createCube();
-	cube.setTranslation(0, 0, 0);
-	cube.setScale(20, 20, 20);
-	cube.shown = true;
+	Object tower = shape.createTower();
+	tower.setTranslation(0, 0, 0);
+	tower.setScale(1, 1, 1);
+	tower.shown = true;
 
-	Object octahedron = shape.createOctahedron();
-	octahedron.setTranslation(-20, -50, 0);
-	octahedron.setScale(20, 20, 20);
-	octahedron.shown = true;
+	Object hemisphere = shape.createHemiSphere();
+	hemisphere.setTranslation(0, 0, 0);
+	hemisphere.setScale(1, 1, 1);
+	hemisphere.shown = true;
 
-	Object tailFin = shape.createTailFin();
-	tailFin.setScale(0.5, 0.5, 0.5);
-	tailFin.setTranslation(100, 50, 0);
+	Object torus = shape.createTorus();
+	torus.setTranslation(0, 0, 0);
+	torus.setScale(1, 1, 1);
+	torus.shown = true;
 
-	//Object dragon("Dragon");
-	//{
-	//	std::ifstream in("dragon.obj", std::ios::in);
-	//	if (!in)
-	//	{
-	//		std::cout<<"Cannot open file"<<std::endl;
-	//		exit(1);
-	//	}
-	//	std::string line;
-	//	while(std::getline(in, line))
-	//	{
-	//		if (line.substr(0, 2) == "v ")
-	//		{
-	//			std::istringstream v(line.substr(2));
-	//			float x, y, z;
-	//			v>>x;
-	//			v>>y;
-	//			v>>z;
-	//			dragon.vertex.push_back(new Vector4D(x, y, z));
-	//			//std::cout<<"Received:"<<std::endl;
-	//			//displayVector4D(*dragon.vertex.back());
-	//		}
-	//		else if (line.substr(0, 2) == "f ")
-	//		{
-	//			int a, b, c;
-
-	//			//const char* chh=line.c_str();
-	//			//sscanf (chh, "f %i/%i %i/%i %i/%i",&a,&A,&b,&B,&c,&C); //here it read the line start with f and store the corresponding values in the variables
-	//			//a--;b--;c--;
-	//			//A--;B--;C--;
-	//			std::istringstream f(line.substr(2));
-	//			f>>a;
-	//			f>>b;
-	//			f>>c;
-	//			a--;
-	//			b--;
-	//			c--;
-	//			//a = a-8;
-	//			//b = b-8;
-	//			//c = c-8;
-	//			dragon.face.push_back(new Face(a, b, c));
-	//			//std::cout<<"Received: "<<a<<", "<<b<<", "<<c<<std::endl;
-	//		}
-	//	}
-	//	dragon.setRotation(90, 0, 0);
-	//	dragon.setScale(5, 5, 5);
-	//}
-
-	//Push initialized objects
-	objects.push_back(cube);
-	objects.push_back(octahedron);
-	//objects.push_back(tailFin);
-	//objects.push_back(dragon);
+	objects.push_back(tower);
+	objects.push_back(hemisphere);
+	objects.push_back(torus);
 
 	/*
 	displayMatrix(cube.modelMatrix, "Model Matrix");
@@ -120,7 +66,7 @@ void Dragon::init()
 	*/
 }
 
-void Dragon::handleInput()
+void Pharos::handleInput()
 {
 	////for self drawing lines
 	//if (InputHandler::Instance()->getMouseButtonState(LEFT))
@@ -435,13 +381,11 @@ void Dragon::handleInput()
 	}
 }
 
-void Dragon::update()
+void Pharos::update()
 {
 	//displayVector3D(cameraRot, "Rotation Camera", 1);
 	Camera::Instance()->rotate(cameraRot);
 	viewMatrix = Camera::Instance()->getViewMatrix();
-
-	//displayMatrix(viewMatrix);
 
 	for (int i = 0; i < objects.size(); i++)
 	{
@@ -466,25 +410,25 @@ void Dragon::update()
 
 
 	//clearing
-	//gph.depthBuffer.clear();
-	//gph.depthBuffer.push_back(1000);
+	//Pgph.depthBuffer.clear();
+	//Pgph.depthBuffer.push_back(1000);
 
 	//clear frameBuffer
-	gph.frameBuffer.clear();
+	Pgph.frameBuffer.clear();
 	//cleat colorBuffer
-	gph.colorBuffer.clear();
+	Pgph.colorBuffer.clear();
 	//reset zBuffer
-	for (int i = 0; i < 801; i++)
+	for (int i = 0; i < 800; i++)
 	{
-		for (int j = 0; j < 601; j++)
+		for (int j = 0; j < 600; j++)
 		{
-			gph.zBuffer[i][j] = 500;
+			Pgph.zBuffer[i][j] = 500;
 		}
 	}
 
 	//draw axis lines
-	gph.drawLine(0, 300, 0, -300, Vector3D(0, 255, 255));
-	gph.drawLine(400, 0, -400, 0, Vector3D(0, 255, 255));
+	Pgph.drawLine(0, 300, 0, -300, Vector3D(0, 255, 255));
+	Pgph.drawLine(400, 0, -400, 0, Vector3D(0, 255, 255));
 
 	//std::cout<<lines.size()<<std::endl;
 
@@ -497,9 +441,9 @@ void Dragon::update()
 		y1 = lines[i-1].getY();
 		x2 = lines[i].getX();
 		y2 = lines[i].getY();
-		gph.drawLine(x1, y1, x2, y2, Vector3D(0, 10, 10));
+		Pgph.drawLine(x1, y1, x2, y2, Vector3D(0, 10, 10));
 	}
-	//std::cout<<"Real: "<<gph.frameBuffer.size()<<std::endl;
+	//std::cout<<"Real: "<<Pgph.frameBuffer.size()<<std::endl;
 
 	//for each object
 	for (int i = 0; i < objects.size(); i++)
@@ -528,7 +472,7 @@ void Dragon::update()
 		//	int x0 = point.getX();
 		//	int y0 = point.getY();
 		//	//std::cout<<"After = Point "<<j<<": "<<x0<<" "<<y0<<std::endl;
-		//	gph.drawPixel(x0, y0);
+		//	Pgph.drawPixel(x0, y0);
 		//}
 
 		//for each face of the object
@@ -575,21 +519,22 @@ void Dragon::update()
 			//displayVector4D(point2, "Point 2", 1);
 
 			//draw 3 lines of the triangle
+			//draw 3 lines of the triangle
 			if (showWire)
 			{
 				if (i == selected)
 				{
 					//highlight selected object by drawng green color line	
-					gph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY(), Vector3D(0, 255, 0));
-					gph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY(), Vector3D(0, 255, 0));
-					gph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY(), Vector3D(0, 255, 0));
+					Pgph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY(), Vector3D(0, 255, 0));
+					Pgph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY(), Vector3D(0, 255, 0));
+					Pgph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY(), Vector3D(0, 255, 0));
 				}
 				else
 				{
 					//use default color red for unselected
-					gph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY());
-					gph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY());
-					gph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY());
+					Pgph.drawLine(point0.getX(), point0.getY(), point1.getX(), point1.getY());
+					Pgph.drawLine(point1.getX(), point1.getY(), point2.getX(), point2.getY());
+					Pgph.drawLine(point2.getX(), point2.getY(), point0.getX(), point0.getY());
 				}
 			}
 
@@ -600,30 +545,30 @@ void Dragon::update()
 				case 0:
 				case 1:
 					//std::cout<<"Face "<<k<<std::endl;
-					gph.fillTriangle(point0, point1, point2, Vector3D(0, 100, 100));	//front
+					Pgph.fillTriangle(point0, point1, point2, Vector3D(0, 100, 100));	//front
 					break;
 				case 2:
 				case 3:
-					gph.fillTriangle(point0, point1, point2, Vector3D(25, 100, 25));	//back
+					Pgph.fillTriangle(point0, point1, point2, Vector3D(25, 100, 25));	//back
 					break;
 				case 4:
 				case 5:
-					gph.fillTriangle(point0, point1, point2, Vector3D(100, 100, 150));	//left
+					Pgph.fillTriangle(point0, point1, point2, Vector3D(100, 100, 150));	//left
 					break;
 				case 6:
 				case 7:
-					gph.fillTriangle(point0, point1, point2, Vector3D(150, 25, 150));	//right
+					Pgph.fillTriangle(point0, point1, point2, Vector3D(150, 25, 150));	//right
 					break;
 				case 8:
 				case 9:
-					gph.fillTriangle(point0, point1, point2, Vector3D(50, 20, 80));	//top
+					Pgph.fillTriangle(point0, point1, point2, Vector3D(50, 20, 80));	//top
 					break;
 				case 10:
 				case 11:
-					gph.fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));		//bottom
+					Pgph.fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));		//bottom
 					break;
 				default:
-					gph.fillTriangle(point0, point1, point2, Vector3D(0, 10, 150));
+					Pgph.fillTriangle(point0, point1, point2, Vector3D(0, 10, 150));
 					break;
 				}
 			}
@@ -631,20 +576,20 @@ void Dragon::update()
 	}
 }
 
-void Dragon::render()
+void Pharos::render()
 {
 	//std::cout<<gph.frameBuffer.size()<<std::endl;
 
-	for (int i = 0; i < gph.frameBuffer.size(); i++)
+	for (int i = 0; i < Pgph.frameBuffer.size(); i++)
 		//for (int i = gph.frameBuffer.size()-1; i >= 0; i--)
 	{
-		float x = gph.frameBuffer[i].getX();
-		float y = gph.frameBuffer[i].getY();
-		float z = gph.frameBuffer[i].getZ();
+		float x = Pgph.frameBuffer[i].getX();
+		float y = Pgph.frameBuffer[i].getY();
+		float z = Pgph.frameBuffer[i].getZ();
 
-		Vector3D color = gph.colorBuffer[i];
+		Vector3D color = Pgph.colorBuffer[i];
 
-		gph.drawPixel(x, y, z, color);
+		Pgph.drawPixel(x, y, z, color);
 	}
 
 }

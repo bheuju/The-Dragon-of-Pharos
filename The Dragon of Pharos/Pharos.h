@@ -1,12 +1,3 @@
-/********************** Dragon of Pharos **********************
-Dragon Class
-- consists all about dragon
-- model space of each parts
-- wireframe
---------------------------------------------------------------
-
-**************************************************************/
-
 #pragma once
 #include "Graphics.h"
 #include "Object.h"
@@ -14,11 +5,10 @@ Dragon Class
 #include "Vector2D.h"
 #include "BasicShape.h"
 
-class Dragon
+class Pharos
 {
 public:
-	Dragon();
-	~Dragon() {}
+	Pharos();
 
 	void init();
 
@@ -27,7 +17,7 @@ public:
 	void render();
 
 private:
-	Graphics gph;
+	Graphics Pgph;
 
 	bool wireFrame;
 	bool showWire;

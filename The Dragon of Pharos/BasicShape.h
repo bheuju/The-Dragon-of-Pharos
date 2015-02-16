@@ -2,9 +2,9 @@
 BasicShape Class
 - consists predefined standard objects
 - objects consists of:
-	* vertices
-	* faces
-	* face normals (TODO)
+* vertices
+* faces
+* face normals (TODO)
 - smallest possible size of object
 - model coordinates of each object
 - objects creating functions have prefix "create[objectName]"
@@ -23,6 +23,11 @@ public:
 
 	Object createCube();
 	Object createOctahedron();
+
 	Object createTailFin();
+
+	Object createTower();
+	Object createHemiSphere();
+	Object createTorus();
 };
 

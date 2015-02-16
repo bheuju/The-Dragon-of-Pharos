@@ -11,11 +11,16 @@ Singleton class
 #include <iostream>
 #include "InputHandler.h"
 #include "Dragon.h"
+#include "Pharos.h"
 
 enum
 {
 	OPENGL = 0,
-	SDL = 1
+	SDL = 1,
+
+	DRAGON = 0,
+	PHAROS = 1,
+	ALL = 9
 };
 
 class DoP
@@ -53,9 +58,12 @@ private:
 	int mode;	//SDL or OPENGL
 	bool mRun;
 
+	int choice;
+
 	SDL_Window* win;
 	SDL_Renderer* ren;
 
 	//Objects
 	Dragon drag;
+	Pharos pharos;
 };

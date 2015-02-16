@@ -88,6 +88,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Pharos.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicShape.h" />
@@ -98,6 +99,7 @@
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Pharos.h" />
     <ClInclude Include="Vector2D.h" />
     <ClInclude Include="Vector3D.h" />
     <ClInclude Include="Vector4D.h" />

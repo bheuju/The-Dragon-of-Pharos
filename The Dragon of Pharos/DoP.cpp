@@ -6,6 +6,8 @@ DoP::DoP()
 {
 	mRun = true;
 	mode = OPENGL;
+
+	choice = PHAROS;
 }
 
 void DoP::init(const char* title, int xpos, int ypos, int width, int height, int flags)
@@ -40,22 +42,61 @@ void DoP::init(const char* title, int xpos, int ypos, int width, int height, int
 
 	//initialize the objects to draw dragon
 	drag.init();
+	pharos.init();
 }
 
 void DoP::handleInputs()
 {
 	InputHandler::Instance()->update();
+
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE))
 	{
 		mRun = false;
 	}
 
-	drag.handleInput();
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F1))
+	{
+		choice = DRAGON;
+	}
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F2))
+	{
+		choice = PHAROS;
+	}
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F4))
+	{
+		choice = ALL;
+	}
+
+	switch(choice)
+	{
+	case DRAGON:
+		drag.handleInput();
+		break;
+	case PHAROS:
+		pharos.handleInput();
+		break;
+	case ALL:
+		//drag.handleInput();
+		//pharos.handleInput();
+		break;
+	}
 }
 
 void DoP::update()
 {
-	drag.update();
+	switch(choice)
+	{
+	case DRAGON:
+		drag.update();
+		break;
+	case PHAROS:
+		pharos.update();
+		break;
+	case ALL:
+		drag.update();
+		pharos.update();
+		break;
+	}
 }
 
 void DoP::render()
@@ -65,7 +106,19 @@ void DoP::render()
 		SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 		SDL_RenderClear(ren);
 
-		drag.render();
+		switch(choice)
+		{
+		case DRAGON:
+			drag.render();
+			break;
+		case PHAROS:
+			pharos.render();
+			break;
+		case ALL:
+			drag.render();
+			pharos.render();
+			break;
+		}
 
 		SDL_RenderPresent(ren);
 	}
@@ -75,7 +128,19 @@ void DoP::render()
 		glClearColor(1, 1, 1, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		drag.render();
+		switch(choice)
+		{
+		case DRAGON:
+			drag.render();
+			break;
+		case PHAROS:
+			pharos.render();
+			break;
+		case ALL:
+			drag.render();
+			pharos.render();
+			break;
+		}
 
 		SDL_GL_SwapWindow(win);
 	}
