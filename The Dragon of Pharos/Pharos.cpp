@@ -330,6 +330,7 @@ void Pharos::handleInput()
 
 	//camera manipulators
 	{
+		cameraRot = Camera::Instance()->getCameraAngle();
 		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_I))
 		{
 			//up - move camera down
@@ -395,6 +396,7 @@ void Pharos::handleInput()
 				std::cout<<"======================================="<<std::endl;
 			}
 		}
+		Camera::Instance()->setCameraAngle(cameraRot);
 	}
 }
 
@@ -404,7 +406,7 @@ void Pharos::update()
 
 	//TODO:	Try to move cameraRot variable to camera class to generalize camera
 	//		rotation also in BOTH mode of F4
-	Camera::Instance()->rotate(cameraRot);
+	Camera::Instance()->rotate();
 	viewMatrix = Camera::Instance()->getViewMatrix();
 
 	for (int i = 0; i < objects.size(); i++)

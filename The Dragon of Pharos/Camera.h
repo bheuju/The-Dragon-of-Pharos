@@ -41,8 +41,12 @@ public:
 
 	Vector3D getOrgCameraPos() {return orgCameraPos;}
 
+	void setCameraAngle(Vector3D angle);
+	void setCameraAngle(float x, float y, float z);
+	Vector3D getCameraAngle() {return cameraAngle;}
+
 	Matrix4 getViewMatrix();
-	void rotate(Vector3D angle);
+	void rotate();
 
 private:
 	Camera();
@@ -54,6 +58,8 @@ private:
 
 	Vector3D orgCameraPos;
 	Vector3D orgUpVector;
+
+	Vector3D cameraAngle;
 
 	Matrix4 viewMatrix;
 };

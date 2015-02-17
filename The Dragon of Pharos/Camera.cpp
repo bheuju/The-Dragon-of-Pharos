@@ -31,12 +31,24 @@ void Camera::setOrgUpVector(float x, float y, float z)
 	orgUpVector = Vector3D(x, y, z);
 }
 
+void Camera::setCameraAngle(Vector3D angle)
+{
+	cameraAngle = angle;
+}
+
+void Camera::setCameraAngle(float x, float y, float z)
+{
+	cameraAngle.setX(x);
+	cameraAngle.setY(y);	
+	cameraAngle.setZ(z);
+}
+
 Matrix4 Camera::getViewMatrix()
 {
 	return(Matrix4().setViewMatrix(cameraPos, cameraTarget, upVector));
 }
 
-void Camera::rotate(Vector3D angle)
+void Camera::rotate()
 {
 	//displayVector3D(angle, "Rotation Angle", 1);
 
@@ -47,7 +59,7 @@ void Camera::rotate(Vector3D angle)
 
 	//Matrix4 transformMatrix = Matrix4().setTranslationMatrix(-x, -y, -z) * Matrix4().setRotation(angle.getX(), angle.getY(), angle.getZ()) * Matrix4().setTranslationMatrix(x, y, z);
 	//Matrix4 transformMatrix = Matrix4().setTranslationMatrix(x, y, z) * Matrix4().setRotation(angle.getX(), angle.getY(), angle.getZ()) * Matrix4().setTranslationMatrix(-x, -y, -z);
-	Matrix4 transformMatrix = Matrix4().setRotation(angle.getX(), angle.getY(), angle.getZ());
+	Matrix4 transformMatrix = Matrix4().setRotation(cameraAngle.getX(), cameraAngle.getY(), cameraAngle.getZ());
 
 	Vector4D post = transformMatrix * Vector4D(orgCameraPos);
 

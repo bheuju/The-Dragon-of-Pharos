@@ -385,6 +385,7 @@ void Dragon::handleInput()
 
 	//camera manipulators
 	{
+		cameraRot = Camera::Instance()->getCameraAngle();
 		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_I))
 		{
 			//up - move camera down
@@ -450,6 +451,7 @@ void Dragon::handleInput()
 				std::cout<<"======================================="<<std::endl;
 			}
 		}
+		Camera::Instance()->setCameraAngle(cameraRot);
 	}
 }
 
@@ -459,7 +461,7 @@ void Dragon::update()
 
 	//TODO:	Try to move cameraRot variable to camera class to generalize camera
 	//		rotation also in BOTH mode of F4
-	Camera::Instance()->rotate(cameraRot);
+	Camera::Instance()->rotate();
 	viewMatrix = Camera::Instance()->getViewMatrix();
 
 	//displayMatrix(viewMatrix);
