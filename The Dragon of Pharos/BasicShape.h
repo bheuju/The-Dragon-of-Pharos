@@ -21,12 +21,17 @@ public:
 	BasicShape();
 	~BasicShape(){}
 
+	//General
 	Object createCube();
 	Object createOctahedron();
 
+	//Dragon
 	Object createTailFin();
+	Object createBodyFin();
+	Object createWing();
 
-	Object createTower();
+	//Pharos
+	Object createTower(float h);
 	Object createHemiSphere();
 	Object createTorus();
 };

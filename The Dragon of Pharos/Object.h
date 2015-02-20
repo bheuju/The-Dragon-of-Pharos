@@ -14,6 +14,14 @@ Objects
 
 class Face;
 
+enum plane
+{
+	XY = 0,
+	YZ = 1,
+	XZ = 2
+
+};
+
 class Object
 {
 public:
@@ -37,6 +45,8 @@ public:
 	float angleX, angleY, angleZ;
 
 	bool shown;
+
+	friend Object mirror(Object obj, int plane = XZ);
 };
 
 class Face
@@ -46,5 +56,6 @@ public:
 	Face(int a, int b, int c);
 	~Face() {}
 
-	int v0, v1, v2, v3;
+	int v0, v1, v2;
+	//v3;
 };

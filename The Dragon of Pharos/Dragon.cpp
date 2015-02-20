@@ -44,21 +44,59 @@ void Dragon::init()
 	//Set Projection Matrix
 	projectionMatrix = Matrix4().setProjectionMatrix(45, 3.0/4.0, 1, 500);
 
-	/** Initialize object: cube */
-	//===========================/
-	Object cube = shape.createCube();
-	cube.setTranslation(0, 0, 0);
-	cube.setScale(20, 20, 20);
-	cube.shown = true;
 
-	Object octahedron = shape.createOctahedron();
-	octahedron.setTranslation(-20, -50, 0);
-	octahedron.setScale(20, 20, 20);
-	octahedron.shown = true;
+	//Initialize Dragon Parts
+	{
+		//Tail Fin
+		Object tailFinX = shape.createTailFin();
+		tailFinX.setTranslation(100, 0, 0);
+		tailFinX.setRotation(60, 0, 0);
+		tailFinX.setScale(0.5, 0.5, 0.5);
+		tailFinX.shown = true;
+		Object tailFinY = mirror(tailFinX);
 
-	Object tailFin = shape.createTailFin();
-	tailFin.setScale(0.5, 0.5, 0.5);
-	tailFin.setTranslation(100, 50, 0);
+		//Wings
+		Object wingY = shape.createWing();
+		wingY.setTranslation(-35, -10, 0);
+		wingY.setScale(0.5, 0.5, 0.5);
+		wingY.setRotation(0, 0, 0);
+		wingY.shown = true;
+		Object wingX = mirror(wingY);
+
+		//Body Fin
+		Object bodyFinY = shape.createBodyFin();
+		bodyFinY.setTranslation(0, -8, 0);
+		bodyFinY.setRotation(0, 0, 0);
+		bodyFinY.setScale(0.5, 0.5, 0.5);
+		bodyFinY.shown = true;
+		Object bodyFinX = mirror(bodyFinY);
+
+		//Push initialized dragon parts
+		objects.push_back(tailFinX);
+		objects.push_back(tailFinY);
+		objects.push_back(wingY);
+		objects.push_back(wingX);
+		objects.push_back(bodyFinY);
+		objects.push_back(bodyFinX);
+	}
+
+	//Initialize Other General Objects
+	{
+		Object cube = shape.createCube();
+		cube.setTranslation(100, 50, 0);
+		cube.setScale(20, 20, 20);
+		cube.shown = true;
+
+		Object octahedron = shape.createOctahedron();
+		octahedron.setTranslation(-20, -50, 0);
+		octahedron.setScale(20, 20, 20);
+		octahedron.shown = true;
+
+		//Push initialized objects
+		objects.push_back(cube);
+		//objects.push_back(octahedron);
+	}
+
 
 	//Object dragon("Dragon");
 	//{
@@ -85,7 +123,6 @@ void Dragon::init()
 	//		else if (line.substr(0, 2) == "f ")
 	//		{
 	//			int a, b, c;
-
 	//			//const char* chh=line.c_str();
 	//			//sscanf (chh, "f %i/%i %i/%i %i/%i",&a,&A,&b,&B,&c,&C); //here it read the line start with f and store the corresponding values in the variables
 	//			//a--;b--;c--;
@@ -107,11 +144,6 @@ void Dragon::init()
 	//	dragon.setRotation(90, 0, 0);
 	//	dragon.setScale(5, 5, 5);
 	//}
-
-	//Push initialized objects
-	objects.push_back(cube);
-	objects.push_back(octahedron);
-	//objects.push_back(tailFin);
 	//objects.push_back(dragon);
 
 	/*
@@ -151,8 +183,8 @@ void Dragon::handleInput()
 	Input Keys Description:
 	F1, F2				-	work with DRAGON / PHAROS
 	F4					-	display all (no manipulation inputs)
-		1				-	DRAGON input handling
-		2				-	PHAROS input handling
+	1				-	DRAGON input handling
+	2				-	PHAROS input handling
 	F9					-	toggle objct highlight on select
 	F10					-	toggle wire
 	F11					-	toggle wireframe / rasterized
@@ -169,7 +201,7 @@ void Dragon::handleInput()
 	I, K, J, L, U, O	-	move camera up, down, left, right
 	R + C				-	reset camera
 	*************************************************************/
-	
+
 	//toggle highlight on select
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F9))
 	{
@@ -619,7 +651,7 @@ void Dragon::update()
 
 			if (!wireFrame)
 			{
-				switch (k)
+				switch (k % 12)
 				{
 				case 0:
 				case 1:

@@ -41,13 +41,13 @@ void Pharos::init()
 
 	/** Initialize object: cube */
 	//===========================/
-	Object tower = shape.createTower();
+	Object tower = shape.createTower(40);
 	tower.setTranslation(0, 0, 0);
 	tower.setScale(1, 1, 1);
 	tower.shown = true;
 
 	Object hemisphere = shape.createHemiSphere();
-	hemisphere.setTranslation(0, 5, 0);
+	hemisphere.setTranslation(0, 40, 0);
 	hemisphere.setScale(1, 1, 1);
 	hemisphere.shown = true;
 
@@ -563,7 +563,7 @@ void Pharos::update()
 
 			if (!wireFrame)
 			{
-				switch (k)
+				switch (k % 12)
 				{
 				case 0:
 				case 1:

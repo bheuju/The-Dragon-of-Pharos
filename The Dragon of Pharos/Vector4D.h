@@ -24,7 +24,7 @@ public:
 		mW = 1.0;
 	}
 
-	Vector4D(float x, float y, float z, float w = 1.0)
+	Vector4D(float x, float y, float z = 0, float w = 1.0)
 	{
 		mX = x;
 		mY = y;
