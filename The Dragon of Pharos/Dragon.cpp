@@ -8,9 +8,9 @@
 Dragon::Dragon()
 {
 	selected = 0;
-	wireFrame = true;
+	wireFrame = false;
 	//wireFrame = false;
-	showWire = true;
+	showWire = false;
 	highLight = true;
 
 	released = true;
@@ -71,13 +71,23 @@ void Dragon::init()
 		bodyFinY.shown = true;
 		Object bodyFinX = mirror(bodyFinY);
 
+		//Head
+		Object headY = shape.createHead();
+		headY.setTranslation(0, 0, 0);
+		headY.setRotation(0, 0, 0);
+		headY.setScale(1, 1, 1);
+		headY.shown = true;
+		Object headX = mirror(headY, YZ);
+
 		//Push initialized dragon parts
-		objects.push_back(tailFinX);
-		objects.push_back(tailFinY);
-		objects.push_back(wingY);
-		objects.push_back(wingX);
-		objects.push_back(bodyFinY);
-		objects.push_back(bodyFinX);
+		objects.push_back(headY);
+		//objects.push_back(headX);
+		//objects.push_back(tailFinX);
+		//objects.push_back(tailFinY);
+		//objects.push_back(wingY);
+		//objects.push_back(wingX);
+		//objects.push_back(bodyFinY);
+		//objects.push_back(bodyFinX);
 	}
 
 	//Initialize Other General Objects
@@ -545,7 +555,7 @@ void Dragon::update()
 	//std::cout<<lines.size()<<std::endl;
 
 
-	//display self made line
+	//display self made line (which were created using mouse clicks)
 	for (int i = 1; i < lines.size(); i++)
 	{
 		int x1, y1, x2, y2;
@@ -692,7 +702,7 @@ void Dragon::render()
 	//std::cout<<Graphics::Instance()->frameBuffer.size()<<std::endl;
 
 	for (int i = 0; i < Graphics::Instance()->frameBuffer.size(); i++)
-		//for (int i = Graphics::Instance()->frameBuffer.size()-1; i >= 0; i--)
+	//for (int i = Graphics::Instance()->frameBuffer.size()-1; i >= 0; i--)
 	{
 		float x = Graphics::Instance()->frameBuffer[i].getX();
 		float y = Graphics::Instance()->frameBuffer[i].getY();

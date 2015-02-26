@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\MyProjects\Graphics\The Dragon of Pharos\Dependencies\SDL2-2.0.1\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\MyProjects\Graphics\The Dragon of Pharos\Dependencies\SDL2-2.0.1\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Dependencies\SDL2-2.0.1\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Dependencies\SDL2-2.0.1\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

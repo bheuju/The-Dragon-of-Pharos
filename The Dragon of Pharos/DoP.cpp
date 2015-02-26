@@ -17,7 +17,7 @@ void DoP::init(const char* title, int xpos, int ypos, int width, int height, int
 	{
 		std::cout<<"Window initialized..."<<std::endl;
 	}
-
+	
 	if (mode == SDL)
 	{
 		//create renderer only in SDL mode
@@ -39,6 +39,14 @@ void DoP::init(const char* title, int xpos, int ypos, int width, int height, int
 		glLoadIdentity();
 		std::cout<<"OpenGL mode ..."<<std::endl;
 	}
+
+	//TTF_Init();
+
+	//font = TTF_OpenFont("fonts/SourceSansPro-Bold.ttf", 18);
+	//SDL_Color color = {100, 100, 100};
+	//surf = TTF_RenderText_Blended(font, "The Dragon of Pharos", color);
+	//tex = SDL_CreateTextureFromSurface(ren, surf);
+	//SDL_FreeSurface(surf);
 
 	//initialize the objects to draw dragon
 	drag.init();
@@ -129,6 +137,12 @@ void DoP::update()
 
 void DoP::render()
 {
+	//SDL_Rect srcRect, destRect;
+	//SDL_QueryTexture(tex, 0, 0, &srcRect.w, &srcRect.h);
+
+	//SDL_RenderCopy(ren, tex, 0, &srcRect);
+	//SDL_RenderPresent(ren);
+
 	if (mode == SDL)
 	{
 		SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);

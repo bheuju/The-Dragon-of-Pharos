@@ -456,7 +456,7 @@ void Pharos::update()
 	//std::cout<<lines.size()<<std::endl;
 
 
-	//display self made line
+	//display self made line (which were created using mouse clicks)
 	for (int i = 1; i < lines.size(); i++)
 	{
 		int x1, y1, x2, y2;

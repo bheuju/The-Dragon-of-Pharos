@@ -29,6 +29,7 @@ public:
 	Object createTailFin();
 	Object createBodyFin();
 	Object createWing();
+	Object createHead();
 
 	//Pharos
 	Object createTower(float h);
