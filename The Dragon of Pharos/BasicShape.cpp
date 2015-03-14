@@ -8,14 +8,15 @@ Object BasicShape::createCube()
 {
 	Object cube("cube");
 	{
-		cube.vertex.push_back(new Vector4D(-1, 1, 1));
-		cube.vertex.push_back(new Vector4D(-1, -1, 1));
-		cube.vertex.push_back(new Vector4D(1, -1, 1));
-		cube.vertex.push_back(new Vector4D(1, 1, 1));
-		cube.vertex.push_back(new Vector4D(-1, 1, -1));
-		cube.vertex.push_back(new Vector4D(-1, -1, -1));
-		cube.vertex.push_back(new Vector4D(1, -1, -1));
-		cube.vertex.push_back(new Vector4D(1, 1, -1));
+		cube.vertex.push_back(new Vertex(-1, 1, 1));		//0
+		cube.vertex.push_back(new Vertex(-1, -1, 1));		//1
+		cube.vertex.push_back(new Vertex(1, -1, 1));		//2
+		cube.vertex.push_back(new Vertex(1, 1, 1));		//3
+		cube.vertex.push_back(new Vertex(-1, 1, -1));		//4
+		cube.vertex.push_back(new Vertex(-1, -1, -1));	//5
+		cube.vertex.push_back(new Vertex(1, -1, -1));		//6
+		cube.vertex.push_back(new Vertex(1, 1, -1));		//7
+
 		cube.face.push_back(new Face(0, 1, 2));
 		cube.face.push_back(new Face(2, 3, 0));
 		cube.face.push_back(new Face(4, 7, 6));
@@ -36,12 +37,12 @@ Object BasicShape::createOctahedron()
 {
 	Object octahedron("Octahedron");
 	{
-		octahedron.vertex.push_back(new Vector4D(1, 0, 0));
-		octahedron.vertex.push_back(new Vector4D(0, -1, 0));
-		octahedron.vertex.push_back(new Vector4D(-1, 0, 0));
-		octahedron.vertex.push_back(new Vector4D(0, 1, 0));
-		octahedron.vertex.push_back(new Vector4D(0, 0, 1));
-		octahedron.vertex.push_back(new Vector4D(0, 0, -1));
+		octahedron.vertex.push_back(new Vertex(1, 0, 0));
+		octahedron.vertex.push_back(new Vertex(0, -1, 0));
+		octahedron.vertex.push_back(new Vertex(-1, 0, 0));
+		octahedron.vertex.push_back(new Vertex(0, 1, 0));
+		octahedron.vertex.push_back(new Vertex(0, 0, 1));
+		octahedron.vertex.push_back(new Vertex(0, 0, -1));
 		octahedron.face.push_back(new Face(1, 0, 4));
 		octahedron.face.push_back(new Face(2, 1, 4));
 		octahedron.face.push_back(new Face(3, 2, 4));
@@ -58,27 +59,27 @@ Object BasicShape::createTailFin()
 {
 	Object tailFin("Tail Fin");
 	{
-		tailFin.vertex.push_back(new Vector4D(35, 0, 0));	//0
-		tailFin.vertex.push_back(new Vector4D(65, 20, 0));	//1
-		tailFin.vertex.push_back(new Vector4D(73, 57, 0));	//2
-		tailFin.vertex.push_back(new Vector4D(26, 0, 0));	//3
-		tailFin.vertex.push_back(new Vector4D(55, 65, 0));	//4
-		tailFin.vertex.push_back(new Vector4D(20, 0, 0));	//5
-		tailFin.vertex.push_back(new Vector4D(28, 55, 0));	//6
-		tailFin.vertex.push_back(new Vector4D(12, 0, 0));	//7
-		tailFin.vertex.push_back(new Vector4D(5, 25, 0));	//8
-		tailFin.vertex.push_back(new Vector4D(0, 0, 0));	//9
+		tailFin.vertex.push_back(new Vertex(35, 0, 0));	//0
+		tailFin.vertex.push_back(new Vertex(65, 20, 0));	//1
+		tailFin.vertex.push_back(new Vertex(73, 57, 0));	//2
+		tailFin.vertex.push_back(new Vertex(26, 0, 0));	//3
+		tailFin.vertex.push_back(new Vertex(55, 65, 0));	//4
+		tailFin.vertex.push_back(new Vertex(20, 0, 0));	//5
+		tailFin.vertex.push_back(new Vertex(28, 55, 0));	//6
+		tailFin.vertex.push_back(new Vertex(12, 0, 0));	//7
+		tailFin.vertex.push_back(new Vertex(5, 25, 0));	//8
+		tailFin.vertex.push_back(new Vertex(0, 0, 0));	//9
 
-		tailFin.vertex.push_back(new Vector4D(35, 0, 5));	//10
-		tailFin.vertex.push_back(new Vector4D(65, 20, 3.46));//11
-		tailFin.vertex.push_back(new Vector4D(73, 57, 0.61));//12
-		tailFin.vertex.push_back(new Vector4D(26, 0, 5));	//13
-		tailFin.vertex.push_back(new Vector4D(55, 65, 0));	//14
-		tailFin.vertex.push_back(new Vector4D(20, 0, 5));	//15
-		tailFin.vertex.push_back(new Vector4D(28, 55, 0.76));//16
-		tailFin.vertex.push_back(new Vector4D(12, 0, 5));	//17
-		tailFin.vertex.push_back(new Vector4D(5, 25, 3.07));	//18
-		tailFin.vertex.push_back(new Vector4D(0, 0, 5));	//19
+		tailFin.vertex.push_back(new Vertex(35, 0, 5));	//10
+		tailFin.vertex.push_back(new Vertex(65, 20, 3.46));//11
+		tailFin.vertex.push_back(new Vertex(73, 57, 0.61));//12
+		tailFin.vertex.push_back(new Vertex(26, 0, 5));	//13
+		tailFin.vertex.push_back(new Vertex(55, 65, 0));	//14
+		tailFin.vertex.push_back(new Vertex(20, 0, 5));	//15
+		tailFin.vertex.push_back(new Vertex(28, 55, 0.76));//16
+		tailFin.vertex.push_back(new Vertex(12, 0, 5));	//17
+		tailFin.vertex.push_back(new Vertex(5, 25, 3.07));	//18
+		tailFin.vertex.push_back(new Vertex(0, 0, 5));	//19
 
 		//top face
 		tailFin.face.push_back(new Face(0, 1, 2));
@@ -126,24 +127,24 @@ Object BasicShape::createBodyFin()
 {
 	Object bodyFin("Body Fin");
 	{
-		bodyFin.vertex.push_back(new Vector4D(0, -5, 0));		//0
+		bodyFin.vertex.push_back(new Vertex(0, -5, 0));		//0
 
-		bodyFin.vertex.push_back(new Vector4D(40, -35, 0));		//1
+		bodyFin.vertex.push_back(new Vertex(40, -35, 0));		//1
 		{
-			bodyFin.vertex.push_back(new Vector4D(40, -31, 0));		//2
-			bodyFin.vertex.push_back(new Vector4D(42, -27, 0));		//1
+			bodyFin.vertex.push_back(new Vertex(40, -31, 0));		//2
+			bodyFin.vertex.push_back(new Vertex(42, -27, 0));		//1
 		}
-		bodyFin.vertex.push_back(new Vector4D(45, -25, 0));		//3
+		bodyFin.vertex.push_back(new Vertex(45, -25, 0));		//3
 		{
-			bodyFin.vertex.push_back(new Vector4D(45, -21, 0));		//4
-			bodyFin.vertex.push_back(new Vector4D(47, -17, 0));		//1
+			bodyFin.vertex.push_back(new Vertex(45, -21, 0));		//4
+			bodyFin.vertex.push_back(new Vertex(47, -17, 0));		//1
 		}
-		bodyFin.vertex.push_back(new Vector4D(50, -15, 0));		//5
+		bodyFin.vertex.push_back(new Vertex(50, -15, 0));		//5
 		{
-			bodyFin.vertex.push_back(new Vector4D(51, -8, 0));		//6
-			bodyFin.vertex.push_back(new Vector4D(55, -3, 0));		//6
+			bodyFin.vertex.push_back(new Vertex(51, -8, 0));		//6
+			bodyFin.vertex.push_back(new Vertex(55, -3, 0));		//6
 		}
-		bodyFin.vertex.push_back(new Vector4D(60, 0, 0));		//7
+		bodyFin.vertex.push_back(new Vertex(60, 0, 0));		//7
 
 		for (int i = 0; i < bodyFin.vertex.size() - 2; i++)
 		{
@@ -161,42 +162,42 @@ Object BasicShape::createWing()
 {
 	Object wing("Wing");
 	{
-		wing.vertex.push_back(new Vector4D(53, 0));		//0
-		wing.vertex.push_back(new Vector4D(-35, 0));	//1
-		wing.vertex.push_back(new Vector4D(45, -20));	//2
-		wing.vertex.push_back(new Vector4D(-20, -30));	//3
-		wing.vertex.push_back(new Vector4D(45, -40));	//4
-		wing.vertex.push_back(new Vector4D(-25, -50));	//5
-		wing.vertex.push_back(new Vector4D(58, -67));	//6
-		wing.vertex.push_back(new Vector4D(0, -80));	//7
-		wing.vertex.push_back(new Vector4D(52, -80));	//8
-		wing.vertex.push_back(new Vector4D(52, -90));	//9
-		wing.vertex.push_back(new Vector4D(3, -107));	//10
-		wing.vertex.push_back(new Vector4D(60, -105));	//11
-		wing.vertex.push_back(new Vector4D(50, -120));	//12
-		wing.vertex.push_back(new Vector4D(0, -135));	//13
-		wing.vertex.push_back(new Vector4D(50, -135));	//14
-		wing.vertex.push_back(new Vector4D(60, -153));	//15
-		wing.vertex.push_back(new Vector4D(50, -160));	//16
-		wing.vertex.push_back(new Vector4D(-3, -158));	//17
-		wing.vertex.push_back(new Vector4D(47, -172));	//18
-		wing.vertex.push_back(new Vector4D(53, -185));	//19
-		wing.vertex.push_back(new Vector4D(40, -190));	//20
-		wing.vertex.push_back(new Vector4D(32, -200));	//21
-		wing.vertex.push_back(new Vector4D(-18, -180));	//22
-		wing.vertex.push_back(new Vector4D(30, -215));	//23
-		wing.vertex.push_back(new Vector4D(33, -230));	//24
-		wing.vertex.push_back(new Vector4D(16, -235));	//25
-		wing.vertex.push_back(new Vector4D(5, -245));	//26
-		wing.vertex.push_back(new Vector4D(-2, -265));	//27
-		wing.vertex.push_back(new Vector4D(-40, -198));	//28
-		wing.vertex.push_back(new Vector4D(-45, -110));	//29
+		wing.vertex.push_back(new Vertex(53, 0));		//0
+		wing.vertex.push_back(new Vertex(-35, 0));	//1
+		wing.vertex.push_back(new Vertex(45, -20));	//2
+		wing.vertex.push_back(new Vertex(-20, -30));	//3
+		wing.vertex.push_back(new Vertex(45, -40));	//4
+		wing.vertex.push_back(new Vertex(-25, -50));	//5
+		wing.vertex.push_back(new Vertex(58, -67));	//6
+		wing.vertex.push_back(new Vertex(0, -80));	//7
+		wing.vertex.push_back(new Vertex(52, -80));	//8
+		wing.vertex.push_back(new Vertex(52, -90));	//9
+		wing.vertex.push_back(new Vertex(3, -107));	//10
+		wing.vertex.push_back(new Vertex(60, -105));	//11
+		wing.vertex.push_back(new Vertex(50, -120));	//12
+		wing.vertex.push_back(new Vertex(0, -135));	//13
+		wing.vertex.push_back(new Vertex(50, -135));	//14
+		wing.vertex.push_back(new Vertex(60, -153));	//15
+		wing.vertex.push_back(new Vertex(50, -160));	//16
+		wing.vertex.push_back(new Vertex(-3, -158));	//17
+		wing.vertex.push_back(new Vertex(47, -172));	//18
+		wing.vertex.push_back(new Vertex(53, -185));	//19
+		wing.vertex.push_back(new Vertex(40, -190));	//20
+		wing.vertex.push_back(new Vertex(32, -200));	//21
+		wing.vertex.push_back(new Vertex(-18, -180));	//22
+		wing.vertex.push_back(new Vertex(30, -215));	//23
+		wing.vertex.push_back(new Vertex(33, -230));	//24
+		wing.vertex.push_back(new Vertex(16, -235));	//25
+		wing.vertex.push_back(new Vertex(5, -245));	//26
+		wing.vertex.push_back(new Vertex(-2, -265));	//27
+		wing.vertex.push_back(new Vertex(-40, -198));	//28
+		wing.vertex.push_back(new Vertex(-45, -110));	//29
 
 		//Interpolate value of z with curve (maybe spline or beizer)
 		//according to value of |y|
 		for (int i = 0; i < wing.vertex.size(); i++)
 		{
-			wing.vertex[i]->setZ(0);	//interpolated value
+			wing.vertex[i]->vertexCoordinates.setZ(0);	//interpolated value
 		}
 
 		//Group 0
@@ -247,68 +248,68 @@ Object BasicShape::createHead()
 {
 	Object head("Head");
 	{
-		head.vertex.push_back(new Vector4D(0, -33, -4));	//0
-		head.vertex.push_back(new Vector4D(0, -27, -2));	//1
-		head.vertex.push_back(new Vector4D(0, -25, -2));	//2
-		head.vertex.push_back(new Vector4D(30, -20, -3));	//3
-		head.vertex.push_back(new Vector4D(14, -17, -4));	//4
-		head.vertex.push_back(new Vector4D(24, -17, -4));	//5
-		head.vertex.push_back(new Vector4D(7, -16, 0));	//6
-		head.vertex.push_back(new Vector4D(14, -13, -3));	//7
-		head.vertex.push_back(new Vector4D(34, -25, -3));	//8
-		head.vertex.push_back(new Vector4D(42, -16, -15));	//9
-		head.vertex.push_back(new Vector4D(39, -13, -8));	//10
-		head.vertex.push_back(new Vector4D(19, -9, -4));	//11
-		head.vertex.push_back(new Vector4D(23, -5, -7));	//12
-		head.vertex.push_back(new Vector4D(29, -8, -7));	//13
-		head.vertex.push_back(new Vector4D(35, -7, -7));	//14
-		head.vertex.push_back(new Vector4D(40, -3, -9));	//15
-		head.vertex.push_back(new Vector4D(15, -9, -5));	//16
-		head.vertex.push_back(new Vector4D(19, -1, -6));	//17
-		head.vertex.push_back(new Vector4D(22, -1, -7));	//18
-		head.vertex.push_back(new Vector4D(6, 0, 0));	//19
-		head.vertex.push_back(new Vector4D(12, 0, -3));	//20
-		head.vertex.push_back(new Vector4D(15, 5, -5));	//21
-		head.vertex.push_back(new Vector4D(20, 5, -5));	//22
-		head.vertex.push_back(new Vector4D(26, 7, -5));	//23
-		head.vertex.push_back(new Vector4D(38, 8, -9));	//24
-		head.vertex.push_back(new Vector4D(38, 10, -7));	//25
-		head.vertex.push_back(new Vector4D(31, 9, -5));	//26
-		head.vertex.push_back(new Vector4D(10, 10, -3));	//27
-		head.vertex.push_back(new Vector4D(24, 8, -6));	//28
-		head.vertex.push_back(new Vector4D(21, 11, -7));	//29
-		head.vertex.push_back(new Vector4D(29, 12, -5));	//30
-		head.vertex.push_back(new Vector4D(33, 13, -8));	//31
-		head.vertex.push_back(new Vector4D(37, 14, -15));	//32
-		head.vertex.push_back(new Vector4D(15, 15, -2));	//33
-		head.vertex.push_back(new Vector4D(25, 14, -3));	//34
-		head.vertex.push_back(new Vector4D(28, 16, -4));	//35
-		head.vertex.push_back(new Vector4D(32, 18, -5));	//36
-		head.vertex.push_back(new Vector4D(37, 20, -9));	//37
-		head.vertex.push_back(new Vector4D(9, 19, -3));	//38
-		head.vertex.push_back(new Vector4D(0, 20, -2));	//39
-		head.vertex.push_back(new Vector4D(19, 20, -9));	//40
-		head.vertex.push_back(new Vector4D(26, 23, -11));	//41
-		head.vertex.push_back(new Vector4D(31, 25, -13));	//42
-		head.vertex.push_back(new Vector4D(36, 25, -15));	//43
-		head.vertex.push_back(new Vector4D(0, 30, -18));	//44
-		head.vertex.push_back(new Vector4D(9, 30, -18));	//45
-		head.vertex.push_back(new Vector4D(17, 30, -18));	//46
-		head.vertex.push_back(new Vector4D(21, 32, -19));	//47
-		head.vertex.push_back(new Vector4D(27, 33, -19));	//48
-		head.vertex.push_back(new Vector4D(36, 31, -18));	//49
-		head.vertex.push_back(new Vector4D(33, 34, -20));	//50
-		head.vertex.push_back(new Vector4D(0, 40 -30));	//51
-		head.vertex.push_back(new Vector4D(5, 40 -30));	//52
-		head.vertex.push_back(new Vector4D(14, 40 -30));	//53
-		head.vertex.push_back(new Vector4D(21, 41, -30));	//54
-		head.vertex.push_back(new Vector4D(0, 43, -38));	//55
-		head.vertex.push_back(new Vector4D(3, 43, -38));	//56
-		head.vertex.push_back(new Vector4D(13, 42, -38));	//57
-		head.vertex.push_back(new Vector4D(0, -17, 0));	//58
-		head.vertex.push_back(new Vector4D(0, 0, 0));	//59
-		head.vertex.push_back(new Vector4D(38, -17, -5));	//60
-		head.vertex.push_back(new Vector4D(28, -22, -3));	//61
+		head.vertex.push_back(new Vertex(0, -33, -4));	//0
+		head.vertex.push_back(new Vertex(0, -27, -2));	//1
+		head.vertex.push_back(new Vertex(0, -25, -2));	//2
+		head.vertex.push_back(new Vertex(30, -20, -3));	//3
+		head.vertex.push_back(new Vertex(14, -17, -4));	//4
+		head.vertex.push_back(new Vertex(24, -17, -4));	//5
+		head.vertex.push_back(new Vertex(7, -16, 0));	//6
+		head.vertex.push_back(new Vertex(14, -13, -3));	//7
+		head.vertex.push_back(new Vertex(34, -25, -3));	//8
+		head.vertex.push_back(new Vertex(42, -16, -15));	//9
+		head.vertex.push_back(new Vertex(39, -13, -8));	//10
+		head.vertex.push_back(new Vertex(19, -9, -4));	//11
+		head.vertex.push_back(new Vertex(23, -5, -7));	//12
+		head.vertex.push_back(new Vertex(29, -8, -7));	//13
+		head.vertex.push_back(new Vertex(35, -7, -7));	//14
+		head.vertex.push_back(new Vertex(40, -3, -9));	//15
+		head.vertex.push_back(new Vertex(15, -9, -5));	//16
+		head.vertex.push_back(new Vertex(19, -1, -6));	//17
+		head.vertex.push_back(new Vertex(22, -1, -7));	//18
+		head.vertex.push_back(new Vertex(6, 0, 0));	//19
+		head.vertex.push_back(new Vertex(12, 0, -3));	//20
+		head.vertex.push_back(new Vertex(15, 5, -5));	//21
+		head.vertex.push_back(new Vertex(20, 5, -5));	//22
+		head.vertex.push_back(new Vertex(26, 7, -5));	//23
+		head.vertex.push_back(new Vertex(38, 8, -9));	//24
+		head.vertex.push_back(new Vertex(38, 10, -7));	//25
+		head.vertex.push_back(new Vertex(31, 9, -5));	//26
+		head.vertex.push_back(new Vertex(10, 10, -3));	//27
+		head.vertex.push_back(new Vertex(24, 8, -6));	//28
+		head.vertex.push_back(new Vertex(21, 11, -7));	//29
+		head.vertex.push_back(new Vertex(29, 12, -5));	//30
+		head.vertex.push_back(new Vertex(33, 13, -8));	//31
+		head.vertex.push_back(new Vertex(37, 14, -15));	//32
+		head.vertex.push_back(new Vertex(15, 15, -2));	//33
+		head.vertex.push_back(new Vertex(25, 14, -3));	//34
+		head.vertex.push_back(new Vertex(28, 16, -4));	//35
+		head.vertex.push_back(new Vertex(32, 18, -5));	//36
+		head.vertex.push_back(new Vertex(37, 20, -9));	//37
+		head.vertex.push_back(new Vertex(9, 19, -3));	//38
+		head.vertex.push_back(new Vertex(0, 20, -2));	//39
+		head.vertex.push_back(new Vertex(19, 20, -9));	//40
+		head.vertex.push_back(new Vertex(26, 23, -11));	//41
+		head.vertex.push_back(new Vertex(31, 25, -13));	//42
+		head.vertex.push_back(new Vertex(36, 25, -15));	//43
+		head.vertex.push_back(new Vertex(0, 30, -18));	//44
+		head.vertex.push_back(new Vertex(9, 30, -18));	//45
+		head.vertex.push_back(new Vertex(17, 30, -18));	//46
+		head.vertex.push_back(new Vertex(21, 32, -19));	//47
+		head.vertex.push_back(new Vertex(27, 33, -19));	//48
+		head.vertex.push_back(new Vertex(36, 31, -18));	//49
+		head.vertex.push_back(new Vertex(33, 34, -20));	//50
+		head.vertex.push_back(new Vertex(0, 40 -30));	//51
+		head.vertex.push_back(new Vertex(5, 40 -30));	//52
+		head.vertex.push_back(new Vertex(14, 40 -30));	//53
+		head.vertex.push_back(new Vertex(21, 41, -30));	//54
+		head.vertex.push_back(new Vertex(0, 43, -38));	//55
+		head.vertex.push_back(new Vertex(3, 43, -38));	//56
+		head.vertex.push_back(new Vertex(13, 42, -38));	//57
+		head.vertex.push_back(new Vertex(0, -17, 0));	//58
+		head.vertex.push_back(new Vertex(0, 0, 0));	//59
+		head.vertex.push_back(new Vertex(38, -17, -5));	//60
+		head.vertex.push_back(new Vertex(28, -22, -3));	//61
 		
 		//Group a
 		head.face.push_back(new Face(0, 8, 1));
@@ -433,27 +434,27 @@ Object BasicShape::createTower(float h)
 {
 	Object tower("tower");
 	{
-		tower.vertex.push_back(new Vector4D(10,0,0));   //0
-		tower.vertex.push_back(new Vector4D(8,0,6));	//1
-		tower.vertex.push_back(new Vector4D(3,0,10));   //2
-		tower.vertex.push_back(new Vector4D(-3,0,10));	//3
-		tower.vertex.push_back(new Vector4D(-8,0,6));	//4
-		tower.vertex.push_back(new Vector4D(-10,0,0));	//5
-		tower.vertex.push_back(new Vector4D(-8,0,-6));	//6
-		tower.vertex.push_back(new Vector4D(-3,0,-10));	//7
-		tower.vertex.push_back(new Vector4D(3,0,-10));	//8
-		tower.vertex.push_back(new Vector4D(8,0,-6));	//9
+		tower.vertex.push_back(new Vertex(10,0,0));   //0
+		tower.vertex.push_back(new Vertex(8,0,6));	//1
+		tower.vertex.push_back(new Vertex(3,0,10));   //2
+		tower.vertex.push_back(new Vertex(-3,0,10));	//3
+		tower.vertex.push_back(new Vertex(-8,0,6));	//4
+		tower.vertex.push_back(new Vertex(-10,0,0));	//5
+		tower.vertex.push_back(new Vertex(-8,0,-6));	//6
+		tower.vertex.push_back(new Vertex(-3,0,-10));	//7
+		tower.vertex.push_back(new Vertex(3,0,-10));	//8
+		tower.vertex.push_back(new Vertex(8,0,-6));	//9
 
-		tower.vertex.push_back(new Vector4D(7,h,0));	//10
-		tower.vertex.push_back(new Vector4D(6,h,4));	//11
-		tower.vertex.push_back(new Vector4D(2,h,7));	//12
-		tower.vertex.push_back(new Vector4D(-2,h,7));	//13
-		tower.vertex.push_back(new Vector4D(-6,h,4));	//14
-		tower.vertex.push_back(new Vector4D(-7,h,0));	//15
-		tower.vertex.push_back(new Vector4D(-6,h,-4));	//16
-		tower.vertex.push_back(new Vector4D(-2,h,-7));	//17
-		tower.vertex.push_back(new Vector4D(2,h,-7));	//18
-		tower.vertex.push_back(new Vector4D(6,h,-4));	//19
+		tower.vertex.push_back(new Vertex(7,h,0));	//10
+		tower.vertex.push_back(new Vertex(6,h,4));	//11
+		tower.vertex.push_back(new Vertex(2,h,7));	//12
+		tower.vertex.push_back(new Vertex(-2,h,7));	//13
+		tower.vertex.push_back(new Vertex(-6,h,4));	//14
+		tower.vertex.push_back(new Vertex(-7,h,0));	//15
+		tower.vertex.push_back(new Vertex(-6,h,-4));	//16
+		tower.vertex.push_back(new Vertex(-2,h,-7));	//17
+		tower.vertex.push_back(new Vertex(2,h,-7));	//18
+		tower.vertex.push_back(new Vertex(6,h,-4));	//19
 
 		tower.face.push_back(new Face(0,10,1));
 		tower.face.push_back(new Face(1,11,2));
@@ -487,84 +488,84 @@ Object BasicShape::createHemiSphere()
 	Object hemiSphere("hemiSphere");
 	{
 		float org = 35;
-		hemiSphere.vertex.push_back(new Vector4D(7,35-org,0));
-		hemiSphere.vertex.push_back(new Vector4D(6,35-org,4));
-		hemiSphere.vertex.push_back(new Vector4D(2,35-org,7));
-		hemiSphere.vertex.push_back(new Vector4D(-2,35-org,7));
-		hemiSphere.vertex.push_back(new Vector4D(-6,35-org,4));
-		hemiSphere.vertex.push_back(new Vector4D(-7,35-org,0));
-		hemiSphere.vertex.push_back(new Vector4D(-6,35-org,-4));
-		hemiSphere.vertex.push_back(new Vector4D(-2,35-org,-7));
-		hemiSphere.vertex.push_back(new Vector4D(2,35-org,-7));
-		hemiSphere.vertex.push_back(new Vector4D(6,35-org,-4));
+		hemiSphere.vertex.push_back(new Vertex(7,35-org,0));
+		hemiSphere.vertex.push_back(new Vertex(6,35-org,4));
+		hemiSphere.vertex.push_back(new Vertex(2,35-org,7));
+		hemiSphere.vertex.push_back(new Vertex(-2,35-org,7));
+		hemiSphere.vertex.push_back(new Vertex(-6,35-org,4));
+		hemiSphere.vertex.push_back(new Vertex(-7,35-org,0));
+		hemiSphere.vertex.push_back(new Vertex(-6,35-org,-4));
+		hemiSphere.vertex.push_back(new Vertex(-2,35-org,-7));
+		hemiSphere.vertex.push_back(new Vertex(2,35-org,-7));
+		hemiSphere.vertex.push_back(new Vertex(6,35-org,-4));
 
-		hemiSphere.vertex.push_back(new Vector4D(6,38.6-org,0));
-		hemiSphere.vertex.push_back(new Vector4D(5,38.6-org,4));
-		hemiSphere.vertex.push_back(new Vector4D(2,38.6-org,6));
-		hemiSphere.vertex.push_back(new Vector4D(-2,38.6-org,6));
-		hemiSphere.vertex.push_back(new Vector4D(-5,38.6-org,4));
-		hemiSphere.vertex.push_back(new Vector4D(-6,38.6-org,0));
-		hemiSphere.vertex.push_back(new Vector4D(-5,38.6-org,-4));
-		hemiSphere.vertex.push_back(new Vector4D(-2,38.6-org,-6));
-		hemiSphere.vertex.push_back(new Vector4D(2,38.6-org,-6));
-		hemiSphere.vertex.push_back(new Vector4D(5,38.6-org,-4));
+		hemiSphere.vertex.push_back(new Vertex(6,38.6-org,0));
+		hemiSphere.vertex.push_back(new Vertex(5,38.6-org,4));
+		hemiSphere.vertex.push_back(new Vertex(2,38.6-org,6));
+		hemiSphere.vertex.push_back(new Vertex(-2,38.6-org,6));
+		hemiSphere.vertex.push_back(new Vertex(-5,38.6-org,4));
+		hemiSphere.vertex.push_back(new Vertex(-6,38.6-org,0));
+		hemiSphere.vertex.push_back(new Vertex(-5,38.6-org,-4));
+		hemiSphere.vertex.push_back(new Vertex(-2,38.6-org,-6));
+		hemiSphere.vertex.push_back(new Vertex(2,38.6-org,-6));
+		hemiSphere.vertex.push_back(new Vertex(5,38.6-org,-4));
 
-		hemiSphere.vertex.push_back(new  Vector4D(5,39.9-org,0));
-		hemiSphere.vertex.push_back(new  Vector4D(4,39.9-org,3));
-		hemiSphere.vertex.push_back(new  Vector4D(2,39.9-org,5));
-		hemiSphere.vertex.push_back(new  Vector4D(-2,39.9-org,5));
-		hemiSphere.vertex.push_back(new  Vector4D(-4,39.9-org,3));
-		hemiSphere.vertex.push_back(new  Vector4D(-5,39.9-org,0));
-		hemiSphere.vertex.push_back(new  Vector4D(-4,39.9-org,-3));
-		hemiSphere.vertex.push_back(new  Vector4D(-2,39.9-org,-5));
-		hemiSphere.vertex.push_back(new  Vector4D(2,39.9-org,-5));
-		hemiSphere.vertex.push_back(new  Vector4D(4,39.9-org,-3));
+		hemiSphere.vertex.push_back(new  Vertex(5,39.9-org,0));
+		hemiSphere.vertex.push_back(new  Vertex(4,39.9-org,3));
+		hemiSphere.vertex.push_back(new  Vertex(2,39.9-org,5));
+		hemiSphere.vertex.push_back(new  Vertex(-2,39.9-org,5));
+		hemiSphere.vertex.push_back(new  Vertex(-4,39.9-org,3));
+		hemiSphere.vertex.push_back(new  Vertex(-5,39.9-org,0));
+		hemiSphere.vertex.push_back(new  Vertex(-4,39.9-org,-3));
+		hemiSphere.vertex.push_back(new  Vertex(-2,39.9-org,-5));
+		hemiSphere.vertex.push_back(new  Vertex(2,39.9-org,-5));
+		hemiSphere.vertex.push_back(new  Vertex(4,39.9-org,-3));
 
-		hemiSphere.vertex.push_back(new  Vector4D(4,40.7-org,0));
-		hemiSphere.vertex.push_back(new  Vector4D(3,40.7-org,2));
-		hemiSphere.vertex.push_back(new  Vector4D(1,40.7-org,4));
-		hemiSphere.vertex.push_back(new  Vector4D(-1,40.7-org,4));
-		hemiSphere.vertex.push_back(new  Vector4D(-3,40.7-org,2));
-		hemiSphere.vertex.push_back(new  Vector4D(-4,40.7-org,0));
-		hemiSphere.vertex.push_back(new  Vector4D(-3,40.7-org,-2));
-		hemiSphere.vertex.push_back(new  Vector4D(-1,40.7-org,-4));
-		hemiSphere.vertex.push_back(new  Vector4D(1,40.7-org,-4));
-		hemiSphere.vertex.push_back(new  Vector4D(3,40.7-org,-2));
+		hemiSphere.vertex.push_back(new  Vertex(4,40.7-org,0));
+		hemiSphere.vertex.push_back(new  Vertex(3,40.7-org,2));
+		hemiSphere.vertex.push_back(new  Vertex(1,40.7-org,4));
+		hemiSphere.vertex.push_back(new  Vertex(-1,40.7-org,4));
+		hemiSphere.vertex.push_back(new  Vertex(-3,40.7-org,2));
+		hemiSphere.vertex.push_back(new  Vertex(-4,40.7-org,0));
+		hemiSphere.vertex.push_back(new  Vertex(-3,40.7-org,-2));
+		hemiSphere.vertex.push_back(new  Vertex(-1,40.7-org,-4));
+		hemiSphere.vertex.push_back(new  Vertex(1,40.7-org,-4));
+		hemiSphere.vertex.push_back(new  Vertex(3,40.7-org,-2));
 
-		hemiSphere.vertex.push_back(new  Vector4D(3,41.3-org,0));
-		hemiSphere.vertex.push_back(new  Vector4D(2,41.3-org,2));
-		hemiSphere.vertex.push_back(new  Vector4D(1,41.3-org,3));
-		hemiSphere.vertex.push_back(new  Vector4D(-1,41.3-org,3));
-		hemiSphere.vertex.push_back(new  Vector4D(-2,41.3-org,2));
-		hemiSphere.vertex.push_back(new  Vector4D(-3,41.3-org,0));
-		hemiSphere.vertex.push_back(new  Vector4D(-2,41.3-org,-2));
-		hemiSphere.vertex.push_back(new  Vector4D(-1,41.3-org,-3));
-		hemiSphere.vertex.push_back(new  Vector4D(1,41.3-org,-3));
-		hemiSphere.vertex.push_back(new  Vector4D(2,41.3-org,-2));
+		hemiSphere.vertex.push_back(new  Vertex(3,41.3-org,0));
+		hemiSphere.vertex.push_back(new  Vertex(2,41.3-org,2));
+		hemiSphere.vertex.push_back(new  Vertex(1,41.3-org,3));
+		hemiSphere.vertex.push_back(new  Vertex(-1,41.3-org,3));
+		hemiSphere.vertex.push_back(new  Vertex(-2,41.3-org,2));
+		hemiSphere.vertex.push_back(new  Vertex(-3,41.3-org,0));
+		hemiSphere.vertex.push_back(new  Vertex(-2,41.3-org,-2));
+		hemiSphere.vertex.push_back(new  Vertex(-1,41.3-org,-3));
+		hemiSphere.vertex.push_back(new  Vertex(1,41.3-org,-3));
+		hemiSphere.vertex.push_back(new  Vertex(2,41.3-org,-2));
 
-		hemiSphere.vertex.push_back(new  Vector4D(2,41.7-org,0));
-		hemiSphere.vertex.push_back(new  Vector4D(1.7,41.7-org,1.2));
-		hemiSphere.vertex.push_back(new  Vector4D(.6,41.7-org,2));
-		hemiSphere.vertex.push_back(new  Vector4D(-.6,41.7-org,2));
-		hemiSphere.vertex.push_back(new  Vector4D(-1.7,41.7-org,1.2));
-		hemiSphere.vertex.push_back(new  Vector4D(-2,41.7-org,0));
-		hemiSphere.vertex.push_back(new  Vector4D(-1.7,41.7-org,-1.2));
-		hemiSphere.vertex.push_back(new  Vector4D(-0.6,41.7-org,-2));
-		hemiSphere.vertex.push_back(new  Vector4D(0.6,41.7-org,-2));
-		hemiSphere.vertex.push_back(new  Vector4D(1.7,41.7-org,-1.2));
+		hemiSphere.vertex.push_back(new  Vertex(2,41.7-org,0));
+		hemiSphere.vertex.push_back(new  Vertex(1.7,41.7-org,1.2));
+		hemiSphere.vertex.push_back(new  Vertex(.6,41.7-org,2));
+		hemiSphere.vertex.push_back(new  Vertex(-.6,41.7-org,2));
+		hemiSphere.vertex.push_back(new  Vertex(-1.7,41.7-org,1.2));
+		hemiSphere.vertex.push_back(new  Vertex(-2,41.7-org,0));
+		hemiSphere.vertex.push_back(new  Vertex(-1.7,41.7-org,-1.2));
+		hemiSphere.vertex.push_back(new  Vertex(-0.6,41.7-org,-2));
+		hemiSphere.vertex.push_back(new  Vertex(0.6,41.7-org,-2));
+		hemiSphere.vertex.push_back(new  Vertex(1.7,41.7-org,-1.2));
 
-		/*	hemiSphere.vertex.push_back(new  Vector4D(1,41.9,0));
-		hemiSphere.vertex.push_back(new  Vector4D(.8,41.9,.6));
-		hemiSphere.vertex.push_back(new  Vector4D(.3,41.9,1));
-		hemiSphere.vertex.push_back(new  Vector4D(-.3,41.9,1));
-		hemiSphere.vertex.push_back(new  Vector4D(-.8,41.9,.6));
-		hemiSphere.vertex.push_back(new  Vector4D(-1,41.9,0));
-		hemiSphere.vertex.push_back(new  Vector4D(-.8,41.9,-.6));
-		hemiSphere.vertex.push_back(new  Vector4D(-.3,41.9,-1));
-		hemiSphere.vertex.push_back(new  Vector4D(.3,41.9,-1));
-		hemiSphere.vertex.push_back(new  Vector4D(.8,41.9,-.6));*/
+		/*	hemiSphere.vertex.push_back(new  Vertex(1,41.9,0));
+		hemiSphere.vertex.push_back(new  Vertex(.8,41.9,.6));
+		hemiSphere.vertex.push_back(new  Vertex(.3,41.9,1));
+		hemiSphere.vertex.push_back(new  Vertex(-.3,41.9,1));
+		hemiSphere.vertex.push_back(new  Vertex(-.8,41.9,.6));
+		hemiSphere.vertex.push_back(new  Vertex(-1,41.9,0));
+		hemiSphere.vertex.push_back(new  Vertex(-.8,41.9,-.6));
+		hemiSphere.vertex.push_back(new  Vertex(-.3,41.9,-1));
+		hemiSphere.vertex.push_back(new  Vertex(.3,41.9,-1));
+		hemiSphere.vertex.push_back(new  Vertex(.8,41.9,-.6));*/
 
-		hemiSphere.vertex.push_back(new  Vector4D(0,42-org,0));
+		hemiSphere.vertex.push_back(new  Vertex(0,42-org,0));
 
 		hemiSphere.face.push_back(new Face(0,10,1));
 		hemiSphere.face.push_back(new Face(1,11,2));
@@ -675,73 +676,73 @@ Object BasicShape::createTorus()
 {
 	Object torus("torus");
 	{
-		torus.vertex.push_back(new Vector4D(8,2,0));
-		torus.vertex.push_back(new Vector4D(6,2,5));
-		torus.vertex.push_back(new Vector4D(2,2,8));
-		torus.vertex.push_back(new Vector4D(-2,2,8));
-		torus.vertex.push_back(new Vector4D(-6,2,5));
-		torus.vertex.push_back(new Vector4D(-8,2,0));
-		torus.vertex.push_back(new Vector4D(-6,2,-5));
-		torus.vertex.push_back(new Vector4D(-2,2,-8));
-		torus.vertex.push_back(new Vector4D(2,2,-8));
-		torus.vertex.push_back(new Vector4D(6,2,-5));
+		torus.vertex.push_back(new Vertex(8,2,0));
+		torus.vertex.push_back(new Vertex(6,2,5));
+		torus.vertex.push_back(new Vertex(2,2,8));
+		torus.vertex.push_back(new Vertex(-2,2,8));
+		torus.vertex.push_back(new Vertex(-6,2,5));
+		torus.vertex.push_back(new Vertex(-8,2,0));
+		torus.vertex.push_back(new Vertex(-6,2,-5));
+		torus.vertex.push_back(new Vertex(-2,2,-8));
+		torus.vertex.push_back(new Vertex(2,2,-8));
+		torus.vertex.push_back(new Vertex(6,2,-5));
 
-		torus.vertex.push_back(new Vector4D(8.3,1.8,0));
-		torus.vertex.push_back(new Vector4D(6.7,1.8,4.9));
-		torus.vertex.push_back(new Vector4D(2.6,1.8,7.9));
-		torus.vertex.push_back(new Vector4D(-2.6,1.8,7.9));
-		torus.vertex.push_back(new Vector4D(-6.7,1.8,4.9));
-		torus.vertex.push_back(new Vector4D(-8.3,1.8,0));
-		torus.vertex.push_back(new Vector4D(-6.7,1.8,-4.9));
-		torus.vertex.push_back(new Vector4D(-2.6,1.8,-7.9));
-		torus.vertex.push_back(new Vector4D(2.8,1.8,-7.9));
-		torus.vertex.push_back(new Vector4D(6.7,1.8,-4.9));
-
-
-		torus.vertex.push_back(new Vector4D(9,1,0));
-		torus.vertex.push_back(new Vector4D(7,1,5));
-		torus.vertex.push_back(new Vector4D(3,1,9));
-		torus.vertex.push_back(new Vector4D(-3,1,9));
-		torus.vertex.push_back(new Vector4D(-7,1,5));
-		torus.vertex.push_back(new Vector4D(-9,1,0));
-		torus.vertex.push_back(new Vector4D(-7,1,-5));
-		torus.vertex.push_back(new Vector4D(-3,1,-9));
-		torus.vertex.push_back(new Vector4D(3,1,-9));
-		torus.vertex.push_back(new Vector4D(7,1,-5));
-
-		torus.vertex.push_back(new Vector4D(8.3,.3,0));
-		torus.vertex.push_back(new Vector4D(6.7,.3,4.9));
-		torus.vertex.push_back(new Vector4D(2.6,.3,7.9));
-		torus.vertex.push_back(new Vector4D(-2.6,.3,7.9));
-		torus.vertex.push_back(new Vector4D(-6.7,.3,4.9));
-		torus.vertex.push_back(new Vector4D(-8.3,.3,0));
-		torus.vertex.push_back(new Vector4D(-6.7,.3,-4.9));
-		torus.vertex.push_back(new Vector4D(-2.6,.3,-7.9));
-		torus.vertex.push_back(new Vector4D(2.8,.3,-7.9));
-		torus.vertex.push_back(new Vector4D(6.7,.3,-4.9));
+		torus.vertex.push_back(new Vertex(8.3,1.8,0));
+		torus.vertex.push_back(new Vertex(6.7,1.8,4.9));
+		torus.vertex.push_back(new Vertex(2.6,1.8,7.9));
+		torus.vertex.push_back(new Vertex(-2.6,1.8,7.9));
+		torus.vertex.push_back(new Vertex(-6.7,1.8,4.9));
+		torus.vertex.push_back(new Vertex(-8.3,1.8,0));
+		torus.vertex.push_back(new Vertex(-6.7,1.8,-4.9));
+		torus.vertex.push_back(new Vertex(-2.6,1.8,-7.9));
+		torus.vertex.push_back(new Vertex(2.8,1.8,-7.9));
+		torus.vertex.push_back(new Vertex(6.7,1.8,-4.9));
 
 
-		torus.vertex.push_back(new Vector4D(8,0,0));
-		torus.vertex.push_back(new Vector4D(6,0,5));
-		torus.vertex.push_back(new Vector4D(2,0,8));
-		torus.vertex.push_back(new Vector4D(-2,0,8));
-		torus.vertex.push_back(new Vector4D(-6,0,5));
-		torus.vertex.push_back(new Vector4D(-8,0,0));
-		torus.vertex.push_back(new Vector4D(-6,0,-5));
-		torus.vertex.push_back(new Vector4D(-2,0,-8));
-		torus.vertex.push_back(new Vector4D(2,0,-8));
-		torus.vertex.push_back(new Vector4D(6,0,-5));
+		torus.vertex.push_back(new Vertex(9,1,0));
+		torus.vertex.push_back(new Vertex(7,1,5));
+		torus.vertex.push_back(new Vertex(3,1,9));
+		torus.vertex.push_back(new Vertex(-3,1,9));
+		torus.vertex.push_back(new Vertex(-7,1,5));
+		torus.vertex.push_back(new Vertex(-9,1,0));
+		torus.vertex.push_back(new Vertex(-7,1,-5));
+		torus.vertex.push_back(new Vertex(-3,1,-9));
+		torus.vertex.push_back(new Vertex(3,1,-9));
+		torus.vertex.push_back(new Vertex(7,1,-5));
 
-		/*	torus.vertex.push_back(new Vector4D(7,1,0));
-		torus.vertex.push_back(new Vector4D(6,1,4));
-		torus.vertex.push_back(new Vector4D(2,1,7));
-		torus.vertex.push_back(new Vector4D(-2,1,7));
-		torus.vertex.push_back(new Vector4D(-6,1,4));
-		torus.vertex.push_back(new Vector4D(-7,1,0));
-		torus.vertex.push_back(new Vector4D(-6,1,-4));
-		torus.vertex.push_back(new Vector4D(-2,1,-7));
-		torus.vertex.push_back(new Vector4D(2,1,-7));
-		torus.vertex.push_back(new Vector4D(6,1,4));
+		torus.vertex.push_back(new Vertex(8.3,.3,0));
+		torus.vertex.push_back(new Vertex(6.7,.3,4.9));
+		torus.vertex.push_back(new Vertex(2.6,.3,7.9));
+		torus.vertex.push_back(new Vertex(-2.6,.3,7.9));
+		torus.vertex.push_back(new Vertex(-6.7,.3,4.9));
+		torus.vertex.push_back(new Vertex(-8.3,.3,0));
+		torus.vertex.push_back(new Vertex(-6.7,.3,-4.9));
+		torus.vertex.push_back(new Vertex(-2.6,.3,-7.9));
+		torus.vertex.push_back(new Vertex(2.8,.3,-7.9));
+		torus.vertex.push_back(new Vertex(6.7,.3,-4.9));
+
+
+		torus.vertex.push_back(new Vertex(8,0,0));
+		torus.vertex.push_back(new Vertex(6,0,5));
+		torus.vertex.push_back(new Vertex(2,0,8));
+		torus.vertex.push_back(new Vertex(-2,0,8));
+		torus.vertex.push_back(new Vertex(-6,0,5));
+		torus.vertex.push_back(new Vertex(-8,0,0));
+		torus.vertex.push_back(new Vertex(-6,0,-5));
+		torus.vertex.push_back(new Vertex(-2,0,-8));
+		torus.vertex.push_back(new Vertex(2,0,-8));
+		torus.vertex.push_back(new Vertex(6,0,-5));
+
+		/*	torus.vertex.push_back(new Vertex(7,1,0));
+		torus.vertex.push_back(new Vertex(6,1,4));
+		torus.vertex.push_back(new Vertex(2,1,7));
+		torus.vertex.push_back(new Vertex(-2,1,7));
+		torus.vertex.push_back(new Vertex(-6,1,4));
+		torus.vertex.push_back(new Vertex(-7,1,0));
+		torus.vertex.push_back(new Vertex(-6,1,-4));
+		torus.vertex.push_back(new Vertex(-2,1,-7));
+		torus.vertex.push_back(new Vertex(2,1,-7));
+		torus.vertex.push_back(new Vertex(6,1,4));
 		*/
 
 

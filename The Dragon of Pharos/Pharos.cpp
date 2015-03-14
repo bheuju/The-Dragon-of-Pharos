@@ -514,10 +514,10 @@ void Pharos::update()
 			//displayMatrix(objects[i].modelMatrix, "Model");
 			//displayMatrix(transformMatrix, "Transform");
 
-			Vector4D point0 = transformMatrix * *objects[i].vertex[v0];
-			Vector4D point1 = transformMatrix * *objects[i].vertex[v1];
-			Vector4D point2 = transformMatrix * *objects[i].vertex[v2];
-			//Vector4D point3 = transformMatrix * *objects[i].vertex[v3];
+			Vector4D point0 = transformMatrix * objects[i].vertex[v0]->vertexCoordinates;
+			Vector4D point1 = transformMatrix * objects[i].vertex[v1]->vertexCoordinates;
+			Vector4D point2 = transformMatrix * objects[i].vertex[v2]->vertexCoordinates;
+			//Vector4D point3 = transformMatrix * *objects[i].vertex[v3]->vertexCoordinates;
 
 			//displayVector4D(point0);
 
@@ -603,16 +603,16 @@ void Pharos::render()
 {
 	//std::cout<<Graphics::Instance()->frameBuffer.size()<<std::endl;
 
-	for (int i = 0; i < Graphics::Instance()->frameBuffer.size(); i++)
-		//for (int i = Graphics::Instance()->frameBuffer.size()-1; i >= 0; i--)
-	{
-		float x = Graphics::Instance()->frameBuffer[i].getX();
-		float y = Graphics::Instance()->frameBuffer[i].getY();
-		float z = Graphics::Instance()->frameBuffer[i].getZ();
+	//for (int i = 0; i < Graphics::Instance()->frameBuffer.size(); i++)
+	//	//for (int i = Graphics::Instance()->frameBuffer.size()-1; i >= 0; i--)
+	//{
+	//	float x = Graphics::Instance()->frameBuffer[i].getX();
+	//	float y = Graphics::Instance()->frameBuffer[i].getY();
+	//	float z = Graphics::Instance()->frameBuffer[i].getZ();
 
-		Vector3D color = Graphics::Instance()->colorBuffer[i];
+	//	Vector3D color = Graphics::Instance()->colorBuffer[i];
 
-		Graphics::Instance()->drawPixel(x, y, z, color);
-	}
+	//	Graphics::Instance()->drawPixel(x, y, z, color);
+	//}
 
 }

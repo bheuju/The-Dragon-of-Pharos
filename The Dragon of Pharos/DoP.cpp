@@ -173,6 +173,7 @@ void DoP::render()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		Graphics::Instance()->render();
+		
 
 		//switch(choice)
 		//{

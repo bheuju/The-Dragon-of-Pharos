@@ -32,6 +32,11 @@ public:
 		mW = w;
 	}
 
+	friend Vector3D to3D(Vector4D v)
+	{
+		return (Vector3D(v.mX, v.mY, v.mZ));
+	}
+
 	float getX() {return mX;}
 	float getY() {return mY;}
 	float getZ() {return mZ;}

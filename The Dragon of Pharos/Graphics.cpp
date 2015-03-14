@@ -43,10 +43,14 @@ void Graphics::putPixel(float x, float y, float z, Vector3D color)
 	{
 		return;
 	}
+	//displayVector4D(frameBuffer.back());
 
 	frameBuffer.push_back(Vector4D(x, y, z));
-	//displayVector4D(frameBuffer.back());
 	colorBuffer.push_back(color);
+
+	//frameBuffer[xp][yp] = Vector4D(x, y, z);
+	//colorBuffer[xp][yp] = color;
+
 	zBuffer[xp][yp] = zDepth;
 
 	//std::cout<<"Real: "<<frameBuffer.size()<<std::endl;
@@ -54,6 +58,7 @@ void Graphics::putPixel(float x, float y, float z, Vector3D color)
 
 void Graphics::drawPixel(float x, float y, float z, Vector3D color)
 {
+	//std::cout<<"Drawn";
 	if (DoP::Instance()->getMode() == OPENGL)
 	{
 		float r = color.getX() / 255.0;
@@ -301,8 +306,9 @@ void Graphics::clearBuffer()
 {
 	//clear frameBuffer
 	frameBuffer.clear();
-	//cleat colorBuffer
+	//clear colorBuffer
 	colorBuffer.clear();
+
 	//reset zBuffer
 	for (int i = 0; i < 801; i++)
 	{
@@ -315,8 +321,9 @@ void Graphics::clearBuffer()
 
 void Graphics::render()
 {
+	//std::cout<<frameBuffer.size()<<std::endl;
 	for (int i = 0; i < frameBuffer.size(); i++)
-		//for (int i = Graphics::Instance()->frameBuffer.size()-1; i >= 0; i--)
+		//for (int i = frameBuffer.size()-1; i >= 0; i--)
 	{
 		float x = frameBuffer[i].getX();
 		float y = frameBuffer[i].getY();

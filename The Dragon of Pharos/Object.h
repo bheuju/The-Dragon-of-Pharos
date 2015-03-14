@@ -13,6 +13,7 @@ Objects
 #include "Matrix4.h"
 
 class Face;
+class Vertex;
 
 enum plane
 {
@@ -30,9 +31,9 @@ public:
 	~Object() {}
 
 	std::string name;
-	std::vector<Vector4D*> vertex;
+	std::vector<Vertex*> vertex;
 	std::vector<Face*> face;
-	
+
 	Object setTranslation(float x, float y, float z);
 	Object setRotation(float x, float y, float z);
 	Object setScale(float x, float y, float z);
@@ -46,7 +47,24 @@ public:
 
 	bool shown;
 
+	//Calculate face normals
+	void calcFaceNormals();
+	void calcVertexNormals();
+
+	//Mirror object through specified plane: XY, YZ, XZ(default)
 	friend Object mirror(Object obj, int plane = XZ);
+};
+
+class Vertex
+{
+public:
+	Vertex();
+	Vertex(float x = 0, float y = 0, float z = 0);
+	~Vertex() {}
+
+	Vector4D vertexCoordinates;
+	Vector3D vertexNormal;
+	int adjFacesCount;
 };
 
 class Face
@@ -57,5 +75,7 @@ public:
 	~Face() {}
 
 	int v0, v1, v2;
+
+	Vector3D faceNormal;
 	//v3;
 };

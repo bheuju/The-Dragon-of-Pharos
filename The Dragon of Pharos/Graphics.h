@@ -44,6 +44,9 @@ public:
 	std::vector<Vector4D> frameBuffer;
 	std::vector<Vector3D> colorBuffer;
 
+	//Vector4D frameBuffer[801][601];
+	//Vector3D colorBuffer[801][601];
+
 private:
 	Graphics();
 	static Graphics* pInstance;

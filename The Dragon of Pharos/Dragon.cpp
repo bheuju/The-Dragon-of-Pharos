@@ -80,7 +80,7 @@ void Dragon::init()
 		Object headX = mirror(headY, YZ);
 
 		//Push initialized dragon parts
-		objects.push_back(headY);
+		//objects.push_back(headY);
 		//objects.push_back(headX);
 		//objects.push_back(tailFinX);
 		//objects.push_back(tailFinY);
@@ -93,9 +93,11 @@ void Dragon::init()
 	//Initialize Other General Objects
 	{
 		Object cube = shape.createCube();
-		cube.setTranslation(100, 50, 0);
+		//cube.setTranslation(100, 50, 0);
 		cube.setScale(20, 20, 20);
 		cube.shown = true;
+		cube.calcFaceNormals();
+		cube.calcVertexNormals();
 
 		Object octahedron = shape.createOctahedron();
 		octahedron.setTranslation(-20, -50, 0);
@@ -613,10 +615,10 @@ void Dragon::update()
 			//displayMatrix(objects[i].modelMatrix, "Model");
 			//displayMatrix(transformMatrix, "Transform");
 
-			Vector4D point0 = transformMatrix * *objects[i].vertex[v0];
-			Vector4D point1 = transformMatrix * *objects[i].vertex[v1];
-			Vector4D point2 = transformMatrix * *objects[i].vertex[v2];
-			//Vector4D point3 = transformMatrix * *objects[i].vertex[v3];
+			Vector4D point0 = transformMatrix * objects[i].vertex[v0]->vertexCoordinates;
+			Vector4D point1 = transformMatrix * objects[i].vertex[v1]->vertexCoordinates;
+			Vector4D point2 = transformMatrix * objects[i].vertex[v2]->vertexCoordinates;
+			//Vector4D point3 = transformMatrix * objects[i].vertex[v3]->vertexCoordinates;
 
 			//displayVector4D(point0);
 
@@ -692,6 +694,7 @@ void Dragon::update()
 					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(0, 10, 150));
 					break;
 				}
+				//Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(50, 50, 1 + 50 * (k % 12) / 12.0));
 			}
 		}
 	}
@@ -701,16 +704,16 @@ void Dragon::render()
 {
 	//std::cout<<Graphics::Instance()->frameBuffer.size()<<std::endl;
 
-	for (int i = 0; i < Graphics::Instance()->frameBuffer.size(); i++)
-	//for (int i = Graphics::Instance()->frameBuffer.size()-1; i >= 0; i--)
-	{
-		float x = Graphics::Instance()->frameBuffer[i].getX();
-		float y = Graphics::Instance()->frameBuffer[i].getY();
-		float z = Graphics::Instance()->frameBuffer[i].getZ();
+	//for (int i = 0; i < Graphics::Instance()->frameBuffer.size(); i++)
+	////for (int i = Graphics::Instance()->frameBuffer.size()-1; i >= 0; i--)
+	//{
+	//	float x = Graphics::Instance()->frameBuffer[i].getX();
+	//	float y = Graphics::Instance()->frameBuffer[i].getY();
+	//	float z = Graphics::Instance()->frameBuffer[i].getZ();
 
-		Vector3D color = Graphics::Instance()->colorBuffer[i];
+	//	Vector3D color = Graphics::Instance()->colorBuffer[i];
 
-		Graphics::Instance()->drawPixel(x, y, z, color);
-	}
+	//	Graphics::Instance()->drawPixel(x, y, z, color);
+	//}
 
 }

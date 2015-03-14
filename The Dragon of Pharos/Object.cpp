@@ -43,15 +43,94 @@ Object Object::setScale(float x, float y, float z)
 	return *this;
 }
 
+void Object::calcFaceNormals()
+{
+	for (int i = 0; i < face.size(); i++)
+	{
+		Vector3D a = to3D(vertex[face[i]->v0]->vertexCoordinates);
+		Vector3D b = to3D(vertex[face[i]->v1]->vertexCoordinates);
+		Vector3D c = to3D(vertex[face[i]->v2]->vertexCoordinates);
+
+		vertex[face[i]->v0]->adjFacesCount++;
+		vertex[face[i]->v1]->adjFacesCount++;
+		vertex[face[i]->v2]->adjFacesCount++;
+
+		Vector3D u = b-a;
+		Vector3D v = c-a;
+
+		Vector3D fn = normalize(cross(u, v));
+
+		//store face normals to respective face object
+		face[i]->faceNormal = fn;
+	}
+}
+
+void Object::calcVertexNormals()
+{
+	//sum normals if vertex repeats in face
+	for (int i = 0; i < face.size(); i++)
+	{
+		Vector3D fn = face[i]->faceNormal;
+		Vector3D vn0 = vertex[face[i]->v0]->vertexNormal;
+		Vector3D vn1 = vertex[face[i]->v1]->vertexNormal;
+		Vector3D vn2 = vertex[face[i]->v2]->vertexNormal;
+
+		vn0 = vn0 + fn;
+		vn1 = vn1 + fn;
+		vn2 = vn2 + fn;
+
+		vertex[face[i]->v0]->vertexNormal = (vn0);
+		vertex[face[i]->v1]->vertexNormal = (vn1);
+		vertex[face[i]->v2]->vertexNormal = (vn2);
+
+		//vertex[face[i]->v0]->vertexNormal = normalize(vn0);
+		//vertex[face[i]->v1]->vertexNormal = normalize(vn1);
+		//vertex[face[i]->v2]->vertexNormal = normalize(vn2);
+
+		//int testVertex = 1;
+		//if (face[i]->v0 == testVertex || face[i]->v1 == testVertex || face[i]->v2 == testVertex)
+		//{
+		//	std::cout<<"----- Vertex "<<testVertex<<" with Face "<<i<<std::endl;
+		//	if (face[i]->v0 == testVertex)
+		//		displayVector3D(vn0, "", 1);
+		//	if (face[i]->v1 == testVertex)
+		//		displayVector3D(vn1, "", 1);
+		//	if (face[i]->v2 == testVertex)
+		//		displayVector3D(vn2, "", 1);
+		//}
+
+		//std::cout<<"\nFace "<<i<<std::endl;
+		//std::cout<<"Calculated"<<std::endl;
+		//displayVector3D(vn0, "", 1);
+		//std::cout<<"Stored"<<std::endl;
+		//displayVector3D(vertex[face[i]->v0]->vertexNormal, "", 1);
+	}
+
+	//normalize vertex normals after calculation has ended
+	//std::cout<<"\n\nNormalizing\n\n";
+	for (int i = 0; i < vertex.size(); i++)
+	{
+		//std::cout<<"Vertex "<<i<<std::endl;
+		//displayVector3D(vertex[i]->vertexNormal, "Non-Normalized", 1);
+
+		//std::cout<<"Faces Count: "<<vertex[i]->adjFacesCount<<std::endl;
+
+		//vertex[i]->vertexNormal = normalize(vertex[i]->vertexNormal / vertex[i]->adjFacesCount);
+		vertex[i]->vertexNormal = normalize(vertex[i]->vertexNormal);
+
+		//displayVector3D(vertex[i]->vertexNormal, "Normalized", 1);
+	}
+}
+
 Object mirror(Object obj, int plane)
 {
 	Object image = Object(obj.name + "_image");
 	//mirror vertex
 	for (int i = 0; i < obj.vertex.size(); i++)
 	{
-		float x = obj.vertex[i]->getX();
-		float y = obj.vertex[i]->getY();
-		float z = obj.vertex[i]->getZ();
+		float x = obj.vertex[i]->vertexCoordinates.getX();
+		float y = obj.vertex[i]->vertexCoordinates.getY();
+		float z = obj.vertex[i]->vertexCoordinates.getZ();
 
 		switch(plane)
 		{
@@ -66,8 +145,9 @@ Object mirror(Object obj, int plane)
 			break;
 		}
 
-		image.vertex.push_back(new Vector4D(x, y, z));
+		image.vertex.push_back(new Vertex(x, y, z));
 	}
+
 	//mirror faces
 	for (int i = 0; i < obj.face.size(); i++)
 	{
@@ -106,9 +186,19 @@ Object mirror(Object obj, int plane)
 	return image;
 }
 
+/* Vertex */
+Vertex::Vertex() : vertexCoordinates(Vector4D()), vertexNormal(Vector3D()), adjFacesCount(0)
+{
+
+}
+
+Vertex::Vertex(float x, float y, float z) : adjFacesCount(0)
+{
+	vertexCoordinates = Vector4D(x, y, z);
+}
 
 /* Faces */
-Face::Face() : v0(0), v1(0), v2(0)
+Face::Face() : v0(0), v1(0), v2(0), faceNormal(Vector3D())
 {
 
 }

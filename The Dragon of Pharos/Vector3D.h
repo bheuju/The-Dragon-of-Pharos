@@ -54,6 +54,16 @@ public:
 		return Vector3D(mX - v2.mX, mY - v2.mY, mZ - v2.mZ);
 	}
 
+	Vector3D operator+(Vector3D& v2)
+	{
+		return Vector3D(mX + v2.mX, mY + v2.mY, mZ + v2.mZ);
+	}
+
+	Vector3D operator/(int n)
+	{
+		return Vector3D(mX / n, mY / n, mZ / n);
+	}
+
 	friend float dot(Vector3D& v1, Vector3D& v2)
 	{
 		return ((v1.mX * v2.mX) + (v1.mY * v2.mY) + (v1.mZ *v2.mZ));
