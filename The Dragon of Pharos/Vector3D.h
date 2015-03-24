@@ -1,4 +1,4 @@
-/************************** Vector3D *************************
+ /************************** Vector3D *************************
 3D vector coordinate system
 --------------------------------------------------------------
 
@@ -59,9 +59,14 @@ public:
 		return Vector3D(mX + v2.mX, mY + v2.mY, mZ + v2.mZ);
 	}
 
-	Vector3D operator/(int n)
+	Vector3D operator/(float n)
 	{
 		return Vector3D(mX / n, mY / n, mZ / n);
+	}
+
+	Vector3D operator*(float n)
+	{
+		return Vector3D(mX * n, mY * n, mZ * n);
 	}
 
 	friend float dot(Vector3D& v1, Vector3D& v2)

@@ -47,10 +47,22 @@ public:
 
 	bool shown;
 
+	//Properties
+	float ks, kb;
+
+	//Set Lighitng properties:
+	//ks = specular, kd = diffused
+	void setLightingProperties(float ks, float kb)
+	{
+		this->ks = ks;
+		this->kb = kb;
+	}
+
 	//Calculate face normals
 	void calcFaceNormals();
 	void calcVertexNormals();
-
+	void calcVectorLightSource();
+	void interpolateVector();
 	//Mirror object through specified plane: XY, YZ, XZ(default)
 	friend Object mirror(Object obj, int plane = XZ);
 };
@@ -59,11 +71,13 @@ class Vertex
 {
 public:
 	Vertex();
-	Vertex(float x = 0, float y = 0, float z = 0);
+	Vertex(Vector4D vertexCoordinates, Vector4D vertexWorldCoordinates = Vector4D(), Vector3D vertexNormal = Vector3D());
 	~Vertex() {}
 
 	Vector4D vertexCoordinates;
 	Vector3D vertexNormal;
+	Vector4D vertexWorldCoordinates;
+
 	int adjFacesCount;
 };
 

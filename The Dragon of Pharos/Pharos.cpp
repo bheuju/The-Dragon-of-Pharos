@@ -1,9 +1,14 @@
+
 #include "Pharos.h"
 #include "InputHandler.h"
 #include "Camera.h"
 
 Pharos::Pharos()
 {
+	//Example of Accessing vertex normals
+	//Vector4D normals = objects[0].vertex[0]->vertexNormal;
+
+
 	selected = 0;
 	wireFrame = true;
 	//wireFrame = false;
@@ -44,21 +49,41 @@ void Pharos::init()
 	Object tower = shape.createTower(40);
 	tower.setTranslation(0, 0, 0);
 	tower.setScale(1, 1, 1);
+	tower.calcFaceNormals();
+	tower.calcVertexNormals();
 	tower.shown = true;
+	//tower.setLightingProperties(1, 1);
 
 	Object hemisphere = shape.createHemiSphere();
 	hemisphere.setTranslation(0, 40, 0);
 	hemisphere.setScale(1, 1, 1);
+	hemisphere.calcFaceNormals();
+	hemisphere.calcVertexNormals();
 	hemisphere.shown = true;
+	//tower.setLightingProperties(0.5, 0.7);
 
-	Object torus = shape.createTorus();
-	torus.setTranslation(0, 25, 0);
-	torus.setScale(1, 1, 1);
-	torus.shown = true;
+	Object torus1 = shape.createTorus();
+	torus1.setTranslation(0, 25, 0);
+	torus1.setScale(1, 1, 1);
+	torus1.shown = true;
+	torus1.calcFaceNormals();
+	torus1.calcVertexNormals();
+
+	Object torus2 = shape.createTorus();
+	torus2.setTranslation(0, 45, 0);
+	torus2.setScale(1, 1, 1);
+	torus2.shown = true;
+
+	Object cube1 = shape.createCube();
+	cube1.setTranslation(0,26,0);
+	cube1.setScale(1,3,1);
+	cube1.shown = true;
 
 	objects.push_back(tower);
 	objects.push_back(hemisphere);
-	objects.push_back(torus);
+	objects.push_back(torus1);
+	objects.push_back(torus2);
+	objects.push_back(cube1);
 
 	/*
 	displayMatrix(cube.modelMatrix, "Model Matrix");
@@ -97,8 +122,8 @@ void Pharos::handleInput()
 	Input Keys Description:
 	F1, F2				-	work with DRAGON / PHAROS
 	F4					-	display all (no manipulation inputs)
-		1				-	DRAGON input handling
-		2				-	PHAROS input handling
+	1				-	DRAGON input handling
+	2				-	PHAROS input handling
 	F9					-	toggle objct highlight on select
 	F10					-	toggle wire
 	F11					-	toggle wireframe / rasterized
@@ -514,32 +539,29 @@ void Pharos::update()
 			//displayMatrix(objects[i].modelMatrix, "Model");
 			//displayMatrix(transformMatrix, "Transform");
 
+			/**Transformation*/
+			//Projection coordinates
 			Vector4D point0 = transformMatrix * objects[i].vertex[v0]->vertexCoordinates;
 			Vector4D point1 = transformMatrix * objects[i].vertex[v1]->vertexCoordinates;
 			Vector4D point2 = transformMatrix * objects[i].vertex[v2]->vertexCoordinates;
-			//Vector4D point3 = transformMatrix * *objects[i].vertex[v3]->vertexCoordinates;
+			//World coordinates
+			Vector4D point0wc = objects[i].modelMatrix * objects[i].vertex[v0]->vertexCoordinates;
+			Vector4D point1wc = objects[i].modelMatrix * objects[i].vertex[v1]->vertexCoordinates;
+			Vector4D point2wc = objects[i].modelMatrix * objects[i].vertex[v2]->vertexCoordinates;
+			//World normals
+			Vector3D point0normal = objects[i].modelMatrix * objects[i].vertex[v0]->vertexNormal;
+			Vector3D point1normal = objects[i].modelMatrix * objects[i].vertex[v1]->vertexNormal;
+			Vector3D point2normal = objects[i].modelMatrix * objects[i].vertex[v2]->vertexNormal;
 
-			//displayVector4D(point0);
-
-			//values before normalizing
-			p0 = point0;
-			p1 = point1;
-			p2 = point2;
-
-			//displayVector4D(p0, "After", 1);
-
-			//normalizing w component
+			//normalizing w component of projected points
 			point0 = point0.getNormalizedW();
 			point1 = point1.getNormalizedW();
 			point2 = point2.getNormalizedW();
 
-			//displayVector4D(point0, "After normalized", 1);
-
-			//std::cout<<"Face: "<<k<<std::endl;
-
-			//displayVector4D(point0, "Point 0", 1);
-			//displayVector4D(point1, "Point 1", 1);
-			//displayVector4D(point2, "Point 2", 1);
+			//Creating vertex objcts to pass to fillTriangle()
+			Vertex va(point0, point0wc, point0normal);
+			Vertex vb(point1, point1wc, point1normal);
+			Vertex vc(point2, point2wc, point2normal);
 
 			//draw 3 lines of the triangle
 			//draw 3 lines of the triangle
@@ -563,38 +585,39 @@ void Pharos::update()
 
 			if (!wireFrame)
 			{
-				switch (k % 12)
-				{
-				case 0:
-				case 1:
-					//std::cout<<"Face "<<k<<std::endl;
-					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(0, 100, 100));	//front
-					break;
-				case 2:
-				case 3:
-					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(25, 100, 25));	//back
-					break;
-				case 4:
-				case 5:
-					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(100, 100, 150));	//left
-					break;
-				case 6:
-				case 7:
-					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(150, 25, 150));	//right
-					break;
-				case 8:
-				case 9:
-					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(50, 20, 80));	//top
-					break;
-				case 10:
-				case 11:
-					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));		//bottom
-					break;
-				default:
-					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(0, 10, 150));
-					break;
-				}
-			}
+				//switch (k % 12)
+				//{
+				//case 0:
+				//case 1:
+				//	//std::cout<<"Face "<<k<<std::endl;
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,0,0));	//front 0, 100, 100
+				//	break;
+				//case 2:
+				//case 3:
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,0,0));	//back 25, 100, 25
+				//	break;
+				//case 4:
+				//case 5:
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,0,0));	//left 100, 100, 150
+				//	break;
+				//case 6:
+				//case 7:
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,0,0));	//right 150, 25, 150
+				//	break;
+				//case 8:
+				//case 9:
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,0,0));	//top 50, 20, 80
+				//	break;
+				//case 10:
+				//case 11:
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,0,0));		//bottom 123, 32, 12
+				//	break;
+				//default:
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,0,0)); // 0, 10, 150
+				//	break;
+				//}
+				Graphics::Instance()->fillTriangle(va, vb, vc, Vector3D(255,80,10)); // 0, 10, 150
+			}	
 		}
 	}
 }

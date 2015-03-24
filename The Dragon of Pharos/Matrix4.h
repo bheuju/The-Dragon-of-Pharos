@@ -31,7 +31,8 @@ public:
 
 	//Operations
 	Matrix4 operator* (Matrix4& mat1);						//matrix - matrix multiplication
-	friend Vector4D operator* (Matrix4& mat, Vector4D& v);	//matrix - vector multiplication
+	friend Vector4D operator* (Matrix4& mat, Vector4D& v);	//matrix - vector4 multiplication
+	friend Vector3D operator* (Matrix4& mat, Vector3D& v);	//matrix - vector3 multiplication
 
 	//Transformation matrices
 	Matrix4 setTranslationMatrix(float tX = 0, float tY = 0, float tZ = 0);

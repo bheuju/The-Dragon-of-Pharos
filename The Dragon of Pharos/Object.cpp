@@ -1,4 +1,5 @@
 #include "Object.h"
+#include "IlluminationHandler.h"
 
 /* Objects */
 Object::Object()
@@ -64,6 +65,18 @@ void Object::calcFaceNormals()
 		face[i]->faceNormal = fn;
 	}
 }
+
+void Object::calcVectorLightSource()
+{
+	Vector3D ls = IlluminationHandler::Instance()->lightSource;
+	for (int i = 0; i < face.size(); i++)
+	{
+		Vector3D o = to3D(vertex[face[i]->v0]->vertexCoordinates);
+		Vector3D L = normalize(ls-o);
+
+	}
+}
+
 
 void Object::calcVertexNormals()
 {
@@ -145,7 +158,7 @@ Object mirror(Object obj, int plane)
 			break;
 		}
 
-		image.vertex.push_back(new Vertex(x, y, z));
+		image.vertex.push_back(new Vertex(Vector4D(x, y, z)));
 	}
 
 	//mirror faces
@@ -187,14 +200,16 @@ Object mirror(Object obj, int plane)
 }
 
 /* Vertex */
-Vertex::Vertex() : vertexCoordinates(Vector4D()), vertexNormal(Vector3D()), adjFacesCount(0)
+Vertex::Vertex() : vertexCoordinates(Vector4D()), vertexNormal(Vector3D()), vertexWorldCoordinates(Vector4D())
 {
 
 }
 
-Vertex::Vertex(float x, float y, float z) : adjFacesCount(0)
+Vertex::Vertex(Vector4D vertexCoordinates, Vector4D vertexWorldCoordinates, Vector3D vertexNormal)
 {
-	vertexCoordinates = Vector4D(x, y, z);
+	this->vertexCoordinates = vertexCoordinates;
+	this->vertexWorldCoordinates = vertexWorldCoordinates;
+	this->vertexNormal = vertexNormal;
 }
 
 /* Faces */

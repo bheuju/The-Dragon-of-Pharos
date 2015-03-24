@@ -81,7 +81,7 @@ Matrix4 Matrix4::operator* (Matrix4& mat1)
 	return m;
 }
 
-//matrix * vector
+//matrix * vector4
 Vector4D operator* (Matrix4& m, Vector4D& v)
 {
 	Vector4D vector;
@@ -98,6 +98,17 @@ Vector4D operator* (Matrix4& m, Vector4D& v)
 
 	return vector;
 }
+
+//matrix * vector3
+Vector3D operator* (Matrix4& m, Vector3D& v)
+{
+	Vector4D vector = Vector4D(v.getX(), v.getY(), v.getZ(), 1);
+
+	Vector4D newVector = m*vector;
+
+	return to3D(newVector);
+}
+
 
 //Transformation Matrices
 //Translation

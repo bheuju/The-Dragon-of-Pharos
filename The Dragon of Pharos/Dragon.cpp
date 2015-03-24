@@ -49,11 +49,16 @@ void Dragon::init()
 	{
 		//Tail Fin
 		Object tailFinX = shape.createTailFin();
-		tailFinX.setTranslation(100, 0, 0);
+		//tailFinX.setTranslation(100, 0, 0);
 		tailFinX.setRotation(60, 0, 0);
 		tailFinX.setScale(0.5, 0.5, 0.5);
 		tailFinX.shown = true;
+		tailFinX.calcFaceNormals();
+		tailFinX.calcVertexNormals();
 		Object tailFinY = mirror(tailFinX);
+		tailFinY.calcFaceNormals();
+		tailFinY.calcVertexNormals();
+
 
 		//Wings
 		Object wingY = shape.createWing();
@@ -98,15 +103,18 @@ void Dragon::init()
 		cube.shown = true;
 		cube.calcFaceNormals();
 		cube.calcVertexNormals();
+		cube.setLightingProperties(0.5, 0.5);     
 
 		Object octahedron = shape.createOctahedron();
 		octahedron.setTranslation(-20, -50, 0);
 		octahedron.setScale(20, 20, 20);
 		octahedron.shown = true;
+		octahedron.calcFaceNormals();
+		octahedron.calcVertexNormals();
 
 		//Push initialized objects
 		objects.push_back(cube);
-		//objects.push_back(octahedron);
+		objects.push_back(octahedron);
 	}
 
 
@@ -615,24 +623,29 @@ void Dragon::update()
 			//displayMatrix(objects[i].modelMatrix, "Model");
 			//displayMatrix(transformMatrix, "Transform");
 
+			/**Transformation*/
+			//Projection coordinates
 			Vector4D point0 = transformMatrix * objects[i].vertex[v0]->vertexCoordinates;
 			Vector4D point1 = transformMatrix * objects[i].vertex[v1]->vertexCoordinates;
 			Vector4D point2 = transformMatrix * objects[i].vertex[v2]->vertexCoordinates;
-			//Vector4D point3 = transformMatrix * objects[i].vertex[v3]->vertexCoordinates;
+			//World coordinates
+			Vector4D point0wc = objects[i].modelMatrix * objects[i].vertex[v0]->vertexCoordinates;
+			Vector4D point1wc = objects[i].modelMatrix * objects[i].vertex[v1]->vertexCoordinates;
+			Vector4D point2wc = objects[i].modelMatrix * objects[i].vertex[v2]->vertexCoordinates;
+			//World normals
+			Vector3D point0normal = objects[i].modelMatrix * objects[i].vertex[v0]->vertexNormal;
+			Vector3D point1normal = objects[i].modelMatrix * objects[i].vertex[v1]->vertexNormal;
+			Vector3D point2normal = objects[i].modelMatrix * objects[i].vertex[v2]->vertexNormal;
 
-			//displayVector4D(point0);
-
-			//values before normalizing
-			p0 = point0;
-			p1 = point1;
-			p2 = point2;
-
-			//displayVector4D(p0, "After", 1);
-
-			//normalizing w component
+			//normalizing w component of projected points
 			point0 = point0.getNormalizedW();
 			point1 = point1.getNormalizedW();
 			point2 = point2.getNormalizedW();
+
+			//Creating vertex objcts to pass to fillTriangle()
+			Vertex va(point0, point0wc, point0normal);
+			Vertex vb(point1, point1wc, point1normal);
+			Vertex vc(point2, point2wc, point2normal);
 
 			//displayVector4D(point0, "After normalized", 1);
 
@@ -663,38 +676,39 @@ void Dragon::update()
 
 			if (!wireFrame)
 			{
-				switch (k % 12)
-				{
-				case 0:
-				case 1:
-					//std::cout<<"Face "<<k<<std::endl;
-					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(0, 100, 100));	//front
-					break;
-				case 2:
-				case 3:
-					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(25, 100, 25));	//back
-					break;
-				case 4:
-				case 5:
-					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(100, 100, 150));	//left
-					break;
-				case 6:
-				case 7:
-					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(150, 25, 150));	//right
-					break;
-				case 8:
-				case 9:
-					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(50, 20, 80));	//top
-					break;
-				case 10:
-				case 11:
-					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(123, 32, 12));		//bottom
-					break;
-				default:
-					Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(0, 10, 150));
-					break;
-				}
-				//Graphics::Instance()->fillTriangle(point0, point1, point2, Vector3D(50, 50, 1 + 50 * (k % 12) / 12.0));
+				//switch (k % 12)
+				//{
+				//case 0:
+				//case 1:
+				//	//std::cout<<"Face "<<k<<std::endl;
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,14,16));	//front 0, 100, 100
+				//	break;
+				//case 2:
+				//case 3:
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(25,100,200));	//back 25, 100, 25
+				//	break;
+				//case 4:
+				//case 5:
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(55,50,90));	//left 100, 100, 150
+				//	break;
+				//case 6:
+				//case 7:
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(5,70,20));	//right 150, 25, 150
+				//	break;
+				//case 8:
+				//case 9:
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(250,50,100));	//top 50, 20, 80
+				//	break;
+				//case 10:
+				//case 11:
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,80,10));		//bottom 123, 32, 12
+				//	break;
+				//default:
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(78,60,200)); // 0, 10, 150
+				//	break;
+				//}
+				//Graphics::Instance()->fillTriangle(point0, point1, point2, point0wc, point1wc, point2wc, point0normal, point1normal, point2normal, Vector3D(255,80,10)); // 0, 10, 150
+				Graphics::Instance()->fillTriangle(va, vb, vc, Vector3D(255,80,10)); // 0, 10, 150
 			}
 		}
 	}
