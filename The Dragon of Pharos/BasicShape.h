@@ -24,8 +24,10 @@ public:
 	//General
 	Object createCube();
 	Object createOctahedron();
+	Object createCuboid();
 
 	//Dragon
+	Object createDragon();
 	Object createTailFin();
 	Object createBodyFin();
 	Object createWing();

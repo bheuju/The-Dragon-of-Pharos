@@ -28,11 +28,10 @@ public:
 	//Calculate intensity
 	//iN : vertex normal
 	//iL : vector from point to light source
-	float calcIntensity(Vector3D iN, Vector3D iL);
+	float calcIntensity(Vector3D iN, Vector3D iL, Vector3D V);
 
 private:
 	IlluminationHandler();
-	IlluminationHandler(float Xamb, float Xd, float Xs);
 
 	static IlluminationHandler *pInstance;
 };

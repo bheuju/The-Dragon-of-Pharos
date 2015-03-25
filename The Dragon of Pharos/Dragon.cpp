@@ -2,9 +2,6 @@
 #include "InputHandler.h"
 #include "Camera.h"
 
-#include <fstream>
-#include <sstream>
-
 Dragon::Dragon()
 {
 	selected = 0;
@@ -103,7 +100,8 @@ void Dragon::init()
 		cube.shown = true;
 		cube.calcFaceNormals();
 		cube.calcVertexNormals();
-		cube.setLightingProperties(0.5, 0.5);     
+		cube.setLightingProperties(0.5, 0.5);
+		cube.color = Vector3D(100, 100, 20);
 
 		Object octahedron = shape.createOctahedron();
 		octahedron.setTranslation(-20, -50, 0);
@@ -111,59 +109,21 @@ void Dragon::init()
 		octahedron.shown = true;
 		octahedron.calcFaceNormals();
 		octahedron.calcVertexNormals();
+		octahedron.color = Vector3D(50, 150, 100);
 
 		//Push initialized objects
 		objects.push_back(cube);
 		objects.push_back(octahedron);
 	}
 
+	//Object dragon = shape.createDragon();
+	//dragon.setRotation(270, 0, 0);
+	//dragon.setScale(15, 15, 15);
+	//dragon.calcFaceNormals();
+	//dragon.calcVertexNormals();
+	//dragon.color = Vector3D(150, 150, 150);
+	//dragon.reverseFace();
 
-	//Object dragon("Dragon");
-	//{
-	//	std::ifstream in("dragon.obj", std::ios::in);
-	//	if (!in)
-	//	{
-	//		std::cout<<"Cannot open file"<<std::endl;
-	//		exit(1);
-	//	}
-	//	std::string line;
-	//	while(std::getline(in, line))
-	//	{
-	//		if (line.substr(0, 2) == "v ")
-	//		{
-	//			std::istringstream v(line.substr(2));
-	//			float x, y, z;
-	//			v>>x;
-	//			v>>y;
-	//			v>>z;
-	//			dragon.vertex.push_back(new Vector4D(x, y, z));
-	//			//std::cout<<"Received:"<<std::endl;
-	//			//displayVector4D(*dragon.vertex.back());
-	//		}
-	//		else if (line.substr(0, 2) == "f ")
-	//		{
-	//			int a, b, c;
-	//			//const char* chh=line.c_str();
-	//			//sscanf (chh, "f %i/%i %i/%i %i/%i",&a,&A,&b,&B,&c,&C); //here it read the line start with f and store the corresponding values in the variables
-	//			//a--;b--;c--;
-	//			//A--;B--;C--;
-	//			std::istringstream f(line.substr(2));
-	//			f>>a;
-	//			f>>b;
-	//			f>>c;
-	//			a--;
-	//			b--;
-	//			c--;
-	//			//a = a-8;
-	//			//b = b-8;
-	//			//c = c-8;
-	//			dragon.face.push_back(new Face(a, b, c));
-	//			//std::cout<<"Received: "<<a<<", "<<b<<", "<<c<<std::endl;
-	//		}
-	//	}
-	//	dragon.setRotation(90, 0, 0);
-	//	dragon.setScale(5, 5, 5);
-	//}
 	//objects.push_back(dragon);
 
 	/*
@@ -708,7 +668,7 @@ void Dragon::update()
 				//	break;
 				//}
 				//Graphics::Instance()->fillTriangle(point0, point1, point2, point0wc, point1wc, point2wc, point0normal, point1normal, point2normal, Vector3D(255,80,10)); // 0, 10, 150
-				Graphics::Instance()->fillTriangle(va, vb, vc, Vector3D(255,80,10)); // 0, 10, 150
+				Graphics::Instance()->fillTriangle(va, vb, vc, objects[i].color); // 0, 10, 150
 			}
 		}
 	}

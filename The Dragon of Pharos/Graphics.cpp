@@ -4,6 +4,7 @@
 #include "DoP.h"
 #include "Vector3D.h"
 #include "IlluminationHandler.h"
+#include "Camera.h"
 
 
 Graphics* Graphics::pInstance = 0;     
@@ -212,11 +213,6 @@ void Graphics::processScanLine(int y, Vertex va, Vertex vb, Vertex vc, Vertex vd
 	gradient1 = gradient1 < 0 ? 0 : (gradient1 > 1 ? 1 : gradient1);
 	gradient2 = gradient2 < 0 ? 0 : (gradient2 > 1 ? 1 : gradient2);
 
-	//displayVector4D(pa, "pa", 1);
-	//displayVector4D(pb, "pb", 1);
-	//displayVector4D(pc, "pc", 1);
-	//displayVector4D(pd, "pd", 1);
-
 	//interpolating start and end points
 	int sx = pa.getX() + gradient1 * (pb.getX() - pa.getX());
 	int ex = pc.getX() + gradient2 * (pd.getX() - pc.getX());
@@ -225,30 +221,26 @@ void Graphics::processScanLine(int y, Vertex va, Vertex vb, Vertex vc, Vertex vd
 	Vector3D sn = interpolateNormal(norma, normb, gradient1);
 	Vector3D en = interpolateNormal(normc, normd, gradient2);
 
-	//std::cout<<"Normal A at: "<<pa.getX()<<", "<<pa.getY()<<std::endl;
-	//displayVector3D(norma, "Normal A", 1);
-	//std::cout<<"Normal B at: "<<pb.getX()<<", "<<pb.getY()<<std::endl;
-	//displayVector3D(normb, "Normal B", 1);
-	//std::cout<<"Interpolated normal at: "<<y<<std::endl;
-	//displayVector3D(sn, "Interpolated", 1);
-
 	//change start and end point
 	if (sx > ex)
 	{
 		int temp = sx;
 		sx = ex;
 		ex = temp;
+
+		Vector3D tempn = sn;
+		sn = en;
+		en = tempn;
 	}
 
 	float z1 = pa.getZ() + gradient1 * (pb.getZ() - pa.getZ());
 	float z2 = pc.getZ() + gradient2 * (pd.getZ() - pc.getZ());
 
-	//std::cout<<"z1: "<<z1<<"\tz2: "<<z2<<std::endl;
-	//float m = 0;
 	for (int x = sx; x < ex; x++)
 	{
 		//std::cout<<"x: "<<x<<" y: "<<y<<std::endl;
 		float gradient = (x - sx) / (float)(ex - sx);
+		gradient = gradient < 0 ? 0 : (gradient > 1 ? 1 : gradient);
 
 		//interpolating value of z - for zBuffer test
 		float z = z1 + gradient * (z2 - z1);
@@ -257,14 +249,11 @@ void Graphics::processScanLine(int y, Vertex va, Vertex vb, Vertex vc, Vertex vd
 		Vector3D n = interpolateNormal(sn, en, gradient);
 
 		//Calculate vector for lighting source
-		//Vector3D ver = to3D(va.vertexWorldCoordinates);
-		Vector3D ver = Vector3D(x, y, z);
-		//Vector3D vec = IlluminationHandler::Instance()->lightSource - Vector3D(x, y, z);
-		Vector3D lightDirection = normalize(IlluminationHandler::Instance()->lightSource - ver);
-		float kI =	IlluminationHandler::Instance()->calcIntensity(normalize(n), lightDirection);
-		//float kI = dot(normalize(n), lightDirection);
+		Vector3D point = Vector3D(x, y, z);
+		Vector3D viewDirection = normalize(Camera::Instance()->getCameraPos() - point);				//point to camera vector
+		Vector3D lightDirection = normalize(IlluminationHandler::Instance()->lightSource - point);	//point to light vector
+		float kI =	IlluminationHandler::Instance()->calcIntensity(normalize(n), lightDirection, viewDirection);
 		kI = kI < 0 ? 0 : (kI > 1 ? 1 : kI);
-		//std::cout<<"Intensity: "<<kI<<std::endl;
 
 		Vector3D correctColor = color*kI;
 		if(correctColor.getX()>255)
@@ -273,9 +262,9 @@ void Graphics::processScanLine(int y, Vertex va, Vertex vb, Vertex vc, Vertex vd
 			correctColor.setY(255);
 		if(correctColor.getZ()>255)
 			correctColor.setZ(255);
+
 		//write to frameBuffer
 		putPixel(x, y, z, correctColor);
-		//m += .1;
 	}
 }
 

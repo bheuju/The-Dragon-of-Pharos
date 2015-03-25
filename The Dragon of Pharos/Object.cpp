@@ -8,6 +8,8 @@ Object::Object()
 	angleX = angleY = angleZ = 0;
 	sX = sY = sZ = 1;
 
+	color = Vector3D();
+
 	shown  = true;
 }
 
@@ -18,6 +20,8 @@ Object::Object(std::string objectName)
 	tX = tY = tZ = 0;
 	angleX = angleY = angleZ = 0;
 	sX = sY = sZ = 1;
+
+	color = Vector3D();
 
 	shown  = true;
 }
@@ -52,9 +56,9 @@ void Object::calcFaceNormals()
 		Vector3D b = to3D(vertex[face[i]->v1]->vertexCoordinates);
 		Vector3D c = to3D(vertex[face[i]->v2]->vertexCoordinates);
 
-		vertex[face[i]->v0]->adjFacesCount++;
-		vertex[face[i]->v1]->adjFacesCount++;
-		vertex[face[i]->v2]->adjFacesCount++;
+		//vertex[face[i]->v0]->adjFacesCount++;
+		//vertex[face[i]->v1]->adjFacesCount++;
+		//vertex[face[i]->v2]->adjFacesCount++;
 
 		Vector3D u = b-a;
 		Vector3D v = c-a;
@@ -197,6 +201,40 @@ Object mirror(Object obj, int plane)
 	image.setScale(obj.sX, obj.sY, obj.sZ);
 
 	return image;
+}
+
+void Object::reverseFace()
+{
+	Object image;
+	for (int i = 0; i < this->face.size(); i++)
+	{
+		int A, B, C;
+
+		A = this->face[i]->v0;
+		B = this->face[i]->v1;
+		C = this->face[i]->v2;
+
+		image.face.push_back(new Face(B, A, C));
+	}
+
+	this->face.clear();
+
+	std::cout<<image.face.size()<<std::endl;
+
+	this->face = image.face;
+
+	std::cout<<this->face.size()<<std::endl;
+
+	//for (int i = 0; i < image.face.size(); i++)
+	//{
+	//	int A, B, C;
+
+	//	A = image.face[i]->v0;
+	//	B = image.face[i]->v1;
+	//	C = image.face[i]->v2;
+
+	//	this->face.push_back(new Face(A, B, C));
+	//}
 }
 
 /* Vertex */

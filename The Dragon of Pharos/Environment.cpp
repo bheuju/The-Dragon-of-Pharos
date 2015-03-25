@@ -1,19 +1,13 @@
-
-#include "Pharos.h"
+#include "Environment.h"
 #include "InputHandler.h"
 #include "Camera.h"
-#include "IlluminationHandler.h"
 
-Pharos::Pharos()
+Environment::Environment()
 {
-	//Example of Accessing vertex normals
-	//Vector4D normals = objects[0].vertex[0]->vertexNormal;
-
-
 	selected = 0;
-	//wireFrame = true;
-	wireFrame = false;
-	showWire = false;
+	wireFrame = true;
+	//wireFrame = false;
+	showWire = true;
 	highLight = true;
 
 	released = true;
@@ -32,7 +26,7 @@ Pharos::Pharos()
 	//lines.push_back(Vector2D(0, 0));
 }
 
-void Pharos::init()
+void Environment::init()
 {
 	//Set View Matrix
 	Camera::Instance()->setOrgCameraPos(0, 0, 200);
@@ -42,63 +36,30 @@ void Pharos::init()
 	Camera::Instance()->setUpVector(0, 1, 0);
 	viewMatrix = Camera::Instance()->getViewMatrix();
 
+	//displayMatrix(viewMatrix);
+
 	//Set Projection Matrix
 	projectionMatrix = Matrix4().setProjectionMatrix(45, 3.0/4.0, 1, 500);
 
-	/** Initialize object: cube */
-	//===========================/
-	Object tower = shape.createTower(40);
-	tower.setTranslation(0, 0, 0);
-	tower.setScale(1, 1, 1);
-	tower.calcFaceNormals();
-	tower.calcVertexNormals();
-	tower.shown = true;
-	//tower.setLightingProperties(1, 1);
 
-	Object hemisphere = shape.createHemiSphere();
-	//hemisphere.setTranslation(0, 40, 0);
-	//hemisphere.setScale(1, 1, 1);
-	hemisphere.setScale(5, 5, 5);
-	hemisphere.calcFaceNormals();
-	hemisphere.calcVertexNormals();
-	hemisphere.shown = true;
-	//tower.setLightingProperties(0.5, 0.7);
+	//environment parts
+	{
+		Object ground=shape.createCuboid();
+		ground.setTranslation(-144,-123,1);
+		ground.setRotation(0,0,0);
+		ground.setScale(97,97,97);
+		ground.shown=true;
 
-	Object torus1 = shape.createTorus();
-	torus1.setTranslation(0, 25, 0);
-	torus1.setScale(1, 1, 1);
-	torus1.shown = true;
-	torus1.calcFaceNormals();
-	torus1.calcVertexNormals();
+		ground.calcFaceNormals();
+		ground.calcVertexNormals();
 
-	Object torus2 = shape.createTorus();
-	torus2.setTranslation(0, 45, 0);
-	torus2.setScale(1, 1, 1);
-	torus2.shown = true;
-	torus2.calcFaceNormals();
-	torus2.calcVertexNormals();
+		ground.color = Vector3D(0, 0, 150);
 
-	Object cube1 = shape.createCube();
-	//cube1.setTranslation(0,26,0);
-	cube1.setScale(10,10,10);
-	cube1.shown = true;
-	cube1.calcFaceNormals();
-	cube1.calcVertexNormals();
-
-	//objects.push_back(tower);
-	objects.push_back(hemisphere);
-	//objects.push_back(torus1);
-	//objects.push_back(torus2);
-	objects.push_back(cube1);
-
-	/*
-	displayMatrix(cube.modelMatrix, "Model Matrix");
-	displayMatrix(viewMatrix, "View Matrix");
-	displayMatrix(projectionMatrix, "Projection Matrix");
-	*/
+		objects.push_back(ground);
+	}
 }
 
-void Pharos::handleInput()
+void Environment::handleInput()
 {
 	////for self drawing lines
 	//if (InputHandler::Instance()->getMouseButtonState(LEFT))
@@ -126,10 +87,11 @@ void Pharos::handleInput()
 
 	/************************************************************
 	Input Keys Description:
-	F1, F2				-	work with DRAGON / PHAROS
+	F1, F2, F3			-	work with DRAGON / PHAROS / ENVIRONMENT
 	F4					-	display all (no manipulation inputs)
-	1				-	DRAGON input handling
-	2				-	PHAROS input handling
+		1				-	DRAGON input handling
+		2				-	PHAROS input handling
+		3				-	ENVIRONMENT input handling
 	F9					-	toggle objct highlight on select
 	F10					-	toggle wire
 	F11					-	toggle wireframe / rasterized
@@ -146,6 +108,7 @@ void Pharos::handleInput()
 	I, K, J, L, U, O	-	move camera up, down, left, right
 	R + C				-	reset camera
 	*************************************************************/
+
 	//toggle highlight on select
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F9))
 	{
@@ -431,7 +394,7 @@ void Pharos::handleInput()
 	}
 }
 
-void Pharos::update()
+void Environment::update()
 {
 	//displayVector3D(cameraRot, "Rotation Camera", 1);
 
@@ -439,6 +402,8 @@ void Pharos::update()
 	//		rotation also in BOTH mode of F4
 	Camera::Instance()->rotate();
 	viewMatrix = Camera::Instance()->getViewMatrix();
+
+	//displayMatrix(viewMatrix);
 
 	for (int i = 0; i < objects.size(); i++)
 	{
@@ -472,9 +437,9 @@ void Pharos::update()
 	////cleat colorBuffer
 	//Graphics::Instance()->colorBuffer.clear();
 	////reset zBuffer
-	//for (int i = 0; i < 800; i++)
+	//for (int i = 0; i < 801; i++)
 	//{
-	//	for (int j = 0; j < 600; j++)
+	//	for (int j = 0; j < 601; j++)
 	//	{
 	//		Graphics::Instance()->zBuffer[i][j] = 500;
 	//	}
@@ -569,7 +534,14 @@ void Pharos::update()
 			Vertex vb(point1, point1wc, point1normal);
 			Vertex vc(point2, point2wc, point2normal);
 
-			//draw 3 lines of the triangle
+			//displayVector4D(point0, "After normalized", 1);
+
+			//std::cout<<"Face: "<<k<<std::endl;
+
+			//displayVector4D(point0, "Point 0", 1);
+			//displayVector4D(point1, "Point 1", 1);
+			//displayVector4D(point2, "Point 2", 1);
+
 			//draw 3 lines of the triangle
 			if (showWire)
 			{
@@ -596,44 +568,45 @@ void Pharos::update()
 				//case 0:
 				//case 1:
 				//	//std::cout<<"Face "<<k<<std::endl;
-				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,0,0));	//front 0, 100, 100
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,14,16));	//front 0, 100, 100
 				//	break;
 				//case 2:
 				//case 3:
-				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,0,0));	//back 25, 100, 25
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(25,100,200));	//back 25, 100, 25
 				//	break;
 				//case 4:
 				//case 5:
-				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,0,0));	//left 100, 100, 150
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(55,50,90));	//left 100, 100, 150
 				//	break;
 				//case 6:
 				//case 7:
-				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,0,0));	//right 150, 25, 150
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(5,70,20));	//right 150, 25, 150
 				//	break;
 				//case 8:
 				//case 9:
-				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,0,0));	//top 50, 20, 80
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(250,50,100));	//top 50, 20, 80
 				//	break;
 				//case 10:
 				//case 11:
-				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,0,0));		//bottom 123, 32, 12
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,80,10));		//bottom 123, 32, 12
 				//	break;
 				//default:
-				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(255,0,0)); // 0, 10, 150
+				//	Graphics::Instance()->fillTriangle(point0, point1, point2, point0normal, point1normal, point2normal, Vector3D(78,60,200)); // 0, 10, 150
 				//	break;
 				//}
-				Graphics::Instance()->fillTriangle(va, vb, vc, Vector3D(255,80,10)); // 0, 10, 150
-			}	
+				//Graphics::Instance()->fillTriangle(point0, point1, point2, point0wc, point1wc, point2wc, point0normal, point1normal, point2normal, Vector3D(255,80,10)); // 0, 10, 150
+				Graphics::Instance()->fillTriangle(va, vb, vc, objects[i].color); // 0, 10, 150
+			}
 		}
 	}
 }
 
-void Pharos::render()
+void Environment::render()
 {
 	//std::cout<<Graphics::Instance()->frameBuffer.size()<<std::endl;
 
 	//for (int i = 0; i < Graphics::Instance()->frameBuffer.size(); i++)
-	//	//for (int i = Graphics::Instance()->frameBuffer.size()-1; i >= 0; i--)
+	////for (int i = Graphics::Instance()->frameBuffer.size()-1; i >= 0; i--)
 	//{
 	//	float x = Graphics::Instance()->frameBuffer[i].getX();
 	//	float y = Graphics::Instance()->frameBuffer[i].getY();

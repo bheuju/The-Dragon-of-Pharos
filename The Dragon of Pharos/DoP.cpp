@@ -17,7 +17,7 @@ void DoP::init(const char* title, int xpos, int ypos, int width, int height, int
 	{
 		std::cout<<"Window initialized..."<<std::endl;
 	}
-	
+
 	if (mode == SDL)
 	{
 		//create renderer only in SDL mode
@@ -51,6 +51,7 @@ void DoP::init(const char* title, int xpos, int ypos, int width, int height, int
 	//initialize the objects to draw dragon
 	drag.init();
 	pharos.init();
+	environment.init();
 }
 
 void DoP::handleInputs()
@@ -73,6 +74,11 @@ void DoP::handleInputs()
 		std::cout<<"Working with Pharos only"<<std::endl;
 		choice = PHAROS;
 	}
+	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F3))
+	{
+		std::cout<<"Working with Environment only"<<std::endl;
+		choice = ENVIRONMENT;
+	}
 	if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_F4))
 	{
 		std::cout<<"Working with ALL"<<std::endl;
@@ -91,6 +97,11 @@ void DoP::handleInputs()
 			std::cout<<"Pharos - Input Enabled."<<std::endl;
 			inputChoice = PHAROS;
 		}
+		if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_3))
+		{
+			std::cout<<"Environment - Input Enabled."<<std::endl;
+			inputChoice = ENVIRONMENT;
+		}
 	}
 
 	//Camera are coupled
@@ -102,6 +113,9 @@ void DoP::handleInputs()
 	case PHAROS:
 		pharos.handleInput();
 		break;
+	case ENVIRONMENT:
+		environment.handleInput();
+		break;
 	case ALL:
 		switch(inputChoice)
 		{
@@ -110,6 +124,9 @@ void DoP::handleInputs()
 			break;
 		case PHAROS:
 			pharos.handleInput();
+			break;
+		case ENVIRONMENT:
+			environment.handleInput();
 			break;
 		}
 		break;
@@ -128,9 +145,13 @@ void DoP::update()
 	case PHAROS:
 		pharos.update();
 		break;
+	case ENVIRONMENT:
+		environment.update();
+		break;
 	case ALL:
 		drag.update();
 		pharos.update();
+		environment.update();
 		break;
 	}
 }
@@ -173,7 +194,7 @@ void DoP::render()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		Graphics::Instance()->render();
-		
+
 
 		//switch(choice)
 		//{

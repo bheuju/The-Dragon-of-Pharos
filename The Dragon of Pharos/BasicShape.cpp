@@ -1,5 +1,6 @@
 #include "BasicShape.h"
-
+#include <fstream>
+#include <sstream>
 
 BasicShape::BasicShape()
 {}
@@ -33,6 +34,41 @@ Object BasicShape::createCube()
 	return cube;
 }
 
+Object BasicShape::createCuboid()
+{
+	Object cuboid("cuboid");
+	{
+		cuboid.vertex.push_back(new Vertex(Vector4D(0, 0, 0)));		//0
+		cuboid.vertex.push_back(new Vertex(Vector4D(3, 0, 0)));		//1
+		cuboid.vertex.push_back(new Vertex(Vector4D(3, 0.25,0)));		//0.5
+		cuboid.vertex.push_back(new Vertex(Vector4D(0,0.25,0)));		//3
+		cuboid.vertex.push_back(new Vertex(Vector4D(0, 0, -1)));		//4
+		cuboid.vertex.push_back(new Vertex(Vector4D(3, 0, -1)));	//5
+		cuboid.vertex.push_back(new Vertex(Vector4D(3, 0.25, -1)));		//6
+		cuboid.vertex.push_back(new Vertex(Vector4D(0, 0.25, -1)));		//7
+
+		cuboid.face.push_back(new Face(0, 1, 4));
+		cuboid.face.push_back(new Face(4, 1, 5));
+
+		cuboid.face.push_back(new Face(1, 5, 2));
+		cuboid.face.push_back(new Face(2 ,5, 6));
+
+		cuboid.face.push_back(new Face(7, 3, 2));
+		cuboid.face.push_back(new Face(7, 2, 6));
+
+		cuboid.face.push_back(new Face(7, 3, 0));
+		cuboid.face.push_back(new Face(7, 0, 4));
+
+		cuboid.face.push_back(new Face(3, 0, 1));
+		cuboid.face.push_back(new Face(3, 1, 2));
+
+		cuboid.face.push_back(new Face(7, 4, 5));
+		cuboid.face.push_back(new Face(7, 5, 6));
+	}
+	return cuboid;
+}
+
+
 Object BasicShape::createOctahedron()
 {
 	Object octahedron("Octahedron");
@@ -53,6 +89,55 @@ Object BasicShape::createOctahedron()
 		octahedron.face.push_back(new Face(3, 0, 5));
 	}
 	return octahedron;
+}
+
+Object BasicShape::createDragon()
+{
+	Object dragon("Dragon");
+	{
+		std::ifstream in("objects/dragons.obj", std::ios::in);
+		if (!in)
+		{
+			std::cout<<"Cannot open file"<<std::endl;
+			exit(1);
+		}
+		std::string line;
+		while(std::getline(in, line))
+		{
+			if (line.substr(0, 2) == "v ")
+			{
+				std::istringstream v(line.substr(2));
+				float x, y, z;
+				v>>x;
+				v>>y;
+				v>>z;
+				dragon.vertex.push_back(new Vertex(Vector4D(x, y, z)));
+				//std::cout<<"Received:"<<std::endl;
+				//displayVector4D(*dragon.vertex.back());
+			}
+			else if (line.substr(0, 2) == "f ")
+			{
+				int a, b, c;
+				//const char* chh=line.c_str();
+				//sscanf (chh, "f %i/%i %i/%i %i/%i",&a,&A,&b,&B,&c,&C); //here it read the line start with f and store the corresponding values in the variables
+				//a--;b--;c--;
+				//A--;B--;C--;
+				std::istringstream f(line.substr(2));
+				f>>a;
+				f>>b;
+				f>>c;
+				a--;
+				b--;
+				c--;
+				//a = a-8;
+				//b = b-8;
+				//c = c-8;
+				dragon.face.push_back(new Face(a, b, c));
+				//std::cout<<"Received: "<<a<<", "<<b<<", "<<c<<std::endl;
+			}
+		}
+	}
+	return dragon;
 }
 
 Object BasicShape::createTailFin()
@@ -310,7 +395,7 @@ Object BasicShape::createHead()
 		head.vertex.push_back(new Vertex(Vector4D(0, 0, 0)));	//59
 		head.vertex.push_back(new Vertex(Vector4D(38, -17, -5)));	//60
 		head.vertex.push_back(new Vertex(Vector4D(28, -22, -3)));	//61
-		
+
 		//Group a
 		head.face.push_back(new Face(0, 8, 1));
 		head.face.push_back(new Face(8, 61, 1));
@@ -425,7 +510,7 @@ Object BasicShape::createHead()
 		head.face.push_back(new Face(14, 23, 18));
 		head.face.push_back(new Face(14, 18, 13));
 		head.face.push_back(new Face(13, 18, 12));
-		
+
 	}
 	return head;
 }
@@ -573,7 +658,7 @@ Object BasicShape::createHemiSphere()
 		hemiSphere.face.push_back(new Face(4,13,3));
 		hemiSphere.face.push_back(new Face(5,14,4));
 		hemiSphere.face.push_back(new Face(6,15,5));
-        hemiSphere.face.push_back(new Face(7,16,6));
+		hemiSphere.face.push_back(new Face(7,16,6));
 		hemiSphere.face.push_back(new Face(8,17,7));
 		hemiSphere.face.push_back(new Face(9,18,8));
 		hemiSphere.face.push_back(new Face(0,19,9));
@@ -759,7 +844,7 @@ Object BasicShape::createTorus()
 		torus.face.push_back(new Face(4,13,3));
 		torus.face.push_back(new Face(5,14,4));
 		torus.face.push_back(new Face(6,15,5));
-        torus.face.push_back(new Face(7,16,6));
+		torus.face.push_back(new Face(7,16,6));
 		torus.face.push_back(new Face(8,17,7));
 		torus.face.push_back(new Face(9,18,8));
 		torus.face.push_back(new Face(0,19,9));

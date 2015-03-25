@@ -12,6 +12,7 @@ Singleton class
 #include "InputHandler.h"
 #include "Dragon.h"
 #include "Pharos.h"
+#include "Environment.h"
 
 enum
 {
@@ -20,6 +21,7 @@ enum
 
 	DRAGON = 0,
 	PHAROS = 1,
+	ENVIRONMENT = 2,
 	ALL = 9
 };
 
@@ -67,4 +69,5 @@ private:
 	//Objects
 	Dragon drag;
 	Pharos pharos;
+	Environment environment;
 };

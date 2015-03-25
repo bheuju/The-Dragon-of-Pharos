@@ -34,6 +34,8 @@ public:
 	std::vector<Vertex*> vertex;
 	std::vector<Face*> face;
 
+	Vector3D color;
+
 	Object setTranslation(float x, float y, float z);
 	Object setRotation(float x, float y, float z);
 	Object setScale(float x, float y, float z);
@@ -65,6 +67,7 @@ public:
 	void interpolateVector();
 	//Mirror object through specified plane: XY, YZ, XZ(default)
 	friend Object mirror(Object obj, int plane = XZ);
+	void reverseFace();
 };
 
 class Vertex
